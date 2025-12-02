@@ -1,0 +1,292 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: #f5f5f5;
+  color: #333;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.navbar {
+  background: white;
+  border-bottom: 2px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.nav-brand h1 {
+  font-size: 1.5rem;
+  color: #ff7043;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.nav-brand h1:hover {
+  transform: scale(1.05);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.3s;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.nav-btn:hover {
+  color: #ff7043;
+  background: #fff3f0;
+}
+
+.nav-btn.active {
+  color: #ff7043;
+  font-weight: 700;
+  border-bottom: 3px solid #ff7043;
+}
+
+.cart-btn {
+  position: relative;
+  background: #fff3f0;
+  color: #ff7043;
+  font-weight: 600;
+  border: 2px solid #ff7043;
+}
+
+.cart-btn:hover {
+  background: #ff7043;
+  color: white;
+}
+
+.user-info {
+  color: #666;
+  font-weight: 600;
+  padding: 0 10px;
+  border-right: 2px solid #e0e0e0;
+}
+
+/* Add user type badges with different colors for each role */
+.user-type {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.user-type.admin {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.user-type.restaurant_staff {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.user-type.customer {
+  background: #f3e5f5;
+  color: #6a1b9a;
+}
+
+.logout-btn {
+  background: #ff7043;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s;
+  font-size: 0.95rem;
+}
+
+.logout-btn:hover {
+  background: #e64a19;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(255, 112, 67, 0.3);
+}
+
+.main-content {
+  flex: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 20px;
+}
+
+.footer {
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 25px;
+  margin-top: auto;
+  border-top: 3px solid #ff7043;
+}
+
+.footer p {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Add loading container with spinner animation */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fff3f0 0%, #ffe0b2 100%);
+  gap: 20px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 112, 67, 0.2);
+  border-top: 4px solid #ff7043;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-container p {
+  font-size: 1.1rem;
+  color: #ff7043;
+  font-weight: 600;
+}
+
+.loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.1rem;
+  color: #999;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .nav-container {
+    padding: 15px 20px;
+  }
+
+  .nav-links {
+    gap: 15px;
+  }
+
+  .main-content {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    gap: 15px;
+    padding: 12px;
+  }
+
+  .nav-brand h1 {
+    font-size: 1.3rem;
+  }
+
+  .nav-links {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .nav-btn {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+  }
+
+  .user-info {
+    border-right: none;
+    padding: 0;
+    font-size: 0.9rem;
+  }
+
+  .user-type {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  .logout-btn {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+
+  .main-content {
+    padding: 10px;
+  }
+
+  .footer {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 10px;
+  }
+
+  .nav-links {
+    gap: 8px;
+  }
+
+  .nav-btn {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .main-content {
+    padding: 8px;
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "food-ordering-app-root",
+  "version": "1.0.0",
+  "description": "Root orchestration for Food Ordering Microservices",
+  "private": true,
+  "scripts": {
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:ps": "docker compose ps",
+    "docker:restart": "docker compose down && docker compose up -d --build",
+    "docker:clean": "docker compose down -v --rmi all",
+    "setup:frontend": "cd frontend && npm install"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
