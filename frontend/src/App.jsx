@@ -46,6 +46,7 @@ export default function App() {
 
   const verifyUser = async (token) => {
     try {
+      // ✅ Đã sửa thành /auth/profile cho đúng với Gateway mới
       const response = await axios.get(`${API_URL}/auth/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -159,6 +160,7 @@ export default function App() {
           {/* Routes cho KHÁCH HÀNG */}
           <Route element={<ProtectedRoute user={user} allowedRoles={['CUSTOMER']} />}>
             <Route path="/restaurants" element={<RestaurantsPage cart={cart} addToCart={addToCart} API_URL={API_URL} />} />
+            {/* Truyền navigate xuống CartPage để chuyển trang sau khi đặt hàng */}
             <Route path="/cart" element={<CartPage cart={cart} removeFromCart={removeFromCart} clearCart={clearCart} API_URL={API_URL} navigate={navigate} />} />
             <Route path="/orders" element={<OrdersPage API_URL={API_URL} />} />
           </Route>
