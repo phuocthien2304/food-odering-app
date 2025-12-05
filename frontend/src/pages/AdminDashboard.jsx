@@ -25,19 +25,19 @@ export default function AdminDashboard({ API_URL }) {
       })
       setStats(response.data)
     } catch (error) {
-      console.error("Failed to load stats", error)
+      console.error("Tải số liệu thống kê thất bại", error)
     } finally {
       setLoading(false)
     }
   }
 
-  if (loading) return <div className="loading">Loading admin dashboard...</div>
+  if (loading) return <div className="loading">Đang tải bảng điều khiển quản trị...</div>
 
   return (
     <div className="admin-dashboard">
       <div className="dashboard-header">
-        <h1>Admin Dashboard</h1>
-        <p>Manage users and restaurants</p>
+        <h1>Bảng điều khiển quản trị</h1>
+        <p>Quản lý người dùng và nhà hàng</p>
       </div>
 
       <div className="admin-tabs">
@@ -45,16 +45,16 @@ export default function AdminDashboard({ API_URL }) {
           className={`tab-btn ${currentTab === "dashboard" ? "active" : ""}`}
           onClick={() => setCurrentTab("dashboard")}
         >
-          Overview
+          Tổng quan
         </button>
         <button className={`tab-btn ${currentTab === "users" ? "active" : ""}`} onClick={() => setCurrentTab("users")}>
-          Users
+          Người dùng
         </button>
         <button
           className={`tab-btn ${currentTab === "restaurants" ? "active" : ""}`}
           onClick={() => setCurrentTab("restaurants")}
         >
-          Restaurants
+          Nhà hàng
         </button>
       </div>
 
@@ -62,22 +62,22 @@ export default function AdminDashboard({ API_URL }) {
         <div className="stats-grid">
           <div className="stat-card">
             <h3>{stats.totalUsers}</h3>
-            <p>Total Users</p>
+            <p>Tổng số người dùng</p>
             <div className="stat-icon">👥</div>
           </div>
           <div className="stat-card">
             <h3>{stats.totalRestaurants}</h3>
-            <p>Total Restaurants</p>
+            <p>Tổng số nhà hàng</p>
             <div className="stat-icon">🏪</div>
           </div>
           <div className="stat-card">
             <h3>{stats.totalOrders}</h3>
-            <p>Total Orders</p>
+            <p>Tổng số đơn hàng</p>
             <div className="stat-icon">📋</div>
           </div>
           <div className="stat-card">
-            <h3>${(stats.totalRevenue || 0).toFixed(2)}</h3>
-            <p>Total Revenue</p>
+            <h3>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(stats.totalRevenue || 0)}</h3>
+            <p>Tổng doanh thu</p>
             <div className="stat-icon">💰</div>
           </div>
         </div>
@@ -104,39 +104,39 @@ function UserManagement({ API_URL }) {
       })
       setUsers(response.data)
     } catch (error) {
-      console.error("Failed to load users", error)
+      console.error("Tải người dùng thất bại", error)
     } finally {
       setLoading(false)
     }
   }
 
   const deleteUser = async (userId) => {
-    if (!window.confirm("Are you sure you want to delete this user?")) return
+    if (!window.confirm("Bạn có chắc chắn muốn xóa người dùng này không?")) return
     try {
       await axios.delete(`${API_URL}/admin/users/${userId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
-      alert("User deleted successfully")
+      alert("Đã xóa người dùng thành công")
       fetchUsers()
     } catch (error) {
-      alert("Failed to delete user")
+      alert("Xóa người dùng thất bại")
     }
   }
 
-  if (loading) return <p>Loading users...</p>
+  if (loading) return <p>Đang tải người dùng...</p>
 
   return (
     <div className="management-section">
-      <h3>User Management</h3>
+      <h3>Quản lý người dùng</h3>
       <div className="table-container">
         <table className="management-table">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Tên</th>
               <th>Email</th>
-              <th>Type</th>
-              <th>Joined</th>
-              <th>Actions</th>
+              <th>Loại</th>
+              <th>Đã tham gia</th>
+              <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -150,7 +150,7 @@ function UserManagement({ API_URL }) {
                 <td>{new Date(user.createdAt).toLocaleDateString()}</td>
                 <td>
                   <button className="btn-delete" onClick={() => deleteUser(user._id)}>
-                    Delete
+                    Xóa
                   </button>
                 </td>
               </tr>
@@ -177,7 +177,7 @@ function RestaurantManagement({ API_URL }) {
       })
       setRestaurants(response.data)
     } catch (error) {
-      console.error("Failed to load restaurants", error)
+      console.error("Tải nhà hàng thất bại", error)
     } finally {
       setLoading(false)
     }
@@ -194,24 +194,24 @@ function RestaurantManagement({ API_URL }) {
       )
       fetchRestaurants()
     } catch (error) {
-      alert("Failed to update restaurant")
+      alert("Cập nhật nhà hàng thất bại")
     }
   }
 
-  if (loading) return <p>Loading restaurants...</p>
+  if (loading) return <p>Đang tải nhà hàng...</p>
 
   return (
     <div className="management-section">
-      <h3>Restaurant Management</h3>
+      <h3>Quản lý nhà hàng</h3>
       <div className="table-container">
         <table className="management-table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Owner</th>
-              <th>Address</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>Tên</th>
+              <th>Chủ sở hữu</th>
+              <th>Địa chỉ</th>
+              <th>Trạng thái</th>
+              <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -222,12 +222,12 @@ function RestaurantManagement({ API_URL }) {
                 <td>{rest.address}</td>
                 <td>
                   <span className={`status-badge ${rest.active ? "active" : "inactive"}`}>
-                    {rest.active ? "Active" : "Inactive"}
+                    {rest.active ? "Hoạt động" : "Không hoạt động"}
                   </span>
                 </td>
                 <td>
                   <button className="btn-toggle" onClick={() => toggleRestaurantStatus(rest._id, rest.active)}>
-                    {rest.active ? "Deactivate" : "Activate"}
+                    {rest.active ? "Vô hiệu hóa" : "Kích hoạt"}
                   </button>
                 </td>
               </tr>

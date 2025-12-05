@@ -24,41 +24,41 @@ export default function RestaurantAnalytics({ API_URL }) {
       })
       setAnalytics(response.data)
     } catch (error) {
-      console.error("Failed to load analytics", error)
+      console.error("Tải phân tích thất bại", error)
     } finally {
       setLoading(false)
     }
   }
 
-  if (loading) return <div className="loading">Loading analytics...</div>
+  if (loading) return <div className="loading">Đang tải phân tích...</div>
 
   return (
     <div className="analytics-container">
-      <h2>Analytics</h2>
+      <h2>Phân tích</h2>
 
       <div className="analytics-grid">
         <div className="analytics-card">
           <h3>{analytics.orderCount}</h3>
-          <p>Total Orders</p>
+          <p>Tổng số đơn hàng</p>
         </div>
         <div className="analytics-card">
-          <h3>${(analytics.revenue || 0).toFixed(2)}</h3>
-          <p>Total Revenue</p>
+          <h3>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(analytics.revenue || 0)}</h3>
+          <p>Tổng doanh thu</p>
         </div>
         <div className="analytics-card">
-          <h3>${((analytics.revenue || 0) / (analytics.orderCount || 1)).toFixed(2)}</h3>
-          <p>Avg Order Value</p>
+          <h3>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format((analytics.revenue || 0) / (analytics.orderCount || 1))}</h3>
+          <p>Giá trị đơn hàng trung bình</p>
         </div>
       </div>
 
       <div className="top-items">
-        <h3>Top Items</h3>
+        <h3>Mặt hàng hàng đầu</h3>
         <table className="analytics-table">
           <thead>
             <tr>
-              <th>Item Name</th>
-              <th>Orders</th>
-              <th>Revenue</th>
+              <th>Tên mặt hàng</th>
+              <th>Đơn hàng</th>
+              <th>Doanh thu</th>
             </tr>
           </thead>
           <tbody>
@@ -66,7 +66,7 @@ export default function RestaurantAnalytics({ API_URL }) {
               <tr key={item._id}>
                 <td>{item.name}</td>
                 <td>{item.orderCount}</td>
-                <td>${(item.revenue || 0).toFixed(2)}</td>
+                <td>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.revenue || 0)}</td>
               </tr>
             ))}
           </tbody>

@@ -16,7 +16,7 @@ class PaymentController {
       throw new HttpException('Missing required fields', HttpStatus.BAD_REQUEST);
     }
 
-    return this.paymentService.initiatePayment(orderId, customerId, amount, paymentMethod || 'VNPAY');
+    return this.paymentService.initiatePayment(orderId, customerId, amount, paymentMethod || 'STRIPE');
   }
 
   @Get(':id')
@@ -76,7 +76,7 @@ class PaymentController {
       orderData._id,
       orderData.customerId,
       orderData.total,
-      'VNPAY'
+      'STRIPE'
     );
   }
 }

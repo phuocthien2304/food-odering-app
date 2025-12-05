@@ -11,10 +11,22 @@ export default function OrdersPage({ API_URL }) {
   const [filter, setFilter] = useState("all")
 
   useEffect(() => {
-    fetchOrders()
-    const interval = setInterval(fetchOrders, 10000)
-    return () => clearInterval(interval)
-  }, [])
+    fetchOrders();
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchOrders();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    const interval = setInterval(fetchOrders, 10000);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearInterval(interval);
+    };
+  }, []);
 
   const fetchOrders = async () => {
     try {
@@ -23,7 +35,7 @@ export default function OrdersPage({ API_URL }) {
       })
       setOrders(response.data)
     } catch (error) {
-      console.error("Failed to load orders", error)
+      console.error("Tải đơn hàng thất bại", error)
     } finally {
       setLoading(false)
     }
@@ -43,11 +55,20 @@ export default function OrdersPage({ API_URL }) {
     )
   }
 
-  if (loading) return <div className="loading">Loading orders...</div>
+  const statusTranslations = {
+    all: "Tất cả đơn hàng",
+    CREATED: "Đã tạo",
+    CONFIRMED: "Đã xác nhận",
+    PREPARING: "Đang chuẩn bị",
+    READY: "Sẵn sàng",
+    COMPLETED: "Hoàn thành",
+  }
+
+  if (loading) return <div className="loading">Đang tải đơn hàng...</div>
 
   return (
     <div className="orders-container">
-      <h2>My Orders</h2>
+      <h2>Đơn hàng của tôi</h2>
 
       <div className="filter-tabs">
         {["all", "CREATED", "CONFIRMED", "PREPARING", "READY", "COMPLETED"].map((status) => (
@@ -56,7 +77,7 @@ export default function OrdersPage({ API_URL }) {
             className={`filter-tab ${filter === status ? "active" : ""}`}
             onClick={() => setFilter(status)}
           >
-            {status === "all" ? "All Orders" : status}
+            {statusTranslations[status]}
           </button>
         ))}
       </div>
@@ -64,19 +85,19 @@ export default function OrdersPage({ API_URL }) {
       <div className="orders-list">
         {filteredOrders.length === 0 ? (
           <div className="no-orders">
-            <p>No orders yet</p>
+            <p>Chưa có đơn hàng nào</p>
           </div>
         ) : (
           filteredOrders.map((order) => (
             <div key={order._id} className="order-card">
               <div className="order-header-row">
                 <div>
-                  <h3>Order #{order._id.slice(-8)}</h3>
+                  <h3>Đơn hàng #{order._id.slice(-8)}</h3>
                   <p className="order-date">{new Date(order.createdAt).toLocaleString()}</p>
                 </div>
                 <div className="order-header-right">
-                  <span className={`status-badge ${getStatusBadgeClass(order.status)}`}>{order.status}</span>
-                  <p className="order-total">${order.total?.toFixed(2) || "N/A"}</p>
+                  <span className={`status-badge ${getStatusBadgeClass(order.status)}`}>{statusTranslations[order.status]}</span>
+                  <p className="order-total">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.total || 0)}</p>
                 </div>
               </div>
 
@@ -84,26 +105,26 @@ export default function OrdersPage({ API_URL }) {
                 className="expand-btn"
                 onClick={() => setExpandedOrder(expandedOrder === order._id ? null : order._id)}
               >
-                {expandedOrder === order._id ? "Hide Details ▲" : "Show Details ▼"}
+                {expandedOrder === order._id ? "Ẩn chi tiết ▲" : "Hiện chi tiết ▼"}
               </button>
 
               {expandedOrder === order._id && (
                 <div className="order-details">
                   <div className="items-section">
-                    <h4>Items</h4>
+                    <h4>Mặt hàng</h4>
                     <ul className="items-list">
                       {order.items?.map((item, idx) => (
                         <li key={idx}>
                           <span className="item-name">{item.name}</span>
                           <span className="item-qty">x{item.quantity}</span>
-                          <span className="item-price">${(item.price * item.quantity).toFixed(2)}</span>
+                          <span className="item-price">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price * item.quantity)}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   <div className="address-section">
-                    <h4>Delivery Address</h4>
+                    <h4>Địa chỉ giao hàng</h4>
                     <p>{order.deliveryAddress?.street}</p>
                     <p>
                       {order.deliveryAddress?.ward}, {order.deliveryAddress?.district}
@@ -113,7 +134,7 @@ export default function OrdersPage({ API_URL }) {
 
                   {order.status === "READY" && (
                     <div className="status-info">
-                      <p className="ready-alert">Your order is ready for pickup!</p>
+                      <p className="ready-alert">Đơn hàng của bạn đã sẵn sàng để nhận!</p>
                     </div>
                   )}
                 </div>

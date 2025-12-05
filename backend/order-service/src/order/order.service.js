@@ -18,32 +18,62 @@ class OrderService {
   }
 
   async createOrder(createDto) {
-    const subtotal = (createDto.items || []).reduce((sum, item) => {
+    // Validate cart items
+    if (!createDto.items || createDto.items.length === 0) {
+      throw new Error('Cart is empty');
+    }
+
+    // Calculate subtotal from cart items
+    const subtotal = createDto.items.reduce((sum, item) => {
       const qty = item.quantity || 1;
-      return sum + (item.price || 0) * qty;
+      const price = item.price || 0;
+      if (price < 0 || qty < 0) {
+        throw new Error('Invalid price or quantity');
+      }
+      return sum + price * qty;
     }, 0);
 
-    const deliveryFee = createDto.deliveryFee || 0;
+    // Validate delivery address if online payment
+    if (createDto.paymentMethod === 'ONLINE' || createDto.paymentMethod === 'STRIPE') {
+      const { deliveryAddress } = createDto;
+      if (!deliveryAddress || !deliveryAddress.street || !deliveryAddress.ward || 
+          !deliveryAddress.district || !deliveryAddress.city) {
+        throw new Error('Complete delivery address is required for online payment');
+      }
+    }
+
+    const deliveryFee = createDto.deliveryFee || 15000; // Default delivery fee VND
     const total = subtotal + deliveryFee;
 
+    // Group items by restaurant (validate single restaurant per order)
     const order = new this.OrderModel({
       customerId: createDto.customerId,
       restaurantId: createDto.restaurantId,
-      items: createDto.items,
+      items: createDto.items.map(item => ({
+        menuItemId: item.menuItemId,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity || 1,
+        notes: item.notes || ''
+      })),
       subtotal,
       deliveryFee,
       total,
       paymentMethod: createDto.paymentMethod || 'COD',
       deliveryAddress: createDto.deliveryAddress,
       customerLocation: createDto.customerLocation,
-      notes: createDto.notes,
-      status: createDto.paymentMethod === 'ONLINE' ? 'PENDING_PAYMENT' : 'CREATED'
+      notes: createDto.notes || '',
+      status: ['ONLINE', 'STRIPE'].includes(createDto.paymentMethod) ? 'PENDING_PAYMENT' : 'CREATED'
     });
 
     const saved = await order.save();
 
-    if (createDto.paymentMethod === 'ONLINE') {
-      this.client.emit('order_requires_payment', saved);
+    // Emit events based on payment method
+    if (['ONLINE', 'STRIPE'].includes(createDto.paymentMethod)) {
+      this.client.emit('order_requires_payment', {
+        ...saved.toObject(),
+        paymentMethod: createDto.paymentMethod
+      });
     } else {
       this.client.emit('order_created', saved);
     }

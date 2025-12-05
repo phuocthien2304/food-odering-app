@@ -10,10 +10,22 @@ class OrderController {
 
   @Post()
   async createOrder(@Body() createDto) {
-    if (!createDto.customerId || !createDto.restaurantId || !createDto.items || createDto.items.length === 0) {
-      throw new HttpException('Missing required fields', HttpStatus.BAD_REQUEST);
+    try {
+      if (!createDto.customerId || !createDto.restaurantId || !createDto.items || createDto.items.length === 0) {
+        throw new HttpException('Missing required fields: customerId, restaurantId, items', HttpStatus.BAD_REQUEST);
+      }
+
+      // Validate items structure
+      createDto.items.forEach((item, idx) => {
+        if (!item.menuItemId || !item.name || item.price === undefined || !item.quantity) {
+          throw new HttpException(`Invalid item at index ${idx}: missing menuItemId, name, price, or quantity`, HttpStatus.BAD_REQUEST);
+        }
+      });
+
+      return this.orderService.createOrder(createDto);
+    } catch (error) {
+      throw new HttpException(error.message || 'Failed to create order', HttpStatus.BAD_REQUEST);
     }
-    return this.orderService.createOrder(createDto);
   }
 
   @Get(':id')

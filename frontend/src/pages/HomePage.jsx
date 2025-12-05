@@ -51,8 +51,8 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
   if (user) {
     return (
       <div className="home-container welcome">
-        <h2>Welcome back, {user.name}!</h2>
-        <p>You are logged in as {user.userType}</p>
+        <h2>Chào mừng trở lại, {user.name}!</h2>
+        <p>Bạn đã đăng nhập với tư cách {user.userType}</p>
         <button
           className="btn-primary"
           onClick={() => {
@@ -61,7 +61,7 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
              else navigate("/restaurants");
           }}
         >
-          Go to Dashboard
+          Đi đến Bảng điều khiển
         </button>
       </div>
     )
@@ -70,26 +70,26 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
   return (
     <div className="home-container">
       <div className="hero">
-        <h2>Welcome to Food Ordering App</h2>
-        <p>Order delicious food from your favorite restaurants</p>
+        <h2>Chào mừng đến với ứng dụng đặt món ăn</h2>
+        <p>Đặt món ăn ngon từ nhà hàng yêu thích của bạn</p>
       </div>
 
       <div className="auth-container">
         <div className="auth-form">
-          <h3>{isLogin ? "Login" : "Register"}</h3>
+          <h3>{isLogin ? "Đăng nhập" : "Đăng ký"}</h3>
           <form onSubmit={handleSubmit}>
             {!isLogin && (
               <>
                 <input
                   type="text"
                   name="name"
-                  placeholder="Full Name"
+                  placeholder="Họ và tên"
                   value={formData.name}
                   onChange={handleChange}
                   required
                 />
                 <div className="user-type-selector">
-                  <label>Select Account Type:</label>
+                  <label>Chọn loại tài khoản:</label>
                   <div className="type-options">
                     <label className="type-option">
                       <input
@@ -98,7 +98,7 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
                         checked={userType === "CUSTOMER"}
                         onChange={(e) => setUserType(e.target.value)}
                       />
-                      <span>Customer</span>
+                      <span>Khách hàng</span>
                     </label>
                     <label className="type-option">
                       <input
@@ -107,7 +107,7 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
                         checked={userType === "RESTAURANT_STAFF"}
                         onChange={(e) => setUserType(e.target.value)}
                       />
-                      <span>Restaurant Staff</span>
+                      <span>Nhân viên nhà hàng</span>
                     </label>
                   </div>
                 </div>
@@ -124,17 +124,17 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
             <input
               type="password"
               name="password"
-              placeholder="Password"
+              placeholder="Mật khẩu"
               value={formData.password}
               onChange={handleChange}
               required
             />
             <button type="submit" className="btn-primary">
-              {isLogin ? "Login" : "Register"}
+              {isLogin ? "Đăng nhập" : "Đăng ký"}
             </button>
           </form>
           <p className="toggle-auth">
-            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            {isLogin ? "Chưa có tài khoản? " : "Đã có tài khoản? "}
             <button
               type="button"
               onClick={() => {
@@ -143,7 +143,7 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
               }}
               className="toggle-link"
             >
-              {isLogin ? "Register" : "Login"}
+              {isLogin ? "Đăng ký" : "Đăng nhập"}
             </button>
           </p>
         </div>

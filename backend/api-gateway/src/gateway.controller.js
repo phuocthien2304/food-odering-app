@@ -116,6 +116,15 @@ class GatewayController {
     }
   }
 
+  @Post('restaurants/:restaurantId/menu')
+  async addMenuItem(@Param('restaurantId') restaurantId, @Body() menuItemDto) {
+    try {
+      return await this.gatewayService.addMenuItem(restaurantId, menuItemDto);
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
   // ==================== ORDER ENDPOINTS ====================
   @Post('orders')
   async createOrder(@Body() orderDto) {
@@ -178,6 +187,33 @@ class GatewayController {
       return await this.gatewayService.getPayment(id);
     } catch (error) {
       throw new HttpException(error.message, error.status || HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @Post('payments/:id/callback')
+  async handlePaymentCallback(@Param('id') id, @Body() callbackData) {
+    try {
+      return await this.gatewayService.handlePaymentCallback(id, callbackData);
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post('payments/:id/retry')
+  async retryPayment(@Param('id') id) {
+    try {
+      return await this.gatewayService.retryPayment(id);
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post('payments/:id/refund')
+  async refundPayment(@Param('id') id, @Body() body) {
+    try {
+      return await this.gatewayService.refundPayment(id, body.reason);
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
     }
   }
 

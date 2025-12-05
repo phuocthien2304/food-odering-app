@@ -32,23 +32,23 @@ services:
   # =========================================
   # 2. FRONTEND
   # =========================================
-  # frontend:
-  #   build:
-  #     context: ./frontend  # <--- Đường dẫn chuẩn từ Root
-  #     dockerfile: Dockerfile
-  #   container_name: food-ordering-frontend
-  #   ports:
-  #     - "5173:5173"
-  #   environment:
-  #     - VITE_API_URL=http://localhost:3000/api
-  #   volumes:
-  #     - ./frontend:/app
-  #     - /app/node_modules
-  #   depends_on:
-  #     - api-gateway
-  #   networks:
-  #     - food-ordering-network
-  #   restart: unless-stopped
+  frontend:
+    build:
+      context: ./frontend  # <--- Đường dẫn chuẩn từ Root
+      dockerfile: Dockerfile
+    container_name: food-ordering-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://api-gateway:3000/api
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api-gateway
+    networks:
+      - food-ordering-network
+    restart: unless-stopped
 
   # =========================================
   # 3. USER SERVICE

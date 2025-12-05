@@ -56,7 +56,7 @@ export default function App() {
         redirectBasedOnRole(response.data.userType);
       }
     } catch (error) {
-      console.error("Session expired")
+      console.error("Phiên đã hết hạn")
       localStorage.removeItem("token")
       setUser(null)
     } finally {
@@ -74,12 +74,14 @@ export default function App() {
   // Xử lý Login từ HomePage
   const handleLoginSuccess = (userData, token) => {
     localStorage.setItem("token", token)
+    localStorage.setItem("user", JSON.stringify(userData))
     setUser(userData)
     redirectBasedOnRole(userData.userType)
   }
 
   const handleLogout = () => {
     localStorage.removeItem("token")
+    localStorage.removeItem("user")
     setUser(null)
     setCart([])
     navigate("/")
@@ -91,12 +93,15 @@ export default function App() {
     if (existingItem) {
       setCart(cart.map((c) => (c.menuItemId === item._id ? { ...c, quantity: c.quantity + 1 } : c)))
     } else {
-      setCart([...cart, { menuItemId: item._id, name: item.name, price: item.price, quantity: 1 }])
+      setCart([...cart, { menuItemId: item._id, restaurantId: item.restaurantId, name: item.name, price: item.price, quantity: 1 }])
     }
   }
 
-  const removeFromCart = (index, isAdd = false) => {
+  const removeFromCart = (item, isAdd = false) => {
     const updated = [...cart]
+    const index = updated.findIndex(i => i.menuItemId === item.menuItemId);
+    if(index === -1) return;
+
     if (isAdd) updated[index].quantity += 1
     else if (updated[index].quantity > 1) updated[index].quantity -= 1
     else updated.splice(index, 1)
@@ -105,7 +110,7 @@ export default function App() {
 
   const clearCart = () => setCart([])
 
-  if (isLoading) return <div className="loading-container"><div className="spinner"></div><p>Loading...</p></div>
+  if (isLoading) return <div className="loading-container"><div className="spinner"></div><p>Đang tải...</p></div>
 
   return (
     <div className="app">
@@ -113,33 +118,33 @@ export default function App() {
       <nav className="navbar">
         <div className="nav-container">
           <div className="nav-brand" onClick={() => navigate('/')} style={{cursor: 'pointer'}}>
-            <h1>🍕 Food Ordering</h1>
+            <h1>🍕 Đặt món ăn</h1>
           </div>
           <div className="nav-links">
             {user ? (
               <>
                 {user.userType === "ADMIN" && (
-                  <button className="nav-btn" onClick={() => navigate("/admin/dashboard")}>Dashboard</button>
+                  <button className="nav-btn" onClick={() => navigate("/admin/dashboard")}>Bảng điều khiển</button>
                 )}
                 {user.userType === "RESTAURANT_STAFF" && (
                   <>
-                    <button className="nav-btn" onClick={() => navigate("/restaurant/dashboard")}>Orders</button>
-                    <button className="nav-btn" onClick={() => navigate("/restaurant/menu")}>Menu</button>
-                    <button className="nav-btn" onClick={() => navigate("/restaurant/analytics")}>Analytics</button>
+                    <button className="nav-btn" onClick={() => navigate("/restaurant/dashboard")}>Đơn hàng</button>
+                    <button className="nav-btn" onClick={() => navigate("/restaurant/menu")}>Thực đơn</button>
+                    <button className="nav-btn" onClick={() => navigate("/restaurant/analytics")}>Phân tích</button>
                   </>
                 )}
                 {user.userType === "CUSTOMER" && (
                   <>
-                    <button className="nav-btn" onClick={() => navigate("/restaurants")}>Restaurants</button>
-                    <button className="nav-btn" onClick={() => navigate("/orders")}>My Orders</button>
-                    <button className="nav-btn cart-btn" onClick={() => navigate("/cart")}>Cart ({cart.length})</button>
+                    <button className="nav-btn" onClick={() => navigate("/restaurants")}>Nhà hàng</button>
+                    <button className="nav-btn" onClick={() => navigate("/orders")}>Đơn hàng của tôi</button>
+                    <button className="nav-btn cart-btn" onClick={() => navigate("/cart")}>Giỏ hàng ({cart.length})</button>
                   </>
                 )}
-                <span className="user-info">Hi, {user.name}</span>
-                <button className="logout-btn" onClick={handleLogout}>Logout</button>
+                <span className="user-info">Chào, {user.name}</span>
+                <button className="logout-btn" onClick={handleLogout}>Đăng xuất</button>
               </>
             ) : (
-              <button className="nav-btn" onClick={() => navigate("/")}>Login</button>
+              <button className="nav-btn" onClick={() => navigate("/")}>Đăng nhập</button>
             )}
           </div>
         </div>
@@ -161,14 +166,14 @@ export default function App() {
           <Route element={<ProtectedRoute user={user} allowedRoles={['CUSTOMER']} />}>
             <Route path="/restaurants" element={<RestaurantsPage cart={cart} addToCart={addToCart} API_URL={API_URL} />} />
             {/* Truyền navigate xuống CartPage để chuyển trang sau khi đặt hàng */}
-            <Route path="/cart" element={<CartPage cart={cart} removeFromCart={removeFromCart} clearCart={clearCart} API_URL={API_URL} navigate={navigate} />} />
+            <Route path="/cart" element={<CartPage cart={cart} removeFromCart={removeFromCart} clearCart={clearCart} API_URL={API_URL} navigate={navigate} user={user} />} />
             <Route path="/orders" element={<OrdersPage API_URL={API_URL} />} />
           </Route>
 
           {/* Routes cho CHỦ NHÀ HÀNG */}
           <Route element={<ProtectedRoute user={user} allowedRoles={['RESTAURANT_STAFF']} />}>
             <Route path="/restaurant/dashboard" element={<RestaurantDashboard API_URL={API_URL} />} />
-            <Route path="/restaurant/menu" element={<RestaurantMenuManagement API_URL={API_URL} />} />
+            <Route path="/restaurant/menu" element={<RestaurantMenuManagement API_URL={API_URL} user={user} />} />
             <Route path="/restaurant/analytics" element={<RestaurantAnalytics API_URL={API_URL} />} />
           </Route>
 
@@ -178,12 +183,12 @@ export default function App() {
           </Route>
 
           {/* 404 */}
-          <Route path="*" element={<div style={{textAlign:'center', marginTop:'50px'}}><h2>404 Not Found</h2></div>} />
+          <Route path="*" element={<div style={{textAlign:'center', marginTop:'50px'}}><h2>404 không tìm thấy</h2></div>} />
         </Routes>
       </main>
 
       <footer className="footer">
-        <p>&copy; 2025 Food Ordering App. All rights reserved.</p>
+        <p>&copy; 2025 Ứng dụng đặt món ăn. Đã đăng ký bản quyền.</p>
       </footer>
     </div>
   )

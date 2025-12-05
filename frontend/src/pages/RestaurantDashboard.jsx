@@ -28,7 +28,7 @@ export default function RestaurantDashboard({ API_URL }) {
       })
       setOrders(response.data)
     } catch (error) {
-      console.error("Failed to load orders", error)
+      console.error("Tải đơn hàng thất bại", error)
     }
   }
 
@@ -39,7 +39,7 @@ export default function RestaurantDashboard({ API_URL }) {
       })
       setStats(response.data)
     } catch (error) {
-      console.error("Failed to load stats", error)
+      console.error("Tải số liệu thống kê thất bại", error)
     } finally {
       setLoading(false)
     }
@@ -57,37 +57,37 @@ export default function RestaurantDashboard({ API_URL }) {
       fetchOrders()
       fetchStats()
     } catch (error) {
-      alert("Failed to update order: " + error.response?.data?.message)
+      alert("Cập nhật đơn hàng thất bại: " + error.response?.data?.message)
     }
   }
 
-  if (loading) return <div className="loading">Loading dashboard...</div>
+  if (loading) return <div className="loading">Đang tải bảng điều khiển...</div>
 
   return (
     <div className="dashboard-container">
-      <h2>Restaurant Dashboard</h2>
+      <h2>Bảng điều khiển nhà hàng</h2>
 
       {/* Stats Cards */}
       <div className="stats-grid">
         <div className="stat-card">
           <h3>{stats.totalOrders}</h3>
-          <p>Total Orders</p>
+          <p>Tổng số đơn hàng</p>
         </div>
         <div className="stat-card">
-          <h3>${(stats.totalRevenue || 0).toFixed(2)}</h3>
-          <p>Total Revenue</p>
+          <h3>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(stats.totalRevenue || 0)}</h3>
+          <p>Tổng doanh thu</p>
         </div>
         <div className="stat-card pending">
           <h3>{stats.pendingOrders}</h3>
-          <p>Pending Orders</p>
+          <p>Đơn hàng chờ xử lý</p>
         </div>
       </div>
 
       {/* Orders Management */}
       <div className="orders-section">
-        <h3>Order Management</h3>
+        <h3>Quản lý đơn hàng</h3>
         {orders.length === 0 ? (
-          <p className="no-orders">No orders yet</p>
+          <p className="no-orders">Chưa có đơn hàng nào</p>
         ) : (
           <div className="orders-list">
             {orders.map((order) => (
@@ -98,7 +98,7 @@ export default function RestaurantDashboard({ API_URL }) {
               >
                 <div className="order-header">
                   <div>
-                    <h3>Order #{order._id.slice(-8)}</h3>
+                    <h3>Đơn hàng #{order._id.slice(-8)}</h3>
                     <p className="order-time">{new Date(order.createdAt).toLocaleString()}</p>
                   </div>
                   <span className={`status ${order.status?.toLowerCase()}`}>{order.status}</span>
@@ -106,27 +106,27 @@ export default function RestaurantDashboard({ API_URL }) {
 
                 <div className="order-info">
                   <p>
-                    <strong>Total:</strong> ${order.total?.toFixed(2) || "N/A"}
+                    <strong>Tổng cộng:</strong> {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.total || 0)}
                   </p>
                   <p>
-                    <strong>Items:</strong> {order.items?.length || 0}
+                    <strong>Mặt hàng:</strong> {order.items?.length || 0}
                   </p>
                 </div>
 
                 {selectedOrder?._id === order._id && (
                   <div className="order-details">
-                    <h4>Items:</h4>
+                    <h4>Mặt hàng:</h4>
                     <ul>
                       {order.items?.map((item, idx) => (
                         <li key={idx}>
-                          {item.name} x {item.quantity} - ${(item.price * item.quantity).toFixed(2)}
-                          {item.notes && <p className="notes">Notes: {item.notes}</p>}
+                          {item.name} x {item.quantity} - {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price * item.quantity)}
+                          {item.notes && <p className="notes">Ghi chú: {item.notes}</p>}
                         </li>
                       ))}
                     </ul>
 
                     <div className="delivery-info">
-                      <h4>Delivery Address:</h4>
+                      <h4>Địa chỉ giao hàng:</h4>
                       <p>
                         {order.deliveryAddress?.street}, {order.deliveryAddress?.ward},{" "}
                         {order.deliveryAddress?.district}, {order.deliveryAddress?.city}
@@ -139,7 +139,7 @@ export default function RestaurantDashboard({ API_URL }) {
                           className="btn-action confirmed"
                           onClick={() => updateOrderStatus(order._id, "CONFIRMED")}
                         >
-                          Confirm Order
+                          Xác nhận đơn hàng
                         </button>
                       )}
                       {order.status === "CONFIRMED" && (
@@ -147,20 +147,20 @@ export default function RestaurantDashboard({ API_URL }) {
                           className="btn-action preparing"
                           onClick={() => updateOrderStatus(order._id, "PREPARING")}
                         >
-                          Start Preparing
+                          Bắt đầu chuẩn bị
                         </button>
                       )}
                       {order.status === "PREPARING" && (
                         <button className="btn-action ready" onClick={() => updateOrderStatus(order._id, "READY")}>
-                          Mark as Ready
+                          Đánh dấu là sẵn sàng
                         </button>
                       )}
                       {order.status === "READY" && (
                         <button
                           className="btn-action completed"
-                          onClick={() => updateOrderStatus(order._id, "COMPLETED")}
+                          onClick={() => updateOrderStatus(order._d, "COMPLETED")}
                         >
-                          Complete Order
+                          Hoàn thành đơn hàng
                         </button>
                       )}
                     </div>

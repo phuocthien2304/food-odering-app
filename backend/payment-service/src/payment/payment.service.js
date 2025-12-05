@@ -2,11 +2,13 @@ const { Injectable } = require('@nestjs/common');
 const { ClientProxyFactory, Transport } = require('@nestjs/microservices');
 const { InjectModel } = require('@nestjs/mongoose');
 const crypto = require('crypto');
+const Stripe = require('stripe');
 
 @Injectable()
 class PaymentService {
   constructor(@InjectModel('Payment') paymentModel) {
     this.PaymentModel = paymentModel;
+    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_your_key_here');
 
     this.client = ClientProxyFactory.create({
       transport: Transport.RMQ,
@@ -18,24 +20,50 @@ class PaymentService {
     });
   }
 
-  async initiatePayment(orderId, customerId, amount, paymentMethod = 'VNPAY') {
-    const payment = new this.PaymentModel({
-      orderId,
-      customerId,
-      amount,
-      paymentMethod,
-      status: 'PENDING',
-      description: `Payment for order ${orderId}`
-    });
+  async initiatePayment(orderId, customerId, amount, paymentMethod = 'STRIPE') {
+    try {
+      const payment = new this.PaymentModel({
+        orderId,
+        customerId,
+        amount,
+        paymentMethod: paymentMethod || 'STRIPE',
+        status: 'PENDING',
+        description: `Payment for order ${orderId}`,
+        retryCount: 0
+      });
 
-    const saved = await payment.save();
+      let saved = await payment.save();
 
-    const paymentUrl = this.generatePaymentUrl(saved._id, amount, paymentMethod);
-    payment.paymentUrl = paymentUrl;
-    payment.redirectUrl = `${process.env.FRONTEND_URL}/payment/callback/${saved._id}`;
-    await payment.save();
+      if (paymentMethod === 'STRIPE') {
+        // Create Stripe Payment Intent
+        const paymentIntent = await this.stripe.paymentIntents.create({
+          amount: Math.round(amount * 100), // Convert to cents
+          currency: 'vnd',
+          description: `Order #${orderId}`,
+          metadata: {
+            paymentId: saved._id.toString(),
+            orderId: orderId.toString(),
+            customerId: customerId.toString()
+          },
+          automatic_payment_methods: { enabled: true },
+        });
 
-    return payment;
+        saved.paymentIntentId = paymentIntent.id;
+        saved.clientSecret = paymentIntent.client_secret;
+      } else {
+        // Fallback to VNPAY or other methods
+        const paymentUrl = this.generatePaymentUrl(saved._id, amount, paymentMethod);
+        saved.paymentUrl = paymentUrl;
+      }
+
+      saved.redirectUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/payment/callback/${saved._id}`;
+      saved = await saved.save();
+
+      return saved;
+    } catch (error) {
+      console.error('Error initiating payment:', error);
+      throw new Error(`Failed to initiate payment: ${error.message}`);
+    }
   }
 
   generatePaymentUrl(paymentId, amount, method) {
@@ -63,13 +91,85 @@ class PaymentService {
   }
 
   async handlePaymentCallback(paymentId, callbackData) {
-    const payment = await this.PaymentModel.findById(paymentId).exec();
-    
-    if (!payment) {
-      throw new Error('Payment not found');
-    }
+    try {
+      const payment = await this.PaymentModel.findById(paymentId).exec();
+      
+      if (!payment) {
+        throw new Error('Payment not found');
+      }
 
-    const isValid = this.verifyCallbackSignature(callbackData, payment.paymentMethod);
+      if (payment.paymentMethod === 'STRIPE') {
+        return this.handleStripeCallback(payment, callbackData);
+      } else {
+        return this.handleVNPayCallback(payment, callbackData);
+      }
+    } catch (error) {
+      console.error('Callback handling error:', error);
+      throw error;
+    }
+  }
+
+  async handleStripeCallback(payment, callbackData) {
+    try {
+      // Handle Stripe webhook or direct callback
+      if (callbackData.type === 'payment_intent.succeeded') {
+        const paymentIntent = callbackData.data.object;
+        
+        if (paymentIntent.id !== payment.paymentIntentId) {
+          throw new Error('Payment Intent ID mismatch');
+        }
+
+        payment.status = 'SUCCESS';
+        payment.transactionId = paymentIntent.id;
+        payment.stripeChargeId = paymentIntent.charges?.data?.[0]?.id;
+        payment.paidAt = new Date();
+      } else if (callbackData.type === 'payment_intent.payment_failed') {
+        const paymentIntent = callbackData.data.object;
+        
+        payment.status = 'FAILED';
+        payment.errorMessage = paymentIntent.last_payment_error?.message || 'Payment failed';
+        payment.failedAt = new Date();
+      } else if (callbackData.paymentIntentStatus === 'succeeded') {
+        // Direct API callback
+        payment.status = 'SUCCESS';
+        payment.transactionId = callbackData.paymentIntentId || payment.paymentIntentId;
+        payment.paidAt = new Date();
+      } else if (callbackData.paymentIntentStatus === 'requires_payment_method') {
+        payment.status = 'PENDING';
+      } else {
+        payment.status = 'FAILED';
+        payment.errorMessage = callbackData.errorMessage || 'Payment processing failed';
+        payment.failedAt = new Date();
+      }
+
+      await payment.save();
+
+      if (payment.status === 'SUCCESS') {
+        this.client.emit('payment_confirmed', {
+          paymentId: payment._id,
+          orderId: payment.orderId,
+          customerId: payment.customerId,
+          amount: payment.amount,
+          transactionId: payment.transactionId,
+          paymentMethod: 'STRIPE'
+        });
+      } else if (payment.status === 'FAILED') {
+        this.client.emit('payment_failed', {
+          paymentId: payment._id,
+          orderId: payment.orderId,
+          reason: payment.errorMessage
+        });
+      }
+
+      return payment;
+    } catch (error) {
+      console.error('Stripe callback error:', error);
+      throw error;
+    }
+  }
+
+  async handleVNPayCallback(payment, callbackData) {
+    const isValid = this.verifyCallbackSignature(callbackData, 'VNPAY');
     
     if (!isValid) {
       payment.status = 'FAILED';
@@ -79,11 +179,11 @@ class PaymentService {
       throw new Error('Invalid callback signature');
     }
 
-    if (callbackData.ResponseCode === '00' || callbackData.vnp_ResponseCode === '00') {
+    if (callbackData.vnp_ResponseCode === '00') {
       payment.status = 'SUCCESS';
-      payment.transactionId = callbackData.TransactionNo || callbackData.vnp_TransactionNo;
-      payment.transactionCode = callbackData.TransactionCode || callbackData.vnp_TransactionCode;
-      payment.bankCode = callbackData.BankCode || callbackData.vnp_BankCode;
+      payment.transactionId = callbackData.vnp_TransactionNo;
+      payment.transactionCode = callbackData.vnp_TransactionCode;
+      payment.bankCode = callbackData.vnp_BankCode;
       payment.paidAt = new Date();
 
       await payment.save();
@@ -99,7 +199,7 @@ class PaymentService {
       return payment;
     } else {
       payment.status = 'FAILED';
-      payment.errorMessage = callbackData.Message || callbackData.vnp_Message || 'Payment failed';
+      payment.errorMessage = callbackData.vnp_Message || 'Payment failed';
       payment.failedAt = new Date();
       await payment.save();
 
@@ -152,49 +252,106 @@ class PaymentService {
     }
   }
 
-  async retryPayment(paymentId) {
-    const payment = await this.PaymentModel.findById(paymentId).exec();
-    
-    if (!payment) {
-      throw new Error('Payment not found');
-    }
+  async retryPayment(id) {
+    try {
+      const payment = await this.PaymentModel.findById(id).exec();
+      if (!payment) {
+        throw new Error('Payment not found');
+      }
 
-    if (payment.retryCount >= 3) {
-      throw new Error('Maximum retry attempts exceeded');
-    }
+      if (payment.retryCount >= 3) {
+        throw new Error('Maximum retry attempts exceeded');
+      }
 
-    payment.status = 'PENDING';
-    payment.retryCount += 1;
-    payment.paymentUrl = this.generatePaymentUrl(paymentId, payment.amount, payment.paymentMethod);
-    
-    return payment.save();
+      if (payment.paymentMethod === 'STRIPE') {
+        // Create a new payment intent for retry
+        const paymentIntent = await this.stripe.paymentIntents.create({
+          amount: Math.round(payment.amount * 100),
+          currency: 'vnd',
+          description: `Retry payment for order #${payment.orderId}`,
+          metadata: {
+            paymentId: payment._id.toString(),
+            orderId: payment.orderId.toString(),
+            customerId: payment.customerId.toString(),
+            retry: true
+          }
+        });
+
+        payment.paymentIntentId = paymentIntent.id;
+        payment.clientSecret = paymentIntent.client_secret;
+        payment.status = 'PENDING';
+        payment.retryCount = (payment.retryCount || 0) + 1;
+        await payment.save();
+
+        return payment;
+      }
+
+      payment.status = 'PENDING';
+      payment.retryCount = (payment.retryCount || 0) + 1;
+      payment.paymentUrl = this.generatePaymentUrl(id, payment.amount, payment.paymentMethod);
+      await payment.save();
+
+      return payment;
+    } catch (error) {
+      console.error('Retry payment error:', error);
+      throw new Error(`Failed to retry payment: ${error.message}`);
+    }
   }
 
-  async refundPayment(paymentId, reason) {
-    const payment = await this.PaymentModel.findById(paymentId).exec();
-    
-    if (!payment) {
-      throw new Error('Payment not found');
+  async refundPayment(id, reason) {
+    try {
+      const payment = await this.PaymentModel.findById(id).exec();
+      if (!payment) {
+        throw new Error('Payment not found');
+      }
+
+      if (payment.status !== 'SUCCESS') {
+        throw new Error('Only successful payments can be refunded');
+      }
+
+      if (payment.paymentMethod === 'STRIPE') {
+        const refund = await this.stripe.refunds.create({
+          charge: payment.stripeChargeId,
+          reason: reason ? 'requested_by_customer' : 'requested_by_customer',
+          metadata: {
+            paymentId: payment._id.toString(),
+            orderId: payment.orderId.toString(),
+            refundReason: reason
+          }
+        });
+
+        payment.status = 'REFUNDED';
+        payment.refundId = refund.id;
+        payment.refundReason = reason;
+        payment.refundedAt = new Date();
+        await payment.save();
+
+        this.client.emit('payment_refunded', {
+          paymentId: payment._id,
+          orderId: payment.orderId,
+          refundId: refund.id,
+          reason: reason
+        });
+
+        return payment;
+      }
+
+      payment.status = 'REFUNDED';
+      payment.refundedAt = new Date();
+      payment.refundReason = reason;
+      await payment.save();
+
+      this.client.emit('payment_refunded', {
+        paymentId: payment._id,
+        orderId: payment.orderId,
+        reason: reason
+      });
+
+      return payment;
+    } catch (error) {
+      console.error('Refund payment error:', error);
+      throw new Error(`Failed to refund payment: ${error.message}`);
     }
-
-    if (payment.status !== 'SUCCESS') {
-      throw new Error('Can only refund successful payments');
-    }
-
-    payment.status = 'REFUNDED';
-    payment.refundedAt = new Date();
-    payment.description = `${payment.description} - Refunded: ${reason}`;
-
-    const refunded = await payment.save();
-
-    this.client.emit('payment_refunded', {
-      paymentId: refunded._id,
-      orderId: refunded.orderId,
-      amount: refunded.amount,
-      reason
-    });
-
-    return refunded;
   }
 
   async getPaymentStats(startDate, endDate) {

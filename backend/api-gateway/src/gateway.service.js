@@ -84,6 +84,14 @@ class GatewayService {
     return this.proxyRequest('restaurant', 'GET', `/api/restaurants/${restaurantId}/menu`);
   }
 
+  async addMenuItem(restaurantId, menuItemDto) {
+    return this.proxyRequest('restaurant', 'POST', `/api/restaurants/${restaurantId}/menu`, menuItemDto);
+  }
+
+  async deleteMenuItem(menuItemId) {
+    return this.proxyRequest('restaurant', 'DELETE', `/api/restaurants/menu/${menuItemId}`);
+  }
+
   async createOrder(orderDto) {
     return this.proxyRequest('order', 'POST', '/api/orders', orderDto);
   }
@@ -110,6 +118,18 @@ class GatewayService {
 
   async getPayment(paymentId) {
     return this.proxyRequest('payment', 'GET', `/api/payments/${paymentId}`);
+  }
+
+  async handlePaymentCallback(paymentId, callbackData) {
+    return this.proxyRequest('payment', 'POST', `/api/payments/${paymentId}/callback`, callbackData);
+  }
+
+  async retryPayment(paymentId) {
+    return this.proxyRequest('payment', 'PATCH', `/api/payments/${paymentId}/retry`, {});
+  }
+
+  async refundPayment(paymentId, reason) {
+    return this.proxyRequest('payment', 'POST', `/api/payments/${paymentId}/refund`, { reason });
   }
 
   async getDelivery(deliveryId) {
