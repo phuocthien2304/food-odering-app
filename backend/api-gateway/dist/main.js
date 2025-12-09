@@ -10,12 +10,13 @@ var _require = require('@nestjs/core'),
   NestFactory = _require.NestFactory;
 var _require2 = require('./app.module'),
   AppModule = _require2.AppModule;
+var wsBroadcast = require('./ws-broadcast');
 function bootstrap() {
   return _bootstrap.apply(this, arguments);
 }
 function _bootstrap() {
   _bootstrap = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-    var app;
+    var app, server;
     return _regenerator().w(function (_context) {
       while (1) switch (_context.n) {
         case 0:
@@ -34,6 +35,15 @@ function _bootstrap() {
           return app.listen(process.env.GATEWAY_PORT || 3000);
         case 2:
           console.log("API Gateway listening on port ".concat(process.env.GATEWAY_PORT || 3000));
+
+          // Initialize WebSocket server attached to the same HTTP server
+          try {
+            server = app.getHttpServer();
+            wsBroadcast.init(server);
+            console.log('WebSocket server initialized on API Gateway');
+          } catch (e) {
+            console.warn('Failed to initialize WebSocket server:', e.message || e);
+          }
         case 3:
           return _context.a(2);
       }

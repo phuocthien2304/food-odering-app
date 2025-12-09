@@ -1,5 +1,6 @@
 const { Controller, Get, Post, Patch, Body, Param, Headers, HttpException, HttpStatus, Inject, Query } = require('@nestjs/common');
 const { GatewayService } = require('./gateway.service');
+const wsBroadcast = require('./ws-broadcast');
 
 @Controller('api')
 class GatewayController {
@@ -259,6 +260,20 @@ class GatewayController {
       return await this.gatewayService.cancelOrder(id, body.reason);
     } catch (error) {
       throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  // Internal endpoint used by other services to broadcast events to websocket clients
+  @Post('internal/events')
+  async internalEvent(@Body() body) {
+    try {
+      // body should be { type: 'delivery_status_changed'|'order_status_changed', payload: {...} }
+      if (!body || !body.type) throw new HttpException('Invalid event', HttpStatus.BAD_REQUEST);
+      // Broadcast to all websocket clients
+      try { wsBroadcast.broadcast(body); } catch (e) { console.warn('WS broadcast failed', e.message || e); }
+      return { ok: true };
+    } catch (error) {
+      throw new HttpException(error.message || 'Failed', error.status || HttpStatus.BAD_REQUEST);
     }
   }
 

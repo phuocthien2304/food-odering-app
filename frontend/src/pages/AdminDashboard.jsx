@@ -175,7 +175,16 @@ function RestaurantManagement({ API_URL }) {
       const response = await axios.get(`${API_URL}/admin/restaurants`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       })
-      setRestaurants(response.data)
+      // ensure we always store an array to avoid render errors if API returns an object
+      const data = response.data;
+      if (Array.isArray(data)) {
+        setRestaurants(data)
+      } else if (Array.isArray(data?.restaurants)) {
+        setRestaurants(data.restaurants)
+      } else {
+        console.error('Unexpected restaurants payload:', data)
+        setRestaurants([])
+      }
     } catch (error) {
       console.error("Tải nhà hàng thất bại", error)
     } finally {
@@ -215,7 +224,7 @@ function RestaurantManagement({ API_URL }) {
             </tr>
           </thead>
           <tbody>
-            {restaurants.map((rest) => (
+            {(Array.isArray(restaurants) ? restaurants : []).map((rest) => (
               <tr key={rest._id}>
                 <td>{rest.name}</td>
                 <td>{rest.owner?.name}</td>

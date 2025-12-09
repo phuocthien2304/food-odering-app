@@ -1,6 +1,7 @@
 const { Injectable } = require('@nestjs/common');
 const { InjectModel } = require('@nestjs/mongoose');
 const { ClientProxyFactory, Transport } = require('@nestjs/microservices');
+const axios = require('axios');
 
 @Injectable()
 class DeliveryService {
@@ -14,6 +15,7 @@ class DeliveryService {
         queueOptions: { durable: false },
       },
     });
+    this.orderServiceUrl = process.env.ORDER_SERVICE_URL || 'http://order-service:3001';
   }
 
   calculateDistance(lat1, lng1, lat2, lng2) {
@@ -77,6 +79,12 @@ class DeliveryService {
 
     // Emit assignment event
     try { this.client.emit('delivery_status_changed', { deliveryId: updated._id, orderId: updated.orderId, driverId, status: updated.status }); } catch (_) {}
+    // Best-effort: update order service via HTTP so customer sees status immediately
+    try {
+      await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/confirm`);
+    } catch (e) {
+      // ignore network errors — RMQ may handle it
+    }
     return updated;
   }
 
@@ -87,16 +95,24 @@ class DeliveryService {
       { new: true }
     ).exec();
     this.client.emit('delivery_status_changed', { deliveryId: updated._id, orderId: updated.orderId, status: updated.status });
+    // Best-effort HTTP update to Order service
+    try {
+      await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/preparing`);
+    } catch (e) {}
     return updated;
   }
 
   async markPicked(id) {
     const updated = await this.DeliveryModel.findByIdAndUpdate(
       id,
-      { status: 'DELIVERING', pickedAt: new Date(), startedAt: new Date(), updatedAt: new Date() },
+      { status: 'PICKED_UP', pickedAt: new Date(), startedAt: new Date(), updatedAt: new Date() },
       { new: true }
     ).exec();
-    this.client.emit('delivery_status_changed', { deliveryId: updated._id, orderId: updated.orderId, status: 'DELIVERING' });
+    this.client.emit('delivery_status_changed', { deliveryId: updated._id, orderId: updated.orderId, status: 'PICKED_UP' });
+    // Best-effort HTTP update to Order service: mark as READY for customer view
+    try {
+      await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/ready`);
+    } catch (e) {}
     return updated;
   }
 
@@ -107,6 +123,9 @@ class DeliveryService {
       { new: true }
     ).exec();
     this.client.emit('delivery_status_changed', { deliveryId: updated._id, orderId: updated.orderId, status: 'COMPLETED' });
+    try {
+      await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/complete`);
+    } catch (e) {}
     return updated;
   }
 
@@ -158,6 +177,26 @@ class DeliveryService {
       orderId: updated.orderId,
       status: updated.status
     });
+
+    // Also best-effort HTTP update to keep order status in sync
+    try {
+      const s = updated.status;
+      if (s === 'ASSIGNED') {
+        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/confirm`);
+      } else if (s === 'AT_RESTAURANT') {
+        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/preparing`);
+      } else if (s === 'PICKED_UP') {
+        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/ready`);
+      } else if (s === 'DELIVERING') {
+        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/delivering`, { distanceKm: updated.distanceKm || 0, etaMinutes: updated.etaMinutes || 0 });
+      } else if (s === 'COMPLETED') {
+        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/complete`);
+      } else if (s === 'CANCELLED') {
+        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/cancel`, { reason: 'Delivery cancelled' });
+      }
+    } catch (e) {
+      // ignore
+    }
 
     return updated;
   }

@@ -410,14 +410,59 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
     key: "cancelOrder",
     value: function () {
       var _cancelOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee20(orderId, reason) {
+        var delivery, cancelled, _t2, _t3;
         return _regenerator().w(function (_context20) {
-          while (1) switch (_context20.n) {
+          while (1) switch (_context20.p = _context20.n) {
             case 0:
-              return _context20.a(2, this.proxyRequest('order', 'PATCH', "/api/orders/".concat(orderId, "/cancel"), {
+              // Check if a delivery exists for this order and whether a driver is already assigned.
+              delivery = null;
+              _context20.p = 1;
+              _context20.n = 2;
+              return this.getDeliveryByOrder(orderId);
+            case 2:
+              delivery = _context20.v;
+              _context20.n = 4;
+              break;
+            case 3:
+              _context20.p = 3;
+              _t2 = _context20.v;
+              // If delivery-service returns 404 or there is no delivery, proceed to cancel the order.
+              delivery = null;
+            case 4:
+              if (!(delivery && delivery.driverId)) {
+                _context20.n = 5;
+                break;
+              }
+              throw {
+                status: 400,
+                message: 'Cannot cancel order: a driver has already been assigned.'
+              };
+            case 5:
+              _context20.n = 6;
+              return this.proxyRequest('order', 'PATCH', "/api/orders/".concat(orderId, "/cancel"), {
                 reason: reason
-              }));
+              });
+            case 6:
+              cancelled = _context20.v;
+              if (!delivery) {
+                _context20.n = 10;
+                break;
+              }
+              _context20.p = 7;
+              _context20.n = 8;
+              return this.proxyRequest('delivery', 'PATCH', "/api/deliveries/".concat(delivery._id, "/status"), {
+                status: 'CANCELLED'
+              });
+            case 8:
+              _context20.n = 10;
+              break;
+            case 9:
+              _context20.p = 9;
+              _t3 = _context20.v;
+            case 10:
+              return _context20.a(2, cancelled);
           }
-        }, _callee20, this);
+        }, _callee20, this, [[7, 9], [1, 3]]);
       }));
       function cancelOrder(_x23, _x24) {
         return _cancelOrder.apply(this, arguments);

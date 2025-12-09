@@ -135,7 +135,33 @@ class GatewayService {
   }
 
   async cancelOrder(orderId, reason) {
-    return this.proxyRequest('order', 'PATCH', `/api/orders/${orderId}/cancel`, { reason });
+    // Check if a delivery exists for this order and whether a driver is already assigned.
+    let delivery = null;
+    try {
+      delivery = await this.getDeliveryByOrder(orderId);
+    } catch (e) {
+      // If delivery-service returns 404 or there is no delivery, proceed to cancel the order.
+      delivery = null;
+    }
+
+    if (delivery && delivery.driverId) {
+      // There is already a driver assigned — do not allow customer-side cancel
+      throw { status: 400, message: 'Cannot cancel order: a driver has already been assigned.' };
+    }
+
+    // Proceed to cancel the order in order-service
+    const cancelled = await this.proxyRequest('order', 'PATCH', `/api/orders/${orderId}/cancel`, { reason });
+
+    // If a delivery record existed (but no driver), mark it cancelled as well to keep services in sync
+    if (delivery) {
+      try {
+        await this.proxyRequest('delivery', 'PATCH', `/api/deliveries/${delivery._id}/status`, { status: 'CANCELLED' });
+      } catch (e) {
+        // Non-fatal: order is cancelled; delivery-service may be out-of-sync temporarily.
+      }
+    }
+
+    return cancelled;
   }
 
   async initiatePayment(paymentDto) {

@@ -126,11 +126,28 @@
   color: #0f5132;
 }
 
+.badge-cancelled {
+  background: #f8d7da;
+  color: #842029;
+}
+
 .order-total {
   font-size: 1.3rem;
   font-weight: 700;
   color: #ff7043;
   margin: 0;
+}
+
+.order-total.cancelled {
+  color: #999;
+  text-decoration: line-through;
+}
+
+.order-cancelled {
+  color: #842029;
+  font-size: 0.9rem;
+  margin: 4px 0 0 0;
+  font-weight: 700;
 }
 
 .expand-btn {

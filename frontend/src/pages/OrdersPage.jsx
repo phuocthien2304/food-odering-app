@@ -41,6 +41,28 @@ export default function OrdersPage({ API_URL }) {
     }
   }
 
+  const [cancellingId, setCancellingId] = useState(null)
+  const cancelOrder = async (orderId) => {
+    const ok = window.confirm('Bạn có chắc muốn hủy đơn này?')
+    if (!ok) return
+
+    try {
+      setCancellingId(orderId)
+      await axios.patch(`${API_URL}/orders/${orderId}/cancel`, { reason: 'Customer cancelled' }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      })
+      // Refresh list
+      await fetchOrders()
+      alert('Hủy đơn thành công')
+    } catch (err) {
+      console.error('Hủy đơn thất bại', err)
+      const msg = err.response?.data?.message || err.message || 'Lỗi khi hủy đơn'
+      alert(`Hủy đơn thất bại: ${msg}`)
+    } finally {
+      setCancellingId(null)
+    }
+  }
+
   const filteredOrders = filter === "all" ? orders : orders.filter((o) => o.status === filter)
 
   const getStatusBadgeClass = (status) => {
@@ -50,6 +72,7 @@ export default function OrdersPage({ API_URL }) {
         CONFIRMED: "badge-confirmed",
         PREPARING: "badge-preparing",
         READY: "badge-ready",
+        CANCELLED: "badge-cancelled",
         COMPLETED: "badge-completed",
       }[status] || "badge-pending"
     )
@@ -61,6 +84,7 @@ export default function OrdersPage({ API_URL }) {
     CONFIRMED: "Đã xác nhận",
     PREPARING: "Đang chuẩn bị",
     READY: "Sẵn sàng",
+    CANCELLED: "Đã hủy",
     COMPLETED: "Hoàn thành",
   }
 
@@ -97,7 +121,8 @@ export default function OrdersPage({ API_URL }) {
                 </div>
                 <div className="order-header-right">
                   <span className={`status-badge ${getStatusBadgeClass(order.status)}`}>{statusTranslations[order.status]}</span>
-                  <p className="order-total">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.total || 0)}</p>
+                  <p className={`order-total ${order.status === 'CANCELLED' ? 'cancelled' : ''}`}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.total || 0)}</p>
+                  {order.status === 'CANCELLED' && <p className="order-cancelled">Đã hủy</p>}
                 </div>
               </div>
 
@@ -135,6 +160,18 @@ export default function OrdersPage({ API_URL }) {
                   {order.status === "READY" && (
                     <div className="status-info">
                       <p className="ready-alert">Đơn hàng của bạn đã sẵn sàng để nhận!</p>
+                    </div>
+                  )}
+
+                  {['CREATED', 'CONFIRMED'].includes(order.status) && (
+                    <div style={{ marginTop: 12 }}>
+                      <button
+                        className="btn-action cancel"
+                        onClick={() => cancelOrder(order._id)}
+                        disabled={cancellingId === order._id}
+                      >
+                        {cancellingId === order._id ? 'Đang hủy...' : 'Hủy đơn'}
+                      </button>
                     </div>
                   )}
                 </div>

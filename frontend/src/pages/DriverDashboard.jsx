@@ -178,7 +178,7 @@ export default function DriverDashboard({ API_URL }) {
               </button>
             )}
 
-            {!isAvailable && d.status === 'DELIVERING' && (
+            {!isAvailable && (d.status === 'DELIVERING' || d.status === 'PICKED_UP') && (
               <button
                 className="btn-action pro-btn completed"
                 onClick={(e) => { e.stopPropagation(); complete(d._id); }}

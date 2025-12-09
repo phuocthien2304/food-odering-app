@@ -92,10 +92,10 @@ let OrderService = (_dec = Injectable(), _dec2 = function (target, key) {
       this.client.emit('order_created', saved);
     }
 
-    // If order starts in CREATED state (e.g., COD), schedule automatic progression
-    if (saved.status === 'CREATED') {
-      this.scheduleOrderProgress(saved._id);
-    }
+    // Previously this service scheduled automatic progression for CREATED orders.
+    // To keep order status in sync with driver actions, scheduling is disabled
+    // and order status will be updated by delivery events instead.
+
     return saved;
   }
   async getOrderById(id) {
@@ -186,11 +186,7 @@ let OrderService = (_dec = Injectable(), _dec2 = function (target, key) {
     }, {
       new: true
     }).exec();
-
-    // Start automatic progression from CONFIRMED
-    try {
-      this.scheduleOrderProgress(orderId);
-    } catch (_) {}
+    // Do not auto-schedule progression; order status changes will follow driver events.
     return updated;
   }
   async startPreparing(orderId) {
@@ -206,6 +202,17 @@ let OrderService = (_dec = Injectable(), _dec2 = function (target, key) {
     return this.OrderModel.findByIdAndUpdate(orderId, {
       status: 'DELIVERING',
       deliveringAt: new Date(),
+      distanceKm,
+      etaMinutes,
+      updatedAt: new Date()
+    }, {
+      new: true
+    }).exec();
+  }
+  async startReady(orderId, distanceKm, etaMinutes) {
+    return this.OrderModel.findByIdAndUpdate(orderId, {
+      status: 'READY',
+      readyAt: new Date(),
       distanceKm,
       etaMinutes,
       updatedAt: new Date()
@@ -253,17 +260,48 @@ let OrderService = (_dec = Injectable(), _dec2 = function (target, key) {
 
     // Emit event to notify restaurant
     this.client.emit('order_paid_confirmed', order);
-    // Start progression now that payment confirmed
-    try {
-      this.scheduleOrderProgress(order._id);
-    } catch (_) {}
+    // Do not auto-schedule progression; wait for delivery events to update statuses.
     return order;
   }
   async handleDeliveryStatusChange(deliveryData) {
-    if (deliveryData.status === 'DELIVERING') {
-      return this.startDelivery(deliveryData.orderId, deliveryData.distanceKm, deliveryData.etaMinutes);
-    } else if (deliveryData.status === 'COMPLETED') {
-      return this.completeOrder(deliveryData.orderId);
+    // Map delivery status changes to order status updates so customer sees real-time status
+    if (!deliveryData || !deliveryData.orderId) return null;
+    const {
+      orderId,
+      status,
+      distanceKm,
+      etaMinutes
+    } = deliveryData;
+
+    // Cancel any scheduled progression for this order — driver actions take precedence
+    try {
+      this.clearScheduledProgress(orderId);
+    } catch (_) {}
+    switch (status) {
+      case 'ASSIGNED':
+        // Driver accepted the delivery -> mark order as CONFIRMED for customer
+        return this.confirmOrder(orderId);
+      case 'AT_RESTAURANT':
+        // Driver arrived at restaurant -> mark order as PREPARING (or leave as CONFIRMED)
+        return this.startPreparing(orderId);
+      case 'PICKED_UP':
+        return this.startReady(orderId);
+      case 'DELIVERING':
+        // Driver picked up -> set order to DELIVERING and update ETA if provided
+        return this.startDelivery(orderId, distanceKm || 0, etaMinutes || 0);
+      case 'COMPLETED':
+        return this.completeOrder(orderId);
+      case 'CANCELLED':
+        // Mark order cancelled if delivery cancelled
+        return this.OrderModel.findByIdAndUpdate(orderId, {
+          status: 'CANCELLED',
+          cancelledAt: new Date(),
+          updatedAt: new Date()
+        }, {
+          new: true
+        }).exec();
+      default:
+        return null;
     }
   }
   async getOrderStats(restaurantId, startDate, endDate) {

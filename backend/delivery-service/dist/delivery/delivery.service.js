@@ -11,6 +11,7 @@ const {
   ClientProxyFactory,
   Transport
 } = require('@nestjs/microservices');
+const axios = require('axios');
 let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
   return InjectModel('Delivery')(target, undefined, 0);
 }, _dec3 = Reflect.metadata("design:type", Function), _dec4 = Reflect.metadata("design:paramtypes", [void 0]), _dec(_class = _dec2(_class = _dec3(_class = _dec4(_class = class DeliveryService {
@@ -26,6 +27,7 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
         }
       }
     });
+    this.orderServiceUrl = process.env.ORDER_SERVICE_URL || 'http://order-service:3001';
   }
   calculateDistance(lat1, lng1, lat2, lng2) {
     const R = 6371; // Earth radius in km
@@ -109,6 +111,12 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
         status: updated.status
       });
     } catch (_) {}
+    // Best-effort: update order service via HTTP so customer sees status immediately
+    try {
+      await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/confirm`);
+    } catch (e) {
+      // ignore network errors — RMQ may handle it
+    }
     return updated;
   }
   async markArrived(id) {
@@ -124,11 +132,15 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
       orderId: updated.orderId,
       status: updated.status
     });
+    // Best-effort HTTP update to Order service
+    try {
+      await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/preparing`);
+    } catch (e) {}
     return updated;
   }
   async markPicked(id) {
     const updated = await this.DeliveryModel.findByIdAndUpdate(id, {
-      status: 'DELIVERING',
+      status: 'PICKED_UP',
       pickedAt: new Date(),
       startedAt: new Date(),
       updatedAt: new Date()
@@ -138,8 +150,12 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
     this.client.emit('delivery_status_changed', {
       deliveryId: updated._id,
       orderId: updated.orderId,
-      status: 'DELIVERING'
+      status: 'PICKED_UP'
     });
+    // Best-effort HTTP update to Order service: mark as READY for customer view
+    try {
+      await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/ready`);
+    } catch (e) {}
     return updated;
   }
   async completeDelivery(id) {
@@ -155,6 +171,9 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
       orderId: updated.orderId,
       status: 'COMPLETED'
     });
+    try {
+      await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/complete`);
+    } catch (e) {}
     return updated;
   }
   async getDeliveryById(id) {
@@ -204,6 +223,31 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
       orderId: updated.orderId,
       status: updated.status
     });
+
+    // Also best-effort HTTP update to keep order status in sync
+    try {
+      const s = updated.status;
+      if (s === 'ASSIGNED') {
+        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/confirm`);
+      } else if (s === 'AT_RESTAURANT') {
+        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/preparing`);
+      } else if (s === 'PICKED_UP') {
+        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/ready`);
+      } else if (s === 'DELIVERING') {
+        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/delivering`, {
+          distanceKm: updated.distanceKm || 0,
+          etaMinutes: updated.etaMinutes || 0
+        });
+      } else if (s === 'COMPLETED') {
+        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/complete`);
+      } else if (s === 'CANCELLED') {
+        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/cancel`, {
+          reason: 'Delivery cancelled'
+        });
+      }
+    } catch (e) {
+      // ignore
+    }
     return updated;
   }
   async getDeliveriesByRestaurant(restaurantId, status = null) {

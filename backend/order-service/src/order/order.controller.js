@@ -57,6 +57,11 @@ class OrderController {
     return this.orderService.startPreparing(id);
   }
 
+  @Patch(':id/ready')
+  async markReady(@Param('id') id) {
+    return this.orderService.startReady(id);
+  }
+
   @Patch(':id/delivering')
   async startDelivery(@Param('id') id, @Body() body) {
     const { distanceKm, etaMinutes } = body;
