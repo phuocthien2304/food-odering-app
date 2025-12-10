@@ -1,0 +1,200 @@
+name: Deploy Backend to Render
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'backend/**'
+      - 'docker-compose.yml'
+      - '.github/workflows/deploy-backend.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Install dependencies (API Gateway)
+        working-directory: ./backend/api-gateway
+        run: npm ci
+      
+      - name: Install dependencies (User Service)
+        working-directory: ./backend/user-service
+        run: npm ci
+      
+      - name: Install dependencies (Order Service)
+        working-directory: ./backend/order-service
+        run: npm ci
+      
+      - name: Install dependencies (Restaurant Service)
+        working-directory: ./backend/restaurant-service
+        run: npm ci
+      
+      - name: Install dependencies (Delivery Service)
+        working-directory: ./backend/delivery-service
+        run: npm ci
+      
+      - name: Install dependencies (Payment Service)
+        working-directory: ./backend/payment-service
+        run: npm ci
+      
+      - name: Build API Gateway
+        working-directory: ./backend/api-gateway
+        run: npm run build
+      
+      - name: Build User Service
+        working-directory: ./backend/user-service
+        run: npm run build
+      
+      - name: Build Order Service
+        working-directory: ./backend/order-service
+        run: npm run build
+      
+      - name: Build Restaurant Service
+        working-directory: ./backend/restaurant-service
+        run: npm run build
+      
+      - name: Build Delivery Service
+        working-directory: ./backend/delivery-service
+        run: npm run build
+      
+      - name: Build Payment Service
+        working-directory: ./backend/payment-service
+        run: npm run build
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Build and push Docker images
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/food-ordering-api-gateway:latest ./backend/api-gateway
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/food-ordering-user-service:latest ./backend/user-service
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/food-ordering-order-service:latest ./backend/order-service
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/food-ordering-restaurant-service:latest ./backend/restaurant-service
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/food-ordering-delivery-service:latest ./backend/delivery-service
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/food-ordering-payment-service:latest ./backend/payment-service
+          
+          docker push ${{ secrets.DOCKER_USERNAME }}/food-ordering-api-gateway:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/food-ordering-user-service:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/food-ordering-order-service:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/food-ordering-restaurant-service:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/food-ordering-delivery-service:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/food-ordering-payment-service:latest
+      
+      - name: Deploy API Gateway to Render
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          curl --request POST \
+            --url https://api.render.com/deploy/srv-${{ secrets.RENDER_API_GATEWAY_SERVICE_ID }} \
+            --header "accept: application/json" \
+            --header "authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            --data "{ \"clearCache\": \"full\" }"
+      
+      - name: Deploy User Service to Render
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          curl --request POST \
+            --url https://api.render.com/deploy/srv-${{ secrets.RENDER_USER_SERVICE_ID }} \
+            --header "accept: application/json" \
+            --header "authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            --data "{ \"clearCache\": \"full\" }"
+      
+      - name: Deploy Order Service to Render
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          curl --request POST \
+            --url https://api.render.com/deploy/srv-${{ secrets.RENDER_ORDER_SERVICE_ID }} \
+            --header "accept: application/json" \
+            --header "authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            --data "{ \"clearCache\": \"full\" }"
+      
+      - name: Deploy Restaurant Service to Render
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          curl --request POST \
+            --url https://api.render.com/deploy/srv-${{ secrets.RENDER_RESTAURANT_SERVICE_ID }} \
+            --header "accept: application/json" \
+            --header "authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            --data "{ \"clearCache\": \"full\" }"
+      
+      - name: Deploy Delivery Service to Render
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          curl --request POST \
+            --url https://api.render.com/deploy/srv-${{ secrets.RENDER_DELIVERY_SERVICE_ID }} \
+            --header "accept: application/json" \
+            --header "authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            --data "{ \"clearCache\": \"full\" }"
+      
+      - name: Deploy Payment Service to Render
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          curl --request POST \
+            --url https://api.render.com/deploy/srv-${{ secrets.RENDER_PAYMENT_SERVICE_ID }} \
+            --header "accept: application/json" \
+            --header "authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            --data "{ \"clearCache\": \"full\" }"
+      
+      - name: Notify Slack on Success
+        if: success()
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "✅ Backend deployment to Render successful!",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*✅ Backend Deployed Successfully*\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref }}\nCommit: ${{ github.sha }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      
+      - name: Notify Slack on Failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "❌ Backend deployment to Render failed!",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*❌ Backend Deployment Failed*\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref }}\nCommit: ${{ github.sha }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
