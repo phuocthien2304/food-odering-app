@@ -56,7 +56,7 @@ export default function FoodsPage({ addToCart, API_URL }) {
   return (
     <div className="foods-container">
       <div className="foods-header">
-        <h2>Chọn món ăn</h2>
+        <h2>Chọn món ăn hehe</h2>
         <div className="search-box">
           <input
             type="text"
