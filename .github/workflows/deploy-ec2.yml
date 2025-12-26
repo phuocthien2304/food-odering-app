@@ -39,7 +39,7 @@ jobs:
           command_timeout: 30m
           script: |
             set -euo pipefail
-
+            DEPLOY_REF="${DEPLOY_REF:-main}"
             echo "==> Deploying ref: ${DEPLOY_REF}"
             echo "==> App dir: ${APP_DIR}"
 
@@ -84,3 +84,4 @@ jobs:
 
             echo "==> Done"
             docker ps
+
