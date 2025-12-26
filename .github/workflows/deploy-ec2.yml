@@ -27,9 +27,12 @@ jobs:
     steps:
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.0.3
-        envs:
+
+        # ✅ env: đặt biến ở runner
+        env:
           APP_DIR: ${{ secrets.EC2_APP_DIR }}
           DEPLOY_REF: ${{ github.event.inputs.ref || github.ref_name }}
+
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -37,10 +40,16 @@ jobs:
           port: ${{ secrets.EC2_PORT || '22' }}
           script_stop: true
           command_timeout: 30m
+
+          # ✅ envs: forward TÊN biến sang EC2 (không phải key:value)
+          envs: APP_DIR,DEPLOY_REF
+
           script: |
             set -euo pipefail
+
             DEPLOY_REF="${DEPLOY_REF:-main}"
             APP_DIR="${APP_DIR:-}"
+
             echo "==> Deploying ref: ${DEPLOY_REF}"
             echo "==> App dir: ${APP_DIR}"
             echo "APP_DIR length: ${#APP_DIR}"
@@ -52,19 +61,13 @@ jobs:
 
             cd "${APP_DIR}"
 
-            # Ensure this is a git repo
             if [ ! -d ".git" ]; then
               echo "ERROR: ${APP_DIR} is not a git repository. Please clone the repo there first."
               exit 1
             fi
 
-            # Fetch everything (branches + tags)
-            git remote -v
             git fetch --all --tags --prune
 
-            # Checkout DEPLOY_REF robustly:
-            # - If it's a branch: track origin/branch
-            # - Else (tag/SHA): detach at that ref
             if git show-ref --verify --quiet "refs/remotes/origin/${DEPLOY_REF}"; then
               echo "==> Ref is a branch on origin: ${DEPLOY_REF}"
               git checkout -B "${DEPLOY_REF}" "origin/${DEPLOY_REF}"
@@ -86,7 +89,3 @@ jobs:
 
             echo "==> Done"
             docker ps
-
-
-
-
