@@ -43,6 +43,7 @@ jobs:
             APP_DIR="${APP_DIR:-}"
             echo "==> Deploying ref: ${DEPLOY_REF}"
             echo "==> App dir: ${APP_DIR}"
+            echo "APP_DIR length: ${#APP_DIR}"
 
             if [ -z "${APP_DIR}" ]; then
               echo "EC2_APP_DIR secret is required (e.g. /home/ubuntu/food-odering-app)"
@@ -85,5 +86,6 @@ jobs:
 
             echo "==> Done"
             docker ps
+
 
 
