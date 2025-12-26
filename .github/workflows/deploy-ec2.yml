@@ -2,14 +2,13 @@ name: Deploy to AWS EC2 (Docker Compose)
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
-      - 'backend/**'
-      - 'frontend/**'
-      - 'docker-compose.aws.yml'
-      - 'docker-compose.yml'
-      - '.github/workflows/deploy-ec2.yml'
+      - "backend/**"
+      - "frontend/**"
+      - "docker-compose.aws.yml"
+      - "docker-compose.yml"
+      - ".github/workflows/deploy-ec2.yml"
   workflow_dispatch:
     inputs:
       ref:
@@ -18,37 +17,70 @@ on:
         default: "main"
 
 concurrency:
-  group: deploy-ec2-${{ github.ref }}
+  group: deploy-ec2
   cancel-in-progress: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      DEPLOY_REF: ${{ github.event.inputs.ref || github.ref_name }}
+
     steps:
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          APP_DIR: ${{ secrets.EC2_APP_DIR }}
+          DEPLOY_REF: ${{ github.event.inputs.ref || github.ref_name }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           port: ${{ secrets.EC2_PORT || '22' }}
+          script_stop: true
+          command_timeout: 30m
           script: |
-            set -e
+            set -euo pipefail
 
-            APP_DIR="${{ secrets.EC2_APP_DIR }}"
-            if [ -z "$APP_DIR" ]; then
+            echo "==> Deploying ref: ${DEPLOY_REF}"
+            echo "==> App dir: ${APP_DIR}"
+
+            if [ -z "${APP_DIR}" ]; then
               echo "EC2_APP_DIR secret is required (e.g. /home/ubuntu/food-odering-app)"
               exit 1
             fi
 
-            cd "$APP_DIR"
+            cd "${APP_DIR}"
 
-            git fetch --all --prune
+            # Ensure this is a git repo
+            if [ ! -d ".git" ]; then
+              echo "ERROR: ${APP_DIR} is not a git repository. Please clone the repo there first."
+              exit 1
+            fi
 
-            git checkout "${DEPLOY_REF}"
-            git pull
+            # Fetch everything (branches + tags)
+            git remote -v
+            git fetch --all --tags --prune
 
-            docker compose -f docker-compose.aws.yml up -d --build
+            # Checkout DEPLOY_REF robustly:
+            # - If it's a branch: track origin/branch
+            # - Else (tag/SHA): detach at that ref
+            if git show-ref --verify --quiet "refs/remotes/origin/${DEPLOY_REF}"; then
+              echo "==> Ref is a branch on origin: ${DEPLOY_REF}"
+              git checkout -B "${DEPLOY_REF}" "origin/${DEPLOY_REF}"
+              git pull --ff-only origin "${DEPLOY_REF}"
+            else
+              echo "==> Ref is tag/SHA (or non-origin branch): ${DEPLOY_REF}"
+              git checkout --detach "${DEPLOY_REF}"
+            fi
+
+            echo "==> Current commit:"
+            git rev-parse --short HEAD
+
+            echo "==> Docker compose deploy"
+            docker compose -f docker-compose.aws.yml pull || true
+            docker compose -f docker-compose.aws.yml up -d --build --remove-orphans
+
+            echo "==> Prune old images"
             docker image prune -f
+
+            echo "==> Done"
+            docker ps
