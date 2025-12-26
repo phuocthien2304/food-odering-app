@@ -40,6 +40,7 @@ jobs:
           script: |
             set -euo pipefail
             DEPLOY_REF="${DEPLOY_REF:-main}"
+            APP_DIR="${APP_DIR:-}"
             echo "==> Deploying ref: ${DEPLOY_REF}"
             echo "==> App dir: ${APP_DIR}"
 
@@ -84,4 +85,5 @@ jobs:
 
             echo "==> Done"
             docker ps
+
 
