@@ -14,8 +14,8 @@ services:
     environment:
       GATEWAY_PORT: 3000
       # Cloud config
-      RABBITMQ_URI: amqps://apvwrzfk:fIsArbh3Y8j8bfed_eZa9KO1oIcDhdil@armadillo.rmq.cloudamqp.com/apvwrzfk
-      MONGODB_URI: mongodb+srv://phuocthien2304:phuocthien2304@cluster0.zpki9d4.mongodb.net/api-gateway?retryWrites=true&w=majority&appName=Cluster0
+      RABBITMQ_URI: ${RABBITMQ_URI}
+      MONGODB_URI: ${MONGODB_URI_API_GATEWAY}
       
       # Internal URLs
       USER_SERVICE_URL: http://user-service:3003
@@ -23,7 +23,7 @@ services:
       RESTAURANT_SERVICE_URL: http://restaurant-service:3002
       DELIVERY_SERVICE_URL: http://delivery-service:3004
       PAYMENT_SERVICE_URL: http://payment-service:3005
-      FRONTEND_URL: http://localhost:5173
+      FRONTEND_URL: ${FRONTEND_URL}
       NODE_ENV: development
     networks:
       - food-ordering-network
@@ -35,23 +35,23 @@ services:
   # =========================================
   # 2. FRONTEND
   # =========================================
-  # frontend:
-  #   build:
-  #     context: ./frontend  # <--- Đường dẫn chuẩn từ Root
-  #     dockerfile: Dockerfile
-  #   container_name: food-ordering-frontend
-  #   ports:
-  #     - "5173:5173"
-  #   environment:
-  #      - VITE_API_GATEWAY_URL=http://api-gateway:3000/api
-  #   volumes:
-  #     - ./frontend/src:/app/src
-  #     - /app/node_modules
-  #   depends_on:
-  #     - api-gateway
-  #   networks:
-  #     - food-ordering-network
-  #   restart: unless-stopped
+  frontend:
+    build:
+      context: ./frontend  # <--- Đường dẫn chuẩn từ Root
+      dockerfile: Dockerfile
+      args:
+        VITE_API_GATEWAY_URL: ${VITE_API_GATEWAY_URL:-http://localhost:3000/api}
+    container_name: food-ordering-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend/src:/app/src
+      - /app/node_modules
+    depends_on:
+      - api-gateway
+    networks:
+      - food-ordering-network
+    restart: unless-stopped
 
   # =========================================
   # 3. USER SERVICE
@@ -65,9 +65,9 @@ services:
       - "3003:3003"
     environment:
       USER_SERVICE_PORT: 3003
-      MONGODB_URI: mongodb+srv://phuocthien2304:phuocthien2304@cluster0.zpki9d4.mongodb.net/user-service?retryWrites=true&w=majority&appName=Cluster0
-      RABBITMQ_URI: amqps://apvwrzfk:fIsArbh3Y8j8bfed_eZa9KO1oIcDhdil@armadillo.rmq.cloudamqp.com/apvwrzfk
-      JWT_SECRET: your-jwt-secret-key-change-in-production
+      MONGODB_URI: ${MONGODB_URI_USER_SERVICE}
+      RABBITMQ_URI: ${RABBITMQ_URI}
+      JWT_SECRET: ${JWT_SECRET}
       NODE_ENV: development
     networks:
       - food-ordering-network
@@ -88,8 +88,8 @@ services:
       - "3001:3001"
     environment:
       ORDER_SERVICE_PORT: 3001
-      MONGODB_URI: mongodb+srv://phuocthien2304:phuocthien2304@cluster0.zpki9d4.mongodb.net/order-service?retryWrites=true&w=majority&appName=Cluster0
-      RABBITMQ_URI: amqps://apvwrzfk:fIsArbh3Y8j8bfed_eZa9KO1oIcDhdil@armadillo.rmq.cloudamqp.com/apvwrzfk
+      MONGODB_URI: ${MONGODB_URI_ORDER_SERVICE}
+      RABBITMQ_URI: ${RABBITMQ_URI}
       ORDER_QUEUE: order_queue
       PAYMENT_QUEUE: payment_queue
       NODE_ENV: development
@@ -112,8 +112,8 @@ services:
       - "3002:3002"
     environment:
       RESTAURANT_SERVICE_PORT: 3002
-      MONGODB_URI: mongodb+srv://phuocthien2304:phuocthien2304@cluster0.zpki9d4.mongodb.net/restaurant-service?retryWrites=true&w=majority&appName=Cluster0
-      RABBITMQ_URI: amqps://apvwrzfk:fIsArbh3Y8j8bfed_eZa9KO1oIcDhdil@armadillo.rmq.cloudamqp.com/apvwrzfk
+      MONGODB_URI: ${MONGODB_URI_RESTAURANT_SERVICE}
+      RABBITMQ_URI: ${RABBITMQ_URI}
       RESTAURANT_QUEUE: restaurant_queue
       NODE_ENV: development
     networks:
@@ -136,8 +136,8 @@ services:
       - "3004:3004"
     environment:
       DELIVERY_SERVICE_PORT: 3004
-      MONGODB_URI: mongodb+srv://phuocthien2304:phuocthien2304@cluster0.zpki9d4.mongodb.net/delivery-service?retryWrites=true&w=majority&appName=Cluster0
-      RABBITMQ_URI: amqps://apvwrzfk:fIsArbh3Y8j8bfed_eZa9KO1oIcDhdil@armadillo.rmq.cloudamqp.com/apvwrzfk
+      MONGODB_URI: ${MONGODB_URI_DELIVERY_SERVICE}
+      RABBITMQ_URI: ${RABBITMQ_URI}
       DELIVERY_QUEUE: delivery_queue
       NODE_ENV: development
     networks:
@@ -159,18 +159,18 @@ services:
       - "3005:3005"
     environment:
       PAYMENT_SERVICE_PORT: 3005
-      MONGODB_URI: mongodb+srv://phuocthien2304:phuocthien2304@cluster0.zpki9d4.mongodb.net/payment-service?retryWrites=true&w=majority&appName=Cluster0
-      RABBITMQ_URI: amqps://apvwrzfk:fIsArbh3Y8j8bfed_eZa9KO1oIcDhdil@armadillo.rmq.cloudamqp.com/apvwrzfk
+      MONGODB_URI: ${MONGODB_URI_PAYMENT_SERVICE}
+      RABBITMQ_URI: ${RABBITMQ_URI}
       PAYMENT_QUEUE: payment_queue
       ORDER_QUEUE: order_queue
-      SEPAY_ACCOUNT_ID: 37114
-      SEPAY_API_KEY: U6TR7M2WQNP4C36JQC5JN81JLWUIKSTVNYBCGWPOGJR2ZRYANHL
-      SEPAY_API_SECRET: U6TR7M2WQNP4C36JQC5JN81JLWUIKSTVNYBCGWPOGJR2ZRYANHL
-      SEPAY_ACCOUNT_NUMBER: 10000580851
-      SEPAY_BANK_NAME: TPBank
-      SEPAY_BANK_CODE: TPB
-      PAYMENT_CALLBACK_URL: https://unequivalent-jeraldine-nontheistical.ngrok-free.dev/api
-      FRONTEND_URL: http://localhost:5173
+      SEPAY_ACCOUNT_ID: ${SEPAY_ACCOUNT_ID}
+      SEPAY_API_KEY: ${SEPAY_API_KEY}
+      SEPAY_API_SECRET: ${SEPAY_API_SECRET}
+      SEPAY_ACCOUNT_NUMBER: ${SEPAY_ACCOUNT_NUMBER}
+      SEPAY_BANK_NAME: ${SEPAY_BANK_NAME}
+      SEPAY_BANK_CODE: ${SEPAY_BANK_CODE}
+      PAYMENT_CALLBACK_URL: ${PAYMENT_CALLBACK_URL}
+      FRONTEND_URL: ${FRONTEND_URL}
       NODE_ENV: development
     networks:
       - food-ordering-network

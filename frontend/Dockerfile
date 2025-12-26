@@ -5,6 +5,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+
+ARG VITE_API_GATEWAY_URL
+ENV VITE_API_GATEWAY_URL=$VITE_API_GATEWAY_URL
 RUN npm run build
 
 ## Production stage
