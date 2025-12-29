@@ -1,16 +1,22 @@
 "use client"
 
 import { useState } from "react"
-import axios from "axios" // Import axios
+import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import "../styles/HomePage.css"
 
-// Nhận prop onLoginSuccess từ App.jsx
 export default function HomePage({ onLoginSuccess, user, API_URL }) {
   const [isLogin, setIsLogin] = useState(true)
   const [userType, setUserType] = useState("CUSTOMER")
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" })
-  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  })
+
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -19,46 +25,79 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // Check confirm password (register only)
+    if (!isLogin && formData.password !== formData.confirmPassword) {
+      alert("Mật khẩu xác nhận không khớp. Vui lòng kiểm tra lại!")
+      return
+    }
+
     try {
-      let response;
+      // ================= LOGIN =================
       if (isLogin) {
-        // Gọi API Login
-        response = await axios.post(`${API_URL}/auth/login`, {
-          email: formData.email,
-          password: formData.password
-        });
-      } else {
-        // Gọi API Register
-        response = await axios.post(`${API_URL}/auth/register`, {
-          name: formData.name,
+        const res = await axios.post(`${API_URL}/auth/login`, {
           email: formData.email,
           password: formData.password,
-          userType: userType
-        });
+        })
+
+        if (res.data?.token) {
+          onLoginSuccess(res.data.token)
+        }
+        return
       }
 
-      // Đăng nhập/Đăng ký thành công -> Gọi App chỉ với token, App sẽ fetch profile canonical
-      if (response.data.token) {
-        onLoginSuccess(response.data.token);
+      // ================= REGISTER =================
+      await axios.post(`${API_URL}/auth/register`, {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        userType,
+      })
+
+      alert("Đăng ký tài khoản thành công!")
+
+      // AUTO LOGIN after register
+      const loginRes = await axios.post(`${API_URL}/auth/login`, {
+        email: formData.email,
+        password: formData.password,
+      })
+
+      if (loginRes.data?.token) {
+        onLoginSuccess(loginRes.data.token)
+      } else {
+        alert("Đăng ký thành công nhưng đăng nhập tự động thất bại. Vui lòng đăng nhập lại.")
+        setIsLogin(true)
       }
 
     } catch (error) {
-      alert("Error: " + (error.response?.data?.message || "Action failed"));
+      const errorMessage = error.response?.data?.message || "Đã xảy ra lỗi"
+
+      if (
+        error.response?.status === 409 ||
+        errorMessage.toLowerCase().includes("email")
+      ) {
+        alert("Đăng ký thất bại: Email này đã được sử dụng. Vui lòng chọn email khác!")
+      } else {
+        alert("Lỗi: " + errorMessage)
+      }
+
+      console.error("Auth Error:", error)
     }
   }
 
-  // Nếu đã login rồi mà quay lại trang chủ -> Hiển thị nút điều hướng
+  // ================= ALREADY LOGIN =================
   if (user) {
     return (
       <div className="home-container welcome">
         <h2>Chào mừng trở lại, {user.name}!</h2>
         <p>Bạn đã đăng nhập với tư cách {user.userType}</p>
+
         <button
           className="btn-primary"
           onClick={() => {
-             if(user.userType === "ADMIN") navigate("/admin/dashboard");
-             else if(user.userType === "RESTAURANT_STAFF") navigate("/restaurant/dashboard");
-             else navigate("/foods");
+            if (user.userType === "ADMIN") navigate("/admin/dashboard")
+            else if (user.userType === "RESTAURANT_STAFF") navigate("/restaurant/dashboard")
+            else navigate("/foods")
           }}
         >
           Đi đến Bảng điều khiển
@@ -67,6 +106,7 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
     )
   }
 
+  // ================= AUTH FORM =================
   return (
     <div className="home-container">
       <div className="hero">
@@ -77,6 +117,7 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
       <div className="auth-container">
         <div className="auth-form">
           <h3>{isLogin ? "Đăng nhập" : "Đăng ký"}</h3>
+
           <form onSubmit={handleSubmit}>
             {!isLogin && (
               <>
@@ -88,40 +129,32 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
                   onChange={handleChange}
                   required
                 />
+
                 <div className="user-type-selector">
                   <label>Chọn loại tài khoản:</label>
                   <div className="type-options">
-                    <label className="type-option">
-                      <input
-                        type="radio"
-                        value="CUSTOMER"
-                        checked={userType === "CUSTOMER"}
-                        onChange={(e) => setUserType(e.target.value)}
-                      />
-                      <span>Khách hàng</span>
-                    </label>
-                    <label className="type-option">
-                      <input
-                        type="radio"
-                        value="RESTAURANT_STAFF"
-                        checked={userType === "RESTAURANT_STAFF"}
-                        onChange={(e) => setUserType(e.target.value)}
-                      />
-                      <span>Nhân viên nhà hàng</span>
-                    </label>
-                    <label className="type-option">
-                      <input
-                        type="radio"
-                        value="DRIVER"
-                        checked={userType === "DRIVER"}
-                        onChange={(e) => setUserType(e.target.value)}
-                      />
-                      <span>Tài xế</span>
-                    </label>
+                    {["CUSTOMER", "RESTAURANT_STAFF", "DRIVER"].map((type) => (
+                      <label className="type-option" key={type}>
+                        <input
+                          type="radio"
+                          value={type}
+                          checked={userType === type}
+                          onChange={(e) => setUserType(e.target.value)}
+                        />
+                        <span>
+                          {type === "CUSTOMER"
+                            ? "Khách hàng"
+                            : type === "RESTAURANT_STAFF"
+                            ? "Nhà hàng"
+                            : "Tài xế"}
+                        </span>
+                      </label>
+                    ))}
                   </div>
                 </div>
               </>
             )}
+
             <input
               type="email"
               name="email"
@@ -130,6 +163,7 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
               onChange={handleChange}
               required
             />
+
             <input
               type="password"
               name="password"
@@ -138,29 +172,42 @@ export default function HomePage({ onLoginSuccess, user, API_URL }) {
               onChange={handleChange}
               required
             />
+
+            {!isLogin && (
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Xác nhận mật khẩu"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            )}
+
             <button type="submit" className="btn-primary">
               {isLogin ? "Đăng nhập" : "Đăng ký"}
             </button>
           </form>
+
           <p className="toggle-auth">
             {isLogin ? "Chưa có tài khoản? " : "Đã có tài khoản? "}
             <button
               type="button"
+              className="toggle-link"
               onClick={() => {
                 setIsLogin(!isLogin)
-                setFormData({ name: "", email: "", password: "" })
+                setFormData({
+                  name: "",
+                  email: "",
+                  password: "",
+                  confirmPassword: "",
+                })
               }}
-              className="toggle-link"
             >
               {isLogin ? "Đăng ký" : "Đăng nhập"}
             </button>
           </p>
         </div>
-      </div>
-      
-      {/* (Giữ nguyên phần Features bên dưới của bạn...) */}
-      <div className="features">
-         {/* ... code cũ của bạn ... */}
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import AddressForm from '../components/AddressForm';
 import '../styles/CreateRestaurantPage.css';
 
 const CreateRestaurantPage = ({ user, updateUser, API_URL }) => {
@@ -30,6 +30,8 @@ const CreateRestaurantPage = ({ user, updateUser, API_URL }) => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [addressSummary, setAddressSummary] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -134,44 +136,41 @@ const CreateRestaurantPage = ({ user, updateUser, API_URL }) => {
           <label htmlFor="phoneNumber">Số điện thoại</label>
           <input type="tel" id="phoneNumber" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
         </div>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="email">Email</label>
           <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} />
-        </div>
+        </div> */}
 
         <fieldset>
           <legend>Địa chỉ</legend>
           <div className="form-group">
-            <label htmlFor="street">Đường</label>
-            <input type="text" id="street" name="address.street" value={formData.address.street} onChange={handleChange} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="ward">Phường/Xã</label>
-            <input type="text" id="ward" name="address.ward" value={formData.address.ward} onChange={handleChange} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="district">Quận/Huyện</label>
-            <input type="text" id="district" name="address.district" value={formData.address.district} onChange={handleChange} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="city">Tỉnh/Thành phố</label>
-            <input type="text" id="city" name="address.city" value={formData.address.city} onChange={handleChange} />
-          </div>
-        </fieldset>
-        
-        <fieldset>
-          <legend>Vị trí (Tọa độ)</legend>
-          <div className="form-group">
-            <label htmlFor="lat">Vĩ độ (Lat)</label>
-            <input type="number" step="any" id="lat" name="location.lat" value={formData.location.lat} onChange={handleChange} required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="lng">Kinh độ (Lng)</label>
-            <input type="number" step="any" id="lng" name="location.lng" value={formData.location.lng} onChange={handleChange} required />
+            <label>Địa chỉ nhà hàng</label>
+            <div className="address-picker-row">
+              <textarea
+                readOnly
+                value={
+                  addressSummary ||
+                  [formData.address.street, formData.address.ward, formData.address.city]
+                    .filter(Boolean)
+                    .join(', ')
+                }
+                placeholder="Chưa chọn. Nhấn nút để chọn trên bản đồ giống trang đặt hàng."
+              />
+              <button type="button" className="btn-secondary" onClick={() => setShowAddressForm(true)}>
+                📍 Chọn địa chỉ
+              </button>
+            </div>
+            {formData.location.lat && formData.location.lng ? (
+              <p className="address-note">
+                Vị trí: {formData.location.lat.toFixed(4)}, {formData.location.lng.toFixed(4)}
+              </p>
+            ) : (
+              <p className="address-note">Hệ thống sẽ lưu cả tọa độ để shipper tìm nhanh hơn.</p>
+            )}
           </div>
         </fieldset>
 
-        <fieldset>
+        {/* <fieldset>
           <legend>Hình ảnh</legend>
           <div className="form-group">
             <label htmlFor="logo">URL Logo</label>
@@ -181,7 +180,7 @@ const CreateRestaurantPage = ({ user, updateUser, API_URL }) => {
             <label htmlFor="banner">URL Banner</label>
             <input type="url" id="banner" name="banner" value={formData.banner} onChange={handleChange} />
           </div>
-        </fieldset>
+        </fieldset> */}
 
         {error && <p className="error-message">{error}</p>}
         
@@ -189,6 +188,29 @@ const CreateRestaurantPage = ({ user, updateUser, API_URL }) => {
           {loading ? 'Đang tạo...' : 'Tạo nhà hàng và tiếp tục'}
         </button>
       </form>
+      {showAddressForm && (
+        <AddressForm
+          onConfirm={(data) => {
+            setFormData(prev => ({
+              ...prev,
+              address: {
+                ...prev.address,
+                street: data.street || '',
+                ward: data.ward || '',
+                district: data.district || prev.address.district,
+                city: data.province || prev.address.city
+              },
+              location: {
+                lat: data.lat ?? prev.location.lat,
+                lng: data.lng ?? prev.location.lng
+              }
+            }));
+            setAddressSummary(data.fullAddress || '');
+            setShowAddressForm(false);
+          }}
+          onCancel={() => setShowAddressForm(false)}
+        />
+      )}
     </div>
   );
 };
