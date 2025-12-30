@@ -26,15 +26,18 @@ export default function RestaurantsPage({ cart, addToCart, API_URL }) {
     }
   }
 
-  // ✅ Hàm helper để hiển thị địa chỉ an toàn (Sửa lỗi Objects are not valid)
   const formatAddress = (address) => {
-    if (!address) return "Không có địa chỉ";
-    if (typeof address === 'string') return address;
-    // Nếu là object, ghép các trường lại
-    return `${address.street || ''}, ${address.ward || ''}, ${address.district || ''}, ${address.city || ''}`.replace(/^, | , | ,/g, '');
+    if (!address) return "Không có địa chỉ"
+    if (typeof address === "string") return address
+    return `${address.street || ""}, ${address.ward || ""}, ${address.district || ""}, ${address.city || ""}`.replace(
+      /^, | , | ,/g,
+      ""
+    )
   }
 
-  const filteredRestaurants = restaurants.filter((r) => r.name.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredRestaurants = restaurants.filter((r) =>
+    r.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   if (loading) return <div className="loading">Đang tải nhà hàng...</div>
 
@@ -69,15 +72,24 @@ export default function RestaurantsPage({ cart, addToCart, API_URL }) {
               <div className="restaurant-info">
                 <h3>{restaurant.name}</h3>
                 <p className="cuisine">{restaurant.cuisineType || "Nhiều loại"}</p>
-                
-                {/* ✅ SỬA: Dùng hàm formatAddress */}
-                <p className="address">{formatAddress(restaurant.address)}</p> 
-                
+                <p className="address">{formatAddress(restaurant.address)}</p>
+
                 <div className="delivery-info">
                   <span>📍 {restaurant.deliveryTime || "30-45"} phút</span>
-                  <span>💲 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(restaurant.minOrder || 0)} tối thiểu</span>
+                  <span>
+                    💲{" "}
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(restaurant.minOrder || 0)}{" "}
+                    tối thiểu
+                  </span>
                 </div>
-                <button className="btn-view-menu" onClick={() => setSelectedRestaurant(restaurant)}>
+
+                <button
+                  className="btn-view-menu"
+                  onClick={() => setSelectedRestaurant(restaurant)}
+                >
                   Xem thực đơn
                 </button>
               </div>
@@ -92,8 +104,7 @@ export default function RestaurantsPage({ cart, addToCart, API_URL }) {
           onClose={() => setSelectedRestaurant(null)}
           addToCart={addToCart}
           API_URL={API_URL}
-          // Truyền hàm formatAddress xuống để dùng tiếp
-          formatAddress={formatAddress} 
+          formatAddress={formatAddress}
         />
       )}
     </div>
@@ -110,8 +121,9 @@ function RestaurantMenu({ restaurant, onClose, addToCart, API_URL, formatAddress
 
   const fetchMenu = async () => {
     try {
-      // ✅ SỬA: Đường dẫn đúng là /restaurants/{id}/menu
-      const response = await axios.get(`${API_URL}/restaurants/${restaurant._id}/menu`)
+      const response = await axios.get(
+        `${API_URL}/restaurants/${restaurant._id}/menu`
+      )
       setMenuItems(response.data)
     } catch (error) {
       console.error("Lỗi tải thực đơn", error)
@@ -120,8 +132,9 @@ function RestaurantMenu({ restaurant, onClose, addToCart, API_URL, formatAddress
     }
   }
 
-  // Fallback nếu không truyền prop (phòng hờ)
-  const safeAddress = formatAddress ? formatAddress(restaurant.address) : (typeof restaurant.address === 'string' ? restaurant.address : "Chi tiết địa chỉ không có sẵn");
+  const safeAddress = formatAddress
+    ? formatAddress(restaurant.address)
+    : "Không có địa chỉ"
 
   if (loading)
     return (
@@ -141,28 +154,51 @@ function RestaurantMenu({ restaurant, onClose, addToCart, API_URL, formatAddress
 
         <div className="menu-header">
           <h2>{restaurant.name}</h2>
-          
-          {/* ✅ SỬA: Hiển thị địa chỉ đã format */}
           <p>{safeAddress}</p>
-          
         </div>
 
         <div className="menu-items">
           {menuItems.length === 0 ? (
             <p className="no-items">Không có món ăn nào</p>
           ) : (
-            menuItems.map((item) => (
-              <div key={item._id} className="menu-item">
-                <div className="item-details">
-                  <h4>{item.name}</h4>
-                  <p className="description">{item.description}</p>
-                  <p className="price">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}</p>
-                </div>
-                <button className="btn-add" onClick={() => addToCart({...item, restaurantId: restaurant._id})}>
-                  Thêm vào giỏ hàng
-                </button>
-              </div>
-            ))
+            menuItems
+              // ✅ Tạm ẩn → không hiện
+              .filter((item) => item.isActive !== false)
+              .map((item) => {
+                const soldOut =
+                  item?.isAvailable === false || item.quantity === 0
+
+                return (
+                  <div key={item._id} className="menu-item">
+                    <div className="item-details">
+                      <h4>{item.name}</h4>
+                      <p className="description">{item.description}</p>
+                      <p className="price">
+                        {new Intl.NumberFormat("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        }).format(item.price)}
+                      </p>
+
+                      {soldOut && (
+                        <span className="sold-out-text">Hết món</span>
+                      )}
+                    </div>
+
+                    <button
+  className="btn-add"
+  disabled={soldOut}
+  onClick={() => {
+    if (soldOut) return
+    addToCart({ ...item, restaurantId: restaurant._id })
+  }}
+>
+  {soldOut ? "Hết món" : "Thêm vào giỏ hàng"}
+</button>
+
+                  </div>
+                )
+              })
           )}
         </div>
       </div>

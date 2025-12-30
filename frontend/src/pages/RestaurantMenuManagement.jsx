@@ -63,7 +63,7 @@ export default function RestaurantMenuManagement({ API_URL, user }) {
     if (!user || !user.restaurantId) return
     try {
       const response = await axios.get(
-        `${API_URL}/restaurants/${user.restaurantId}/menu`,
+        `${API_URL}/restaurants/${user.restaurantId}/menu/manage`,
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       )
       setMenuItems(response.data)
@@ -146,19 +146,15 @@ export default function RestaurantMenuManagement({ API_URL, user }) {
     try {
       if (!isEditing) {
         // ✅ ADD
-        await axios.post(
-          `${API_URL}/restaurants/${user.restaurantId}/menu`,
-          payload,
-          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-        )
+        await axios.post(`${API_URL}/restaurants/${user.restaurantId}/menu/manage`, payload, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        })
         alert("Thêm món thành công!")
       } else {
-        // ✅ EDIT (dựa theo pattern delete đang dùng /restaurants/menu/:id)
-        await axios.patch(
-          `${API_URL}/restaurants/menu/${editingItem._id}`,
-          payload,
-          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-        )
+        // ✅ EDIT
+        await axios.patch(`${API_URL}/restaurants/menu/${editingItem._id}`, payload, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        })
         alert("Cập nhật món thành công!")
       }
 
@@ -183,6 +179,13 @@ export default function RestaurantMenuManagement({ API_URL, user }) {
     } catch (error) {
       alert("Xóa món thất bại")
     }
+  }
+
+  // ✅ Toggle: Tạm ẩn (isActive) & Hết món (isAvailable)
+  const patchMenuItem = async (menuItemId, data) => {
+    await axios.patch(`${API_URL}/restaurants/menu/${menuItemId}`, data, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
   }
 
   if (loading) return <div className="loading">Đang tải thực đơn...</div>
@@ -214,113 +217,109 @@ export default function RestaurantMenuManagement({ API_URL, user }) {
       </button>
 
       {showForm && (
-  <div className="modal-overlay" onClick={closeForm}>
-    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-      <div className="modal-header">
-        <h3 style={{ margin: 0 }}>
-          {isEditing ? "Sửa món ăn" : "Thêm món ăn"}
-        </h3>
-        <button type="button" className="modal-close" onClick={closeForm}>
-          ✕
-        </button>
-      </div>
+        <div className="modal-overlay" onClick={closeForm}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 style={{ margin: 0 }}>{isEditing ? "Sửa món ăn" : "Thêm món ăn"}</h3>
+              <button type="button" className="modal-close" onClick={closeForm}>
+                ✕
+              </button>
+            </div>
 
-      <form className="add-item-form modal-form" onSubmit={handleSubmit}>
-        {/* Tên món */}
-        <input
-          type="text"
-          name="name"
-          placeholder="Tên món"
-          value={formData.name}
-          onChange={handleInputChange}
-          required
-          className="form-input"
-        />
-
-        {/* Mô tả */}
-        <textarea
-          name="description"
-          placeholder="Mô tả"
-          value={formData.description}
-          onChange={handleInputChange}
-          className="form-textarea"
-        />
-
-        {/* Giá */}
-        <input
-          type="number"
-          name="price"
-          placeholder="Giá"
-          value={formData.price}
-          onChange={handleInputChange}
-          required
-          step="1000"
-          className="form-input"
-        />
-
-        {/* Loại món */}
-        <div className="form-group">
-          <label>Loại món</label>
-          <select
-            name="category"
-            className="form-input"
-            value={isNewCategory ? "__NEW__" : formData.category}
-            onChange={(e) => {
-              const v = e.target.value
-              if (v === "__NEW__") {
-                setIsNewCategory(true)
-                setNewCategory("")
-                return
-              }
-              setIsNewCategory(false)
-              setNewCategory("")
-              setFormData((prev) => ({ ...prev, category: v }))
-            }}
-          >
-            {CATEGORY_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-            <option value="__NEW__">➕ Thêm phân loại mới...</option>
-          </select>
-
-          {isNewCategory && (
-            <div style={{ marginTop: 8 }}>
+            <form className="add-item-form modal-form" onSubmit={handleSubmit}>
+              {/* Tên món */}
               <input
                 type="text"
+                name="name"
+                placeholder="Tên món"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
                 className="form-input"
-                placeholder="Nhập phân loại mới (vd: NOODLES, FAST_FOOD...)"
-                value={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
               />
-              <div style={{ marginTop: 6, fontSize: 12, opacity: 0.8 }}>
-                Sẽ lưu thành:{" "}
-                <b>{normalizeCategory(newCategory) || "(chưa nhập)"}</b>
+
+              {/* Mô tả */}
+              <textarea
+                name="description"
+                placeholder="Mô tả"
+                value={formData.description}
+                onChange={handleInputChange}
+                className="form-textarea"
+              />
+
+              {/* Giá */}
+              <input
+                type="number"
+                name="price"
+                placeholder="Giá"
+                value={formData.price}
+                onChange={handleInputChange}
+                required
+                step="1000"
+                className="form-input"
+              />
+
+              {/* Loại món */}
+              <div className="form-group">
+                <label>Loại món</label>
+                <select
+                  name="category"
+                  className="form-input"
+                  value={isNewCategory ? "__NEW__" : formData.category}
+                  onChange={(e) => {
+                    const v = e.target.value
+                    if (v === "__NEW__") {
+                      setIsNewCategory(true)
+                      setNewCategory("")
+                      return
+                    }
+                    setIsNewCategory(false)
+                    setNewCategory("")
+                    setFormData((prev) => ({ ...prev, category: v }))
+                  }}
+                >
+                  {CATEGORY_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                  <option value="__NEW__">➕ Thêm phân loại mới...</option>
+                </select>
+
+                {isNewCategory && (
+                  <div style={{ marginTop: 8 }}>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="Nhập phân loại mới (vd: NOODLES, FAST_FOOD...)"
+                      value={newCategory}
+                      onChange={(e) => setNewCategory(e.target.value)}
+                    />
+                    <div style={{ marginTop: 6, fontSize: 12, opacity: 0.8 }}>
+                      Sẽ lưu thành: <b>{normalizeCategory(newCategory) || "(chưa nhập)"}</b>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+
+              {/* URL hình ảnh */}
+              <input
+                type="url"
+                name="image"
+                placeholder="URL hình ảnh"
+                value={formData.image}
+                onChange={handleInputChange}
+                className="form-input"
+              />
+
+              {/* Nút submit */}
+              <button type="submit" className="btn-submit">
+                {isEditing ? "Lưu thay đổi" : "Thêm món"}
+              </button>
+            </form>
+          </div>
         </div>
-
-        {/* URL hình ảnh */}
-        <input
-          type="url"
-          name="image"
-          placeholder="URL hình ảnh"
-          value={formData.image}
-          onChange={handleInputChange}
-          className="form-input"
-        />
-
-        {/* Nút submit */}
-        <button type="submit" className="btn-submit">
-          {isEditing ? "Lưu thay đổi" : "Thêm món"}
-        </button>
-      </form>
-    </div>
-  </div>
-)}
-
+      )}
 
       <div className="menu-items-list">
         {menuItems.length === 0 ? (
@@ -328,6 +327,8 @@ export default function RestaurantMenuManagement({ API_URL, user }) {
         ) : (
           menuItems.map((item) => {
             const categoryVi = CATEGORY_LABELS_VI[item.category] || item.category
+
+            // ✅ 2 trạng thái như bạn yêu cầu
             const hidden = item?.isActive === false
             const soldOut = item?.isAvailable === false || item?.quantity === 0
 
@@ -355,6 +356,44 @@ export default function RestaurantMenuManagement({ API_URL, user }) {
                       currency: "VND",
                     }).format(item.price)}
                   </p>
+
+                  {/* ✅ TẠM ẨN + HẾT MÓN */}
+                  <div className="item-flags">
+                    {/* Tạm ẩn: người mua KHÔNG thấy */}
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={hidden}
+                        onChange={async (e) => {
+                          try {
+                            await patchMenuItem(item._id, { isActive: !e.target.checked })
+                            fetchMenuItems()
+                          } catch (err) {
+                            alert(err.response?.data?.message || "Không thể cập nhật Tạm ẩn")
+                          }
+                        }}
+                      />
+                      <span className="slider" />
+                      <span className="switch-text">Tạm ẩn</span>
+                    </label>
+
+                    {/* Hết món: người mua vẫn thấy nhưng hiện “Bán hết” */}
+                    <label className="checkbox-soldout">
+                      <input
+                        type="checkbox"
+                        checked={soldOut}
+                        onChange={async (e) => {
+                          try {
+                            await patchMenuItem(item._id, { isAvailable: !e.target.checked })
+                            fetchMenuItems()
+                          } catch (err) {
+                            alert(err.response?.data?.message || "Không thể cập nhật Hết món")
+                          }
+                        }}
+                      />
+                      <span>Hết món</span>
+                    </label>
+                  </div>
                 </div>
 
                 <div className="item-actions">

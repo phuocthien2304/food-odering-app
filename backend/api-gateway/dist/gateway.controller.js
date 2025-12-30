@@ -1,7 +1,7 @@
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec0, _dec1, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _dec34, _dec35, _dec36, _dec37, _dec38, _dec39, _dec40, _dec41, _dec42, _dec43, _dec44, _dec45, _dec46, _dec47, _dec48, _dec49, _dec50, _dec51, _dec52, _dec53, _dec54, _dec55, _dec56, _dec57, _dec58, _dec59, _dec60, _dec61, _dec62, _dec63, _dec64, _dec65, _dec66, _dec67, _dec68, _dec69, _dec70, _dec71, _dec72, _dec73, _dec74, _dec75, _dec76, _dec77, _dec78, _dec79, _dec80, _dec81, _dec82, _dec83, _dec84, _dec85, _dec86, _dec87, _dec88, _dec89, _dec90, _dec91, _dec92, _dec93, _dec94, _dec95, _dec96, _dec97, _dec98, _dec99, _dec100, _dec101, _dec102, _dec103, _dec104, _dec105, _dec106, _dec107, _dec108, _dec109, _dec110, _dec111, _dec112, _dec113, _dec114, _dec115, _dec116, _dec117, _dec118, _dec119, _dec120, _dec121, _dec122, _dec123, _dec124, _dec125, _dec126, _dec127, _dec128, _dec129, _dec130, _dec131, _dec132, _dec133, _dec134, _dec135, _dec136, _dec137, _dec138, _dec139, _dec140, _dec141, _dec142, _dec143, _dec144, _dec145, _dec146, _dec147, _dec148, _dec149, _dec150, _dec151, _dec152, _dec153, _dec154, _dec155, _dec156, _dec157, _dec158, _dec159, _dec160, _dec161, _dec162, _dec163, _dec164, _dec165, _dec166, _dec167, _dec168, _dec169, _dec170, _dec171, _dec172, _dec173, _dec174, _dec175, _dec176, _dec177, _dec178, _dec179, _dec180, _dec181, _dec182, _dec183, _class, _class2;
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec0, _dec1, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _dec34, _dec35, _dec36, _dec37, _dec38, _dec39, _dec40, _dec41, _dec42, _dec43, _dec44, _dec45, _dec46, _dec47, _dec48, _dec49, _dec50, _dec51, _dec52, _dec53, _dec54, _dec55, _dec56, _dec57, _dec58, _dec59, _dec60, _dec61, _dec62, _dec63, _dec64, _dec65, _dec66, _dec67, _dec68, _dec69, _dec70, _dec71, _dec72, _dec73, _dec74, _dec75, _dec76, _dec77, _dec78, _dec79, _dec80, _dec81, _dec82, _dec83, _dec84, _dec85, _dec86, _dec87, _dec88, _dec89, _dec90, _dec91, _dec92, _dec93, _dec94, _dec95, _dec96, _dec97, _dec98, _dec99, _dec100, _dec101, _dec102, _dec103, _dec104, _dec105, _dec106, _dec107, _dec108, _dec109, _dec110, _dec111, _dec112, _dec113, _dec114, _dec115, _dec116, _dec117, _dec118, _dec119, _dec120, _dec121, _dec122, _dec123, _dec124, _dec125, _dec126, _dec127, _dec128, _dec129, _dec130, _dec131, _dec132, _dec133, _dec134, _dec135, _dec136, _dec137, _dec138, _dec139, _dec140, _dec141, _dec142, _dec143, _dec144, _dec145, _dec146, _dec147, _dec148, _dec149, _dec150, _dec151, _dec152, _dec153, _dec154, _dec155, _dec156, _dec157, _dec158, _dec159, _dec160, _dec161, _dec162, _dec163, _dec164, _dec165, _dec166, _dec167, _dec168, _dec169, _dec170, _dec171, _dec172, _dec173, _dec174, _dec175, _dec176, _dec177, _dec178, _dec179, _dec180, _dec181, _dec182, _dec183, _dec184, _dec185, _dec186, _dec187, _class, _class2;
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -66,75 +66,77 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   return Param('menuItemId')(target, key, 0);
 }, _dec66 = function _dec66(target, key) {
   return Body()(target, key, 1);
-}, _dec67 = Reflect.metadata("design:type", Function), _dec68 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec69 = Get('admin/restaurants'), _dec70 = Reflect.metadata("design:type", Function), _dec71 = Reflect.metadata("design:paramtypes", []), _dec72 = Patch('admin/restaurants/:id'), _dec73 = function _dec73(target, key) {
+}, _dec67 = Reflect.metadata("design:type", Function), _dec68 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec69 = Get('admin/restaurants'), _dec70 = Reflect.metadata("design:type", Function), _dec71 = Reflect.metadata("design:paramtypes", []), _dec72 = Get('restaurants/:restaurantId/menu/manage'), _dec73 = function _dec73(target, key) {
+  return Param('restaurantId')(target, key, 0);
+}, _dec74 = Reflect.metadata("design:type", Function), _dec75 = Reflect.metadata("design:paramtypes", [void 0]), _dec76 = Patch('admin/restaurants/:id'), _dec77 = function _dec77(target, key) {
   return Param('id')(target, key, 0);
-}, _dec74 = function _dec74(target, key) {
+}, _dec78 = function _dec78(target, key) {
   return Body()(target, key, 1);
-}, _dec75 = Reflect.metadata("design:type", Function), _dec76 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec77 = Post('orders'), _dec78 = function _dec78(target, key) {
+}, _dec79 = Reflect.metadata("design:type", Function), _dec80 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec81 = Post('orders'), _dec82 = function _dec82(target, key) {
   return Body()(target, key, 0);
-}, _dec79 = Reflect.metadata("design:type", Function), _dec80 = Reflect.metadata("design:paramtypes", [void 0]), _dec81 = Get('orders/customer'), _dec82 = function _dec82(target, key) {
+}, _dec83 = Reflect.metadata("design:type", Function), _dec84 = Reflect.metadata("design:paramtypes", [void 0]), _dec85 = Get('orders/customer'), _dec86 = function _dec86(target, key) {
   return Headers('authorization')(target, key, 0);
-}, _dec83 = Reflect.metadata("design:type", Function), _dec84 = Reflect.metadata("design:paramtypes", [void 0]), _dec85 = Get('orders/:id'), _dec86 = function _dec86(target, key) {
+}, _dec87 = Reflect.metadata("design:type", Function), _dec88 = Reflect.metadata("design:paramtypes", [void 0]), _dec89 = Get('orders/:id'), _dec90 = function _dec90(target, key) {
   return Param('id')(target, key, 0);
-}, _dec87 = Reflect.metadata("design:type", Function), _dec88 = Reflect.metadata("design:paramtypes", [void 0]), _dec89 = Get('customers/:customerId/orders'), _dec90 = function _dec90(target, key) {
+}, _dec91 = Reflect.metadata("design:type", Function), _dec92 = Reflect.metadata("design:paramtypes", [void 0]), _dec93 = Get('customers/:customerId/orders'), _dec94 = function _dec94(target, key) {
   return Param('customerId')(target, key, 0);
-}, _dec91 = Reflect.metadata("design:type", Function), _dec92 = Reflect.metadata("design:paramtypes", [void 0]), _dec93 = Patch('orders/:id/confirm'), _dec94 = function _dec94(target, key) {
+}, _dec95 = Reflect.metadata("design:type", Function), _dec96 = Reflect.metadata("design:paramtypes", [void 0]), _dec97 = Patch('orders/:id/confirm'), _dec98 = function _dec98(target, key) {
   return Param('id')(target, key, 0);
-}, _dec95 = Reflect.metadata("design:type", Function), _dec96 = Reflect.metadata("design:paramtypes", [void 0]), _dec97 = Get('orders/customer'), _dec98 = function _dec98(target, key) {
+}, _dec99 = Reflect.metadata("design:type", Function), _dec100 = Reflect.metadata("design:paramtypes", [void 0]), _dec101 = Get('orders/customer'), _dec102 = function _dec102(target, key) {
   return Headers('authorization')(target, key, 0);
-}, _dec99 = Reflect.metadata("design:type", Function), _dec100 = Reflect.metadata("design:paramtypes", [void 0]), _dec101 = Patch('orders/:id/cancel'), _dec102 = function _dec102(target, key) {
+}, _dec103 = Reflect.metadata("design:type", Function), _dec104 = Reflect.metadata("design:paramtypes", [void 0]), _dec105 = Patch('orders/:id/cancel'), _dec106 = function _dec106(target, key) {
   return Param('id')(target, key, 0);
-}, _dec103 = function _dec103(target, key) {
+}, _dec107 = function _dec107(target, key) {
   return Body()(target, key, 1);
-}, _dec104 = Reflect.metadata("design:type", Function), _dec105 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec106 = Post('internal/events'), _dec107 = function _dec107(target, key) {
+}, _dec108 = Reflect.metadata("design:type", Function), _dec109 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec110 = Post('internal/events'), _dec111 = function _dec111(target, key) {
   return Body()(target, key, 0);
-}, _dec108 = Reflect.metadata("design:type", Function), _dec109 = Reflect.metadata("design:paramtypes", [void 0]), _dec110 = Post('payments/initiate'), _dec111 = function _dec111(target, key) {
+}, _dec112 = Reflect.metadata("design:type", Function), _dec113 = Reflect.metadata("design:paramtypes", [void 0]), _dec114 = Post('payments/initiate'), _dec115 = function _dec115(target, key) {
   return Body()(target, key, 0);
-}, _dec112 = Reflect.metadata("design:type", Function), _dec113 = Reflect.metadata("design:paramtypes", [void 0]), _dec114 = Get('payments/callback'), _dec115 = Reflect.metadata("design:type", Function), _dec116 = Reflect.metadata("design:paramtypes", []), _dec117 = Get('payments/:id'), _dec118 = function _dec118(target, key) {
+}, _dec116 = Reflect.metadata("design:type", Function), _dec117 = Reflect.metadata("design:paramtypes", [void 0]), _dec118 = Get('payments/callback'), _dec119 = Reflect.metadata("design:type", Function), _dec120 = Reflect.metadata("design:paramtypes", []), _dec121 = Get('payments/:id'), _dec122 = function _dec122(target, key) {
   return Param('id')(target, key, 0);
-}, _dec119 = Reflect.metadata("design:type", Function), _dec120 = Reflect.metadata("design:paramtypes", [void 0]), _dec121 = Get('payments/order/:orderId'), _dec122 = function _dec122(target, key) {
+}, _dec123 = Reflect.metadata("design:type", Function), _dec124 = Reflect.metadata("design:paramtypes", [void 0]), _dec125 = Get('payments/order/:orderId'), _dec126 = function _dec126(target, key) {
   return Param('orderId')(target, key, 0);
-}, _dec123 = Reflect.metadata("design:type", Function), _dec124 = Reflect.metadata("design:paramtypes", [void 0]), _dec125 = Post('payments/:id/callback'), _dec126 = function _dec126(target, key) {
+}, _dec127 = Reflect.metadata("design:type", Function), _dec128 = Reflect.metadata("design:paramtypes", [void 0]), _dec129 = Post('payments/:id/callback'), _dec130 = function _dec130(target, key) {
   return Param('id')(target, key, 0);
-}, _dec127 = function _dec127(target, key) {
+}, _dec131 = function _dec131(target, key) {
   return Body()(target, key, 1);
-}, _dec128 = Reflect.metadata("design:type", Function), _dec129 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec130 = Post('payments/callback'), _dec131 = function _dec131(target, key) {
+}, _dec132 = Reflect.metadata("design:type", Function), _dec133 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec134 = Post('payments/callback'), _dec135 = function _dec135(target, key) {
   return Body()(target, key, 0);
-}, _dec132 = function _dec132(target, key) {
+}, _dec136 = function _dec136(target, key) {
   return Headers('authorization')(target, key, 1);
-}, _dec133 = Reflect.metadata("design:type", Function), _dec134 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec135 = Post('payments/:id/retry'), _dec136 = function _dec136(target, key) {
+}, _dec137 = Reflect.metadata("design:type", Function), _dec138 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec139 = Post('payments/:id/retry'), _dec140 = function _dec140(target, key) {
   return Param('id')(target, key, 0);
-}, _dec137 = Reflect.metadata("design:type", Function), _dec138 = Reflect.metadata("design:paramtypes", [void 0]), _dec139 = Post('payments/:id/refund'), _dec140 = function _dec140(target, key) {
+}, _dec141 = Reflect.metadata("design:type", Function), _dec142 = Reflect.metadata("design:paramtypes", [void 0]), _dec143 = Post('payments/:id/refund'), _dec144 = function _dec144(target, key) {
   return Param('id')(target, key, 0);
-}, _dec141 = function _dec141(target, key) {
+}, _dec145 = function _dec145(target, key) {
   return Body()(target, key, 1);
-}, _dec142 = Reflect.metadata("design:type", Function), _dec143 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec144 = Get('deliveries/:id'), _dec145 = function _dec145(target, key) {
+}, _dec146 = Reflect.metadata("design:type", Function), _dec147 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec148 = Get('deliveries/:id'), _dec149 = function _dec149(target, key) {
   return Param('id')(target, key, 0);
-}, _dec146 = Reflect.metadata("design:type", Function), _dec147 = Reflect.metadata("design:paramtypes", [void 0]), _dec148 = Get('deliveries/order/:orderId'), _dec149 = function _dec149(target, key) {
+}, _dec150 = Reflect.metadata("design:type", Function), _dec151 = Reflect.metadata("design:paramtypes", [void 0]), _dec152 = Get('deliveries/order/:orderId'), _dec153 = function _dec153(target, key) {
   return Param('orderId')(target, key, 0);
-}, _dec150 = Reflect.metadata("design:type", Function), _dec151 = Reflect.metadata("design:paramtypes", [void 0]), _dec152 = Get('deliveries/available'), _dec153 = Reflect.metadata("design:type", Function), _dec154 = Reflect.metadata("design:paramtypes", []), _dec155 = Get('deliveries/driver/history'), _dec156 = function _dec156(target, key) {
+}, _dec154 = Reflect.metadata("design:type", Function), _dec155 = Reflect.metadata("design:paramtypes", [void 0]), _dec156 = Get('deliveries/available'), _dec157 = Reflect.metadata("design:type", Function), _dec158 = Reflect.metadata("design:paramtypes", []), _dec159 = Get('deliveries/driver/history'), _dec160 = function _dec160(target, key) {
   return Headers('authorization')(target, key, 0);
-}, _dec157 = Reflect.metadata("design:type", Function), _dec158 = Reflect.metadata("design:paramtypes", [void 0]), _dec159 = Patch('deliveries/:id/accept'), _dec160 = function _dec160(target, key) {
+}, _dec161 = Reflect.metadata("design:type", Function), _dec162 = Reflect.metadata("design:paramtypes", [void 0]), _dec163 = Patch('deliveries/:id/accept'), _dec164 = function _dec164(target, key) {
   return Param('id')(target, key, 0);
-}, _dec161 = function _dec161(target, key) {
+}, _dec165 = function _dec165(target, key) {
   return Headers('authorization')(target, key, 1);
-}, _dec162 = Reflect.metadata("design:type", Function), _dec163 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec164 = Patch('deliveries/:id/arrived'), _dec165 = function _dec165(target, key) {
+}, _dec166 = Reflect.metadata("design:type", Function), _dec167 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec168 = Patch('deliveries/:id/arrived'), _dec169 = function _dec169(target, key) {
   return Param('id')(target, key, 0);
-}, _dec166 = function _dec166(target, key) {
+}, _dec170 = function _dec170(target, key) {
   return Headers('authorization')(target, key, 1);
-}, _dec167 = Reflect.metadata("design:type", Function), _dec168 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec169 = Patch('deliveries/:id/picked'), _dec170 = function _dec170(target, key) {
+}, _dec171 = Reflect.metadata("design:type", Function), _dec172 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec173 = Patch('deliveries/:id/picked'), _dec174 = function _dec174(target, key) {
   return Param('id')(target, key, 0);
-}, _dec171 = function _dec171(target, key) {
+}, _dec175 = function _dec175(target, key) {
   return Headers('authorization')(target, key, 1);
-}, _dec172 = Reflect.metadata("design:type", Function), _dec173 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec174 = Patch('deliveries/:id/complete'), _dec175 = function _dec175(target, key) {
+}, _dec176 = Reflect.metadata("design:type", Function), _dec177 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec178 = Patch('deliveries/:id/complete'), _dec179 = function _dec179(target, key) {
   return Param('id')(target, key, 0);
-}, _dec176 = function _dec176(target, key) {
+}, _dec180 = function _dec180(target, key) {
   return Headers('authorization')(target, key, 1);
-}, _dec177 = Reflect.metadata("design:type", Function), _dec178 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec179 = Post('deliveries/:id/start'), _dec180 = function _dec180(target, key) {
+}, _dec181 = Reflect.metadata("design:type", Function), _dec182 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec183 = Post('deliveries/:id/start'), _dec184 = function _dec184(target, key) {
   return Param('id')(target, key, 0);
-}, _dec181 = function _dec181(target, key) {
+}, _dec185 = function _dec185(target, key) {
   return Body()(target, key, 1);
-}, _dec182 = Reflect.metadata("design:type", Function), _dec183 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec(_class = _dec2(_class = _dec3(_class = _dec4(_class = (_class2 = /*#__PURE__*/function () {
+}, _dec186 = Reflect.metadata("design:type", Function), _dec187 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec(_class = _dec2(_class = _dec3(_class = _dec4(_class = (_class2 = /*#__PURE__*/function () {
   function GatewayController(gatewayService) {
     _classCallCheck(this, GatewayController);
     this.gatewayService = gatewayService;
@@ -610,36 +612,63 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
       return getRestaurantsAdmin;
     }()
   }, {
-    key: "toggleRestaurantStatus",
+    key: "getMenuForManage",
     value: function () {
-      var _toggleRestaurantStatus = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee16(id, body) {
-        var active, _t16;
+      var _getMenuForManage = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee16(restaurantId) {
+        var _t16;
         return _regenerator().w(function (_context16) {
           while (1) switch (_context16.p = _context16.n) {
+            case 0:
+              _context16.p = 0;
+              _context16.n = 1;
+              return this.gatewayService.getMenuForManage(restaurantId);
+            case 1:
+              return _context16.a(2, _context16.v);
+            case 2:
+              _context16.p = 2;
+              _t16 = _context16.v;
+              throw new HttpException(_t16.message, _t16.status || HttpStatus.BAD_REQUEST);
+            case 3:
+              return _context16.a(2);
+          }
+        }, _callee16, this, [[0, 2]]);
+      }));
+      function getMenuForManage(_x17) {
+        return _getMenuForManage.apply(this, arguments);
+      }
+      return getMenuForManage;
+    }()
+  }, {
+    key: "toggleRestaurantStatus",
+    value: function () {
+      var _toggleRestaurantStatus = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee17(id, body) {
+        var active, _t17;
+        return _regenerator().w(function (_context17) {
+          while (1) switch (_context17.p = _context17.n) {
             case 0:
               // Frontend đang gửi { active: !currentStatus }
               active = body.active;
               if (!(typeof active !== 'boolean')) {
-                _context16.n = 1;
+                _context17.n = 1;
                 break;
               }
               throw new HttpException('active field must be boolean', HttpStatus.BAD_REQUEST);
             case 1:
-              _context16.p = 1;
-              _context16.n = 2;
+              _context17.p = 1;
+              _context17.n = 2;
               return this.gatewayService.toggleRestaurantStatus(id, active);
             case 2:
-              return _context16.a(2, _context16.v);
+              return _context17.a(2, _context17.v);
             case 3:
-              _context16.p = 3;
-              _t16 = _context16.v;
-              throw new HttpException(_t16.message, _t16.status || HttpStatus.BAD_REQUEST);
+              _context17.p = 3;
+              _t17 = _context17.v;
+              throw new HttpException(_t17.message, _t17.status || HttpStatus.BAD_REQUEST);
             case 4:
-              return _context16.a(2);
+              return _context17.a(2);
           }
-        }, _callee16, this, [[1, 3]]);
+        }, _callee17, this, [[1, 3]]);
       }));
-      function toggleRestaurantStatus(_x17, _x18) {
+      function toggleRestaurantStatus(_x18, _x19) {
         return _toggleRestaurantStatus.apply(this, arguments);
       }
       return toggleRestaurantStatus;
@@ -647,43 +676,43 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   }, {
     key: "createOrder",
     value: function () {
-      var _createOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee17(orderDto) {
-        var created, _t17, _t18;
-        return _regenerator().w(function (_context17) {
-          while (1) switch (_context17.p = _context17.n) {
+      var _createOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee18(orderDto) {
+        var created, _t18, _t19;
+        return _regenerator().w(function (_context18) {
+          while (1) switch (_context18.p = _context18.n) {
             case 0:
-              _context17.p = 0;
-              _context17.n = 1;
+              _context18.p = 0;
+              _context18.n = 1;
               return this.gatewayService.createOrder(orderDto);
             case 1:
-              created = _context17.v;
-              _context17.p = 2;
+              created = _context18.v;
+              _context18.p = 2;
               if (!(created && created.status === 'CREATED')) {
-                _context17.n = 3;
+                _context18.n = 3;
                 break;
               }
-              _context17.n = 3;
+              _context18.n = 3;
               return this.gatewayService.createDelivery(created);
             case 3:
-              _context17.n = 5;
+              _context18.n = 5;
               break;
             case 4:
-              _context17.p = 4;
-              _t17 = _context17.v;
+              _context18.p = 4;
+              _t18 = _context18.v;
               // don't fail order creation if delivery creation fails
-              console.warn('Failed to create delivery for order (fallback):', _t17.message || _t17);
+              console.warn('Failed to create delivery for order (fallback):', _t18.message || _t18);
             case 5:
-              return _context17.a(2, created);
+              return _context18.a(2, created);
             case 6:
-              _context17.p = 6;
-              _t18 = _context17.v;
-              throw new HttpException(_t18.message, _t18.status || HttpStatus.BAD_REQUEST);
+              _context18.p = 6;
+              _t19 = _context18.v;
+              throw new HttpException(_t19.message, _t19.status || HttpStatus.BAD_REQUEST);
             case 7:
-              return _context17.a(2);
+              return _context18.a(2);
           }
-        }, _callee17, this, [[2, 4], [0, 6]]);
+        }, _callee18, this, [[2, 4], [0, 6]]);
       }));
-      function createOrder(_x19) {
+      function createOrder(_x20) {
         return _createOrder.apply(this, arguments);
       }
       return createOrder;
@@ -693,44 +722,44 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
     key: "getCustomerOrdersByToken",
     value: // New: get orders for the authenticated customer (uses token)
     function () {
-      var _getCustomerOrdersByToken = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee18(authHeader) {
-        var token, profile, customerId, _t19;
-        return _regenerator().w(function (_context18) {
-          while (1) switch (_context18.p = _context18.n) {
+      var _getCustomerOrdersByToken = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee19(authHeader) {
+        var token, profile, customerId, _t20;
+        return _regenerator().w(function (_context19) {
+          while (1) switch (_context19.p = _context19.n) {
             case 0:
               token = authHeader && authHeader.replace('Bearer ', '');
               if (token) {
-                _context18.n = 1;
+                _context19.n = 1;
                 break;
               }
               throw new HttpException('No token provided', HttpStatus.UNAUTHORIZED);
             case 1:
-              _context18.p = 1;
-              _context18.n = 2;
+              _context19.p = 1;
+              _context19.n = 2;
               return this.gatewayService.getProfileByToken(token);
             case 2:
-              profile = _context18.v;
+              profile = _context19.v;
               customerId = profile && (profile._id || profile.id);
               if (customerId) {
-                _context18.n = 3;
+                _context19.n = 3;
                 break;
               }
               throw new HttpException('Invalid token/profile', HttpStatus.UNAUTHORIZED);
             case 3:
-              _context18.n = 4;
+              _context19.n = 4;
               return this.gatewayService.getCustomerOrders(customerId);
             case 4:
-              return _context18.a(2, _context18.v);
+              return _context19.a(2, _context19.v);
             case 5:
-              _context18.p = 5;
-              _t19 = _context18.v;
-              throw new HttpException(_t19.message || 'Failed to fetch customer orders', _t19.status || HttpStatus.BAD_REQUEST);
+              _context19.p = 5;
+              _t20 = _context19.v;
+              throw new HttpException(_t20.message || 'Failed to fetch customer orders', _t20.status || HttpStatus.BAD_REQUEST);
             case 6:
-              return _context18.a(2);
+              return _context19.a(2);
           }
-        }, _callee18, this, [[1, 5]]);
+        }, _callee19, this, [[1, 5]]);
       }));
-      function getCustomerOrdersByToken(_x20) {
+      function getCustomerOrdersByToken(_x21) {
         return _getCustomerOrdersByToken.apply(this, arguments);
       }
       return getCustomerOrdersByToken;
@@ -738,41 +767,14 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   }, {
     key: "getOrder",
     value: function () {
-      var _getOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee19(id) {
-        var _t20;
-        return _regenerator().w(function (_context19) {
-          while (1) switch (_context19.p = _context19.n) {
-            case 0:
-              _context19.p = 0;
-              _context19.n = 1;
-              return this.gatewayService.getOrder(id);
-            case 1:
-              return _context19.a(2, _context19.v);
-            case 2:
-              _context19.p = 2;
-              _t20 = _context19.v;
-              throw new HttpException(_t20.message, _t20.status || HttpStatus.NOT_FOUND);
-            case 3:
-              return _context19.a(2);
-          }
-        }, _callee19, this, [[0, 2]]);
-      }));
-      function getOrder(_x21) {
-        return _getOrder.apply(this, arguments);
-      }
-      return getOrder;
-    }()
-  }, {
-    key: "getCustomerOrders",
-    value: function () {
-      var _getCustomerOrders = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee20(customerId) {
+      var _getOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee20(id) {
         var _t21;
         return _regenerator().w(function (_context20) {
           while (1) switch (_context20.p = _context20.n) {
             case 0:
               _context20.p = 0;
               _context20.n = 1;
-              return this.gatewayService.getCustomerOrders(customerId);
+              return this.gatewayService.getOrder(id);
             case 1:
               return _context20.a(2, _context20.v);
             case 2:
@@ -784,7 +786,34 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
           }
         }, _callee20, this, [[0, 2]]);
       }));
-      function getCustomerOrders(_x22) {
+      function getOrder(_x22) {
+        return _getOrder.apply(this, arguments);
+      }
+      return getOrder;
+    }()
+  }, {
+    key: "getCustomerOrders",
+    value: function () {
+      var _getCustomerOrders = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee21(customerId) {
+        var _t22;
+        return _regenerator().w(function (_context21) {
+          while (1) switch (_context21.p = _context21.n) {
+            case 0:
+              _context21.p = 0;
+              _context21.n = 1;
+              return this.gatewayService.getCustomerOrders(customerId);
+            case 1:
+              return _context21.a(2, _context21.v);
+            case 2:
+              _context21.p = 2;
+              _t22 = _context21.v;
+              throw new HttpException(_t22.message, _t22.status || HttpStatus.NOT_FOUND);
+            case 3:
+              return _context21.a(2);
+          }
+        }, _callee21, this, [[0, 2]]);
+      }));
+      function getCustomerOrders(_x23) {
         return _getCustomerOrders.apply(this, arguments);
       }
       return getCustomerOrders;
@@ -792,41 +821,14 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   }, {
     key: "confirmOrder",
     value: function () {
-      var _confirmOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee21(id) {
-        var _t22;
-        return _regenerator().w(function (_context21) {
-          while (1) switch (_context21.p = _context21.n) {
-            case 0:
-              _context21.p = 0;
-              _context21.n = 1;
-              return this.gatewayService.confirmOrder(id);
-            case 1:
-              return _context21.a(2, _context21.v);
-            case 2:
-              _context21.p = 2;
-              _t22 = _context21.v;
-              throw new HttpException(_t22.message, _t22.status || HttpStatus.BAD_REQUEST);
-            case 3:
-              return _context21.a(2);
-          }
-        }, _callee21, this, [[0, 2]]);
-      }));
-      function confirmOrder(_x23) {
-        return _confirmOrder.apply(this, arguments);
-      }
-      return confirmOrder;
-    }()
-  }, {
-    key: "cancelOrder",
-    value: function () {
-      var _cancelOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee22(id, body) {
+      var _confirmOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee22(id) {
         var _t23;
         return _regenerator().w(function (_context22) {
           while (1) switch (_context22.p = _context22.n) {
             case 0:
               _context22.p = 0;
               _context22.n = 1;
-              return this.gatewayService.cancelOrder(id, body.reason);
+              return this.gatewayService.confirmOrder(id);
             case 1:
               return _context22.a(2, _context22.v);
             case 2:
@@ -838,7 +840,34 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
           }
         }, _callee22, this, [[0, 2]]);
       }));
-      function cancelOrder(_x24, _x25) {
+      function confirmOrder(_x24) {
+        return _confirmOrder.apply(this, arguments);
+      }
+      return confirmOrder;
+    }()
+  }, {
+    key: "cancelOrder",
+    value: function () {
+      var _cancelOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee23(id, body) {
+        var _t24;
+        return _regenerator().w(function (_context23) {
+          while (1) switch (_context23.p = _context23.n) {
+            case 0:
+              _context23.p = 0;
+              _context23.n = 1;
+              return this.gatewayService.cancelOrder(id, body.reason);
+            case 1:
+              return _context23.a(2, _context23.v);
+            case 2:
+              _context23.p = 2;
+              _t24 = _context23.v;
+              throw new HttpException(_t24.message, _t24.status || HttpStatus.BAD_REQUEST);
+            case 3:
+              return _context23.a(2);
+          }
+        }, _callee23, this, [[0, 2]]);
+      }));
+      function cancelOrder(_x25, _x26) {
         return _cancelOrder.apply(this, arguments);
       }
       return cancelOrder;
@@ -846,14 +875,14 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   }, {
     key: "internalEvent",
     value: function () {
-      var _internalEvent = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee23(body) {
-        var _t24;
-        return _regenerator().w(function (_context23) {
-          while (1) switch (_context23.p = _context23.n) {
+      var _internalEvent = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee24(body) {
+        var _t25;
+        return _regenerator().w(function (_context24) {
+          while (1) switch (_context24.p = _context24.n) {
             case 0:
-              _context23.p = 0;
+              _context24.p = 0;
               if (!(!body || !body.type)) {
-                _context23.n = 1;
+                _context24.n = 1;
                 break;
               }
               throw new HttpException('Invalid event', HttpStatus.BAD_REQUEST);
@@ -864,19 +893,19 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
               } catch (e) {
                 console.warn('WS broadcast failed', e.message || e);
               }
-              return _context23.a(2, {
+              return _context24.a(2, {
                 ok: true
               });
             case 2:
-              _context23.p = 2;
-              _t24 = _context23.v;
-              throw new HttpException(_t24.message || 'Failed', _t24.status || HttpStatus.BAD_REQUEST);
+              _context24.p = 2;
+              _t25 = _context24.v;
+              throw new HttpException(_t25.message || 'Failed', _t25.status || HttpStatus.BAD_REQUEST);
             case 3:
-              return _context23.a(2);
+              return _context24.a(2);
           }
-        }, _callee23, null, [[0, 2]]);
+        }, _callee24, null, [[0, 2]]);
       }));
-      function internalEvent(_x26) {
+      function internalEvent(_x27) {
         return _internalEvent.apply(this, arguments);
       }
       return internalEvent;
@@ -884,26 +913,26 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   }, {
     key: "initiatePayment",
     value: function () {
-      var _initiatePayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee24(paymentDto) {
-        var _t25;
-        return _regenerator().w(function (_context24) {
-          while (1) switch (_context24.p = _context24.n) {
+      var _initiatePayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee25(paymentDto) {
+        var _t26;
+        return _regenerator().w(function (_context25) {
+          while (1) switch (_context25.p = _context25.n) {
             case 0:
-              _context24.p = 0;
-              _context24.n = 1;
+              _context25.p = 0;
+              _context25.n = 1;
               return this.gatewayService.initiatePayment(paymentDto);
             case 1:
-              return _context24.a(2, _context24.v);
+              return _context25.a(2, _context25.v);
             case 2:
-              _context24.p = 2;
-              _t25 = _context24.v;
-              throw new HttpException(_t25.message, _t25.status || HttpStatus.BAD_REQUEST);
+              _context25.p = 2;
+              _t26 = _context25.v;
+              throw new HttpException(_t26.message, _t26.status || HttpStatus.BAD_REQUEST);
             case 3:
-              return _context24.a(2);
+              return _context25.a(2);
           }
-        }, _callee24, this, [[0, 2]]);
+        }, _callee25, this, [[0, 2]]);
       }));
-      function initiatePayment(_x27) {
+      function initiatePayment(_x28) {
         return _initiatePayment.apply(this, arguments);
       }
       return initiatePayment;
@@ -911,16 +940,16 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   }, {
     key: "sepayWebhookHealthCheck",
     value: function () {
-      var _sepayWebhookHealthCheck = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee25() {
-        return _regenerator().w(function (_context25) {
-          while (1) switch (_context25.n) {
+      var _sepayWebhookHealthCheck = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee26() {
+        return _regenerator().w(function (_context26) {
+          while (1) switch (_context26.n) {
             case 0:
-              return _context25.a(2, {
+              return _context26.a(2, {
                 success: true,
                 message: 'OK'
               });
           }
-        }, _callee25);
+        }, _callee26);
       }));
       function sepayWebhookHealthCheck() {
         return _sepayWebhookHealthCheck.apply(this, arguments);
@@ -930,41 +959,14 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   }, {
     key: "getPayment",
     value: function () {
-      var _getPayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee26(id) {
-        var _t26;
-        return _regenerator().w(function (_context26) {
-          while (1) switch (_context26.p = _context26.n) {
-            case 0:
-              _context26.p = 0;
-              _context26.n = 1;
-              return this.gatewayService.getPayment(id);
-            case 1:
-              return _context26.a(2, _context26.v);
-            case 2:
-              _context26.p = 2;
-              _t26 = _context26.v;
-              throw new HttpException(_t26.message, _t26.status || HttpStatus.NOT_FOUND);
-            case 3:
-              return _context26.a(2);
-          }
-        }, _callee26, this, [[0, 2]]);
-      }));
-      function getPayment(_x28) {
-        return _getPayment.apply(this, arguments);
-      }
-      return getPayment;
-    }()
-  }, {
-    key: "getPaymentByOrder",
-    value: function () {
-      var _getPaymentByOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee27(orderId) {
+      var _getPayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee27(id) {
         var _t27;
         return _regenerator().w(function (_context27) {
           while (1) switch (_context27.p = _context27.n) {
             case 0:
               _context27.p = 0;
               _context27.n = 1;
-              return this.gatewayService.getPaymentByOrderId(orderId);
+              return this.gatewayService.getPayment(id);
             case 1:
               return _context27.a(2, _context27.v);
             case 2:
@@ -976,7 +978,34 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
           }
         }, _callee27, this, [[0, 2]]);
       }));
-      function getPaymentByOrder(_x29) {
+      function getPayment(_x29) {
+        return _getPayment.apply(this, arguments);
+      }
+      return getPayment;
+    }()
+  }, {
+    key: "getPaymentByOrder",
+    value: function () {
+      var _getPaymentByOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee28(orderId) {
+        var _t28;
+        return _regenerator().w(function (_context28) {
+          while (1) switch (_context28.p = _context28.n) {
+            case 0:
+              _context28.p = 0;
+              _context28.n = 1;
+              return this.gatewayService.getPaymentByOrderId(orderId);
+            case 1:
+              return _context28.a(2, _context28.v);
+            case 2:
+              _context28.p = 2;
+              _t28 = _context28.v;
+              throw new HttpException(_t28.message, _t28.status || HttpStatus.NOT_FOUND);
+            case 3:
+              return _context28.a(2);
+          }
+        }, _callee28, this, [[0, 2]]);
+      }));
+      function getPaymentByOrder(_x30) {
         return _getPaymentByOrder.apply(this, arguments);
       }
       return getPaymentByOrder;
@@ -984,41 +1013,14 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   }, {
     key: "handlePaymentCallback",
     value: function () {
-      var _handlePaymentCallback = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee28(id, callbackData) {
-        var _t28;
-        return _regenerator().w(function (_context28) {
-          while (1) switch (_context28.p = _context28.n) {
-            case 0:
-              _context28.p = 0;
-              _context28.n = 1;
-              return this.gatewayService.handlePaymentCallback(id, callbackData);
-            case 1:
-              return _context28.a(2, _context28.v);
-            case 2:
-              _context28.p = 2;
-              _t28 = _context28.v;
-              throw new HttpException(_t28.message, _t28.status || HttpStatus.BAD_REQUEST);
-            case 3:
-              return _context28.a(2);
-          }
-        }, _callee28, this, [[0, 2]]);
-      }));
-      function handlePaymentCallback(_x30, _x31) {
-        return _handlePaymentCallback.apply(this, arguments);
-      }
-      return handlePaymentCallback;
-    }()
-  }, {
-    key: "handleSepayWebhook",
-    value: function () {
-      var _handleSepayWebhook = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee29(callbackData, authorization) {
+      var _handlePaymentCallback = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee29(id, callbackData) {
         var _t29;
         return _regenerator().w(function (_context29) {
           while (1) switch (_context29.p = _context29.n) {
             case 0:
               _context29.p = 0;
               _context29.n = 1;
-              return this.gatewayService.handleSepayWebhook(callbackData, authorization);
+              return this.gatewayService.handlePaymentCallback(id, callbackData);
             case 1:
               return _context29.a(2, _context29.v);
             case 2:
@@ -1030,22 +1032,22 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
           }
         }, _callee29, this, [[0, 2]]);
       }));
-      function handleSepayWebhook(_x32, _x33) {
-        return _handleSepayWebhook.apply(this, arguments);
+      function handlePaymentCallback(_x31, _x32) {
+        return _handlePaymentCallback.apply(this, arguments);
       }
-      return handleSepayWebhook;
+      return handlePaymentCallback;
     }()
   }, {
-    key: "retryPayment",
+    key: "handleSepayWebhook",
     value: function () {
-      var _retryPayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee30(id) {
+      var _handleSepayWebhook = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee30(callbackData, authorization) {
         var _t30;
         return _regenerator().w(function (_context30) {
           while (1) switch (_context30.p = _context30.n) {
             case 0:
               _context30.p = 0;
               _context30.n = 1;
-              return this.gatewayService.retryPayment(id);
+              return this.gatewayService.handleSepayWebhook(callbackData, authorization);
             case 1:
               return _context30.a(2, _context30.v);
             case 2:
@@ -1057,22 +1059,22 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
           }
         }, _callee30, this, [[0, 2]]);
       }));
-      function retryPayment(_x34) {
-        return _retryPayment.apply(this, arguments);
+      function handleSepayWebhook(_x33, _x34) {
+        return _handleSepayWebhook.apply(this, arguments);
       }
-      return retryPayment;
+      return handleSepayWebhook;
     }()
   }, {
-    key: "refundPayment",
+    key: "retryPayment",
     value: function () {
-      var _refundPayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee31(id, body) {
+      var _retryPayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee31(id) {
         var _t31;
         return _regenerator().w(function (_context31) {
           while (1) switch (_context31.p = _context31.n) {
             case 0:
               _context31.p = 0;
               _context31.n = 1;
-              return this.gatewayService.refundPayment(id, body.reason);
+              return this.gatewayService.retryPayment(id);
             case 1:
               return _context31.a(2, _context31.v);
             case 2:
@@ -1084,7 +1086,34 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
           }
         }, _callee31, this, [[0, 2]]);
       }));
-      function refundPayment(_x35, _x36) {
+      function retryPayment(_x35) {
+        return _retryPayment.apply(this, arguments);
+      }
+      return retryPayment;
+    }()
+  }, {
+    key: "refundPayment",
+    value: function () {
+      var _refundPayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee32(id, body) {
+        var _t32;
+        return _regenerator().w(function (_context32) {
+          while (1) switch (_context32.p = _context32.n) {
+            case 0:
+              _context32.p = 0;
+              _context32.n = 1;
+              return this.gatewayService.refundPayment(id, body.reason);
+            case 1:
+              return _context32.a(2, _context32.v);
+            case 2:
+              _context32.p = 2;
+              _t32 = _context32.v;
+              throw new HttpException(_t32.message, _t32.status || HttpStatus.BAD_REQUEST);
+            case 3:
+              return _context32.a(2);
+          }
+        }, _callee32, this, [[0, 2]]);
+      }));
+      function refundPayment(_x36, _x37) {
         return _refundPayment.apply(this, arguments);
       }
       return refundPayment;
@@ -1092,41 +1121,14 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   }, {
     key: "getDelivery",
     value: function () {
-      var _getDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee32(id) {
-        var _t32;
-        return _regenerator().w(function (_context32) {
-          while (1) switch (_context32.p = _context32.n) {
-            case 0:
-              _context32.p = 0;
-              _context32.n = 1;
-              return this.gatewayService.getDelivery(id);
-            case 1:
-              return _context32.a(2, _context32.v);
-            case 2:
-              _context32.p = 2;
-              _t32 = _context32.v;
-              throw new HttpException(_t32.message, _t32.status || HttpStatus.NOT_FOUND);
-            case 3:
-              return _context32.a(2);
-          }
-        }, _callee32, this, [[0, 2]]);
-      }));
-      function getDelivery(_x37) {
-        return _getDelivery.apply(this, arguments);
-      }
-      return getDelivery;
-    }()
-  }, {
-    key: "getDeliveryByOrder",
-    value: function () {
-      var _getDeliveryByOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee33(orderId) {
+      var _getDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee33(id) {
         var _t33;
         return _regenerator().w(function (_context33) {
           while (1) switch (_context33.p = _context33.n) {
             case 0:
               _context33.p = 0;
               _context33.n = 1;
-              return this.gatewayService.getDeliveryByOrder(orderId);
+              return this.gatewayService.getDelivery(id);
             case 1:
               return _context33.a(2, _context33.v);
             case 2:
@@ -1138,7 +1140,34 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
           }
         }, _callee33, this, [[0, 2]]);
       }));
-      function getDeliveryByOrder(_x38) {
+      function getDelivery(_x38) {
+        return _getDelivery.apply(this, arguments);
+      }
+      return getDelivery;
+    }()
+  }, {
+    key: "getDeliveryByOrder",
+    value: function () {
+      var _getDeliveryByOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee34(orderId) {
+        var _t34;
+        return _regenerator().w(function (_context34) {
+          while (1) switch (_context34.p = _context34.n) {
+            case 0:
+              _context34.p = 0;
+              _context34.n = 1;
+              return this.gatewayService.getDeliveryByOrder(orderId);
+            case 1:
+              return _context34.a(2, _context34.v);
+            case 2:
+              _context34.p = 2;
+              _t34 = _context34.v;
+              throw new HttpException(_t34.message, _t34.status || HttpStatus.NOT_FOUND);
+            case 3:
+              return _context34.a(2);
+          }
+        }, _callee34, this, [[0, 2]]);
+      }));
+      function getDeliveryByOrder(_x39) {
         return _getDeliveryByOrder.apply(this, arguments);
       }
       return getDeliveryByOrder;
@@ -1146,24 +1175,24 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   }, {
     key: "getAvailableDeliveries",
     value: function () {
-      var _getAvailableDeliveries = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee34() {
-        var _t34;
-        return _regenerator().w(function (_context34) {
-          while (1) switch (_context34.p = _context34.n) {
+      var _getAvailableDeliveries = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee35() {
+        var _t35;
+        return _regenerator().w(function (_context35) {
+          while (1) switch (_context35.p = _context35.n) {
             case 0:
-              _context34.p = 0;
-              _context34.n = 1;
+              _context35.p = 0;
+              _context35.n = 1;
               return this.gatewayService.getAvailableDeliveries();
             case 1:
-              return _context34.a(2, _context34.v);
+              return _context35.a(2, _context35.v);
             case 2:
-              _context34.p = 2;
-              _t34 = _context34.v;
-              throw new HttpException(_t34.message, _t34.status || HttpStatus.INTERNAL_SERVER_ERROR);
+              _context35.p = 2;
+              _t35 = _context35.v;
+              throw new HttpException(_t35.message, _t35.status || HttpStatus.INTERNAL_SERVER_ERROR);
             case 3:
-              return _context34.a(2);
+              return _context35.a(2);
           }
-        }, _callee34, this, [[0, 2]]);
+        }, _callee35, this, [[0, 2]]);
       }));
       function getAvailableDeliveries() {
         return _getAvailableDeliveries.apply(this, arguments);
@@ -1173,52 +1202,7 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   }, {
     key: "getDriverHistoryByToken",
     value: function () {
-      var _getDriverHistoryByToken = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee35(authHeader) {
-        var token, profile, driverId, _t35;
-        return _regenerator().w(function (_context35) {
-          while (1) switch (_context35.p = _context35.n) {
-            case 0:
-              token = authHeader && authHeader.replace('Bearer ', '');
-              if (token) {
-                _context35.n = 1;
-                break;
-              }
-              throw new HttpException('No token provided', HttpStatus.UNAUTHORIZED);
-            case 1:
-              _context35.p = 1;
-              _context35.n = 2;
-              return this.gatewayService.getProfileByToken(token);
-            case 2:
-              profile = _context35.v;
-              driverId = profile && (profile._id || profile.id);
-              if (!(!driverId || profile.userType !== 'DRIVER')) {
-                _context35.n = 3;
-                break;
-              }
-              throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-            case 3:
-              _context35.n = 4;
-              return this.gatewayService.getDriverHistory(driverId);
-            case 4:
-              return _context35.a(2, _context35.v);
-            case 5:
-              _context35.p = 5;
-              _t35 = _context35.v;
-              throw new HttpException(_t35.message || 'Failed', _t35.status || HttpStatus.BAD_REQUEST);
-            case 6:
-              return _context35.a(2);
-          }
-        }, _callee35, this, [[1, 5]]);
-      }));
-      function getDriverHistoryByToken(_x39) {
-        return _getDriverHistoryByToken.apply(this, arguments);
-      }
-      return getDriverHistoryByToken;
-    }() // Driver actions (token-based): accept/arrive/pick/complete
-  }, {
-    key: "acceptDelivery",
-    value: function () {
-      var _acceptDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee36(id, authHeader) {
+      var _getDriverHistoryByToken = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee36(authHeader) {
         var token, profile, driverId, _t36;
         return _regenerator().w(function (_context36) {
           while (1) switch (_context36.p = _context36.n) {
@@ -1243,28 +1227,28 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
               throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
             case 3:
               _context36.n = 4;
-              return this.gatewayService.assignDelivery(id, driverId);
+              return this.gatewayService.getDriverHistory(driverId);
             case 4:
               return _context36.a(2, _context36.v);
             case 5:
               _context36.p = 5;
               _t36 = _context36.v;
-              throw new HttpException(_t36.message || 'Failed to accept', _t36.status || HttpStatus.BAD_REQUEST);
+              throw new HttpException(_t36.message || 'Failed', _t36.status || HttpStatus.BAD_REQUEST);
             case 6:
               return _context36.a(2);
           }
         }, _callee36, this, [[1, 5]]);
       }));
-      function acceptDelivery(_x40, _x41) {
-        return _acceptDelivery.apply(this, arguments);
+      function getDriverHistoryByToken(_x40) {
+        return _getDriverHistoryByToken.apply(this, arguments);
       }
-      return acceptDelivery;
-    }()
+      return getDriverHistoryByToken;
+    }() // Driver actions (token-based): accept/arrive/pick/complete
   }, {
-    key: "arrivedDelivery",
+    key: "acceptDelivery",
     value: function () {
-      var _arrivedDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee37(id, authHeader) {
-        var token, profile, _t37;
+      var _acceptDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee37(id, authHeader) {
+        var token, profile, driverId, _t37;
         return _regenerator().w(function (_context37) {
           while (1) switch (_context37.p = _context37.n) {
             case 0:
@@ -1280,34 +1264,35 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
               return this.gatewayService.getProfileByToken(token);
             case 2:
               profile = _context37.v;
-              if (!(!profile || profile.userType !== 'DRIVER')) {
+              driverId = profile && (profile._id || profile.id);
+              if (!(!driverId || profile.userType !== 'DRIVER')) {
                 _context37.n = 3;
                 break;
               }
               throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
             case 3:
               _context37.n = 4;
-              return this.gatewayService.markArrived(id);
+              return this.gatewayService.assignDelivery(id, driverId);
             case 4:
               return _context37.a(2, _context37.v);
             case 5:
               _context37.p = 5;
               _t37 = _context37.v;
-              throw new HttpException(_t37.message || 'Failed', _t37.status || HttpStatus.BAD_REQUEST);
+              throw new HttpException(_t37.message || 'Failed to accept', _t37.status || HttpStatus.BAD_REQUEST);
             case 6:
               return _context37.a(2);
           }
         }, _callee37, this, [[1, 5]]);
       }));
-      function arrivedDelivery(_x42, _x43) {
-        return _arrivedDelivery.apply(this, arguments);
+      function acceptDelivery(_x41, _x42) {
+        return _acceptDelivery.apply(this, arguments);
       }
-      return arrivedDelivery;
+      return acceptDelivery;
     }()
   }, {
-    key: "pickedDelivery",
+    key: "arrivedDelivery",
     value: function () {
-      var _pickedDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee38(id, authHeader) {
+      var _arrivedDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee38(id, authHeader) {
         var token, profile, _t38;
         return _regenerator().w(function (_context38) {
           while (1) switch (_context38.p = _context38.n) {
@@ -1331,7 +1316,7 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
               throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
             case 3:
               _context38.n = 4;
-              return this.gatewayService.markPicked(id);
+              return this.gatewayService.markArrived(id);
             case 4:
               return _context38.a(2, _context38.v);
             case 5:
@@ -1343,15 +1328,15 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
           }
         }, _callee38, this, [[1, 5]]);
       }));
-      function pickedDelivery(_x44, _x45) {
-        return _pickedDelivery.apply(this, arguments);
+      function arrivedDelivery(_x43, _x44) {
+        return _arrivedDelivery.apply(this, arguments);
       }
-      return pickedDelivery;
+      return arrivedDelivery;
     }()
   }, {
-    key: "completeDelivery",
+    key: "pickedDelivery",
     value: function () {
-      var _completeDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee39(id, authHeader) {
+      var _pickedDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee39(id, authHeader) {
         var token, profile, _t39;
         return _regenerator().w(function (_context39) {
           while (1) switch (_context39.p = _context39.n) {
@@ -1375,7 +1360,7 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
               throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
             case 3:
               _context39.n = 4;
-              return this.gatewayService.completeDeliveryRequest(id);
+              return this.gatewayService.markPicked(id);
             case 4:
               return _context39.a(2, _context39.v);
             case 5:
@@ -1387,7 +1372,51 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
           }
         }, _callee39, this, [[1, 5]]);
       }));
-      function completeDelivery(_x46, _x47) {
+      function pickedDelivery(_x45, _x46) {
+        return _pickedDelivery.apply(this, arguments);
+      }
+      return pickedDelivery;
+    }()
+  }, {
+    key: "completeDelivery",
+    value: function () {
+      var _completeDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee40(id, authHeader) {
+        var token, profile, _t40;
+        return _regenerator().w(function (_context40) {
+          while (1) switch (_context40.p = _context40.n) {
+            case 0:
+              token = authHeader && authHeader.replace('Bearer ', '');
+              if (token) {
+                _context40.n = 1;
+                break;
+              }
+              throw new HttpException('No token provided', HttpStatus.UNAUTHORIZED);
+            case 1:
+              _context40.p = 1;
+              _context40.n = 2;
+              return this.gatewayService.getProfileByToken(token);
+            case 2:
+              profile = _context40.v;
+              if (!(!profile || profile.userType !== 'DRIVER')) {
+                _context40.n = 3;
+                break;
+              }
+              throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+            case 3:
+              _context40.n = 4;
+              return this.gatewayService.completeDeliveryRequest(id);
+            case 4:
+              return _context40.a(2, _context40.v);
+            case 5:
+              _context40.p = 5;
+              _t40 = _context40.v;
+              throw new HttpException(_t40.message || 'Failed', _t40.status || HttpStatus.BAD_REQUEST);
+            case 6:
+              return _context40.a(2);
+          }
+        }, _callee40, this, [[1, 5]]);
+      }));
+      function completeDelivery(_x47, _x48) {
         return _completeDelivery.apply(this, arguments);
       }
       return completeDelivery;
@@ -1395,32 +1424,32 @@ var GatewayController = (_dec = Controller('api'), _dec2 = function _dec2(target
   }, {
     key: "startDelivery",
     value: function () {
-      var _startDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee40(id, data) {
-        var _t40;
-        return _regenerator().w(function (_context40) {
-          while (1) switch (_context40.p = _context40.n) {
+      var _startDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee41(id, data) {
+        var _t41;
+        return _regenerator().w(function (_context41) {
+          while (1) switch (_context41.p = _context41.n) {
             case 0:
-              _context40.p = 0;
-              _context40.n = 1;
+              _context41.p = 0;
+              _context41.n = 1;
               return this.gatewayService.startDelivery(id, data);
             case 1:
-              return _context40.a(2, _context40.v);
+              return _context41.a(2, _context41.v);
             case 2:
-              _context40.p = 2;
-              _t40 = _context40.v;
-              throw new HttpException(_t40.message, _t40.status || HttpStatus.BAD_REQUEST);
+              _context41.p = 2;
+              _t41 = _context41.v;
+              throw new HttpException(_t41.message, _t41.status || HttpStatus.BAD_REQUEST);
             case 3:
-              return _context40.a(2);
+              return _context41.a(2);
           }
-        }, _callee40, this, [[0, 2]]);
+        }, _callee41, this, [[0, 2]]);
       }));
-      function startDelivery(_x48, _x49) {
+      function startDelivery(_x49, _x50) {
         return _startDelivery.apply(this, arguments);
       }
       return startDelivery;
     }()
   }]);
-}(), _applyDecoratedDescriptor(_class2.prototype, "register", [_dec5, _dec6, _dec7, _dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "register"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "login", [_dec9, _dec0, _dec1, _dec10], Object.getOwnPropertyDescriptor(_class2.prototype, "login"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "verifyEmail", [_dec11, _dec12, _dec13, _dec14], Object.getOwnPropertyDescriptor(_class2.prototype, "verifyEmail"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "verifyToken", [_dec15, _dec16, _dec17, _dec18], Object.getOwnPropertyDescriptor(_class2.prototype, "verifyToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getProfileByToken", [_dec19, _dec20, _dec21, _dec22], Object.getOwnPropertyDescriptor(_class2.prototype, "getProfileByToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getProfile", [_dec23, _dec24, _dec25, _dec26], Object.getOwnPropertyDescriptor(_class2.prototype, "getProfile"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "updateProfile", [_dec27, _dec28, _dec29, _dec30, _dec31], Object.getOwnPropertyDescriptor(_class2.prototype, "updateProfile"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurants", [_dec32, _dec33, _dec34], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurants"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getAllMenuItems", [_dec35, _dec36, _dec37, _dec38], Object.getOwnPropertyDescriptor(_class2.prototype, "getAllMenuItems"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantById", [_dec39, _dec40, _dec41, _dec42], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantById"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "searchRestaurants", [_dec43, _dec44, _dec45, _dec46], Object.getOwnPropertyDescriptor(_class2.prototype, "searchRestaurants"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantMenu", [_dec47, _dec48, _dec49, _dec50], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantMenu"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "addMenuItem", [_dec51, _dec52, _dec53, _dec54, _dec55], Object.getOwnPropertyDescriptor(_class2.prototype, "addMenuItem"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "createRestaurant", [_dec56, _dec57, _dec58, _dec59], Object.getOwnPropertyDescriptor(_class2.prototype, "createRestaurant"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "deleteMenuItem", [_dec60, _dec61, _dec62, _dec63], Object.getOwnPropertyDescriptor(_class2.prototype, "deleteMenuItem"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "updateMenuItem", [_dec64, _dec65, _dec66, _dec67, _dec68], Object.getOwnPropertyDescriptor(_class2.prototype, "updateMenuItem"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantsAdmin", [_dec69, _dec70, _dec71], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantsAdmin"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "toggleRestaurantStatus", [_dec72, _dec73, _dec74, _dec75, _dec76], Object.getOwnPropertyDescriptor(_class2.prototype, "toggleRestaurantStatus"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "createOrder", [_dec77, _dec78, _dec79, _dec80], Object.getOwnPropertyDescriptor(_class2.prototype, "createOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getCustomerOrdersByToken", [_dec81, _dec82, _dec83, _dec84], Object.getOwnPropertyDescriptor(_class2.prototype, "getCustomerOrdersByToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getOrder", [_dec85, _dec86, _dec87, _dec88], Object.getOwnPropertyDescriptor(_class2.prototype, "getOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getCustomerOrders", [_dec89, _dec90, _dec91, _dec92], Object.getOwnPropertyDescriptor(_class2.prototype, "getCustomerOrders"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "confirmOrder", [_dec93, _dec94, _dec95, _dec96], Object.getOwnPropertyDescriptor(_class2.prototype, "confirmOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getCustomerOrdersByToken", [_dec97, _dec98, _dec99, _dec100], Object.getOwnPropertyDescriptor(_class2.prototype, "getCustomerOrdersByToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "cancelOrder", [_dec101, _dec102, _dec103, _dec104, _dec105], Object.getOwnPropertyDescriptor(_class2.prototype, "cancelOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "internalEvent", [_dec106, _dec107, _dec108, _dec109], Object.getOwnPropertyDescriptor(_class2.prototype, "internalEvent"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "initiatePayment", [_dec110, _dec111, _dec112, _dec113], Object.getOwnPropertyDescriptor(_class2.prototype, "initiatePayment"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "sepayWebhookHealthCheck", [_dec114, _dec115, _dec116], Object.getOwnPropertyDescriptor(_class2.prototype, "sepayWebhookHealthCheck"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getPayment", [_dec117, _dec118, _dec119, _dec120], Object.getOwnPropertyDescriptor(_class2.prototype, "getPayment"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getPaymentByOrder", [_dec121, _dec122, _dec123, _dec124], Object.getOwnPropertyDescriptor(_class2.prototype, "getPaymentByOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "handlePaymentCallback", [_dec125, _dec126, _dec127, _dec128, _dec129], Object.getOwnPropertyDescriptor(_class2.prototype, "handlePaymentCallback"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "handleSepayWebhook", [_dec130, _dec131, _dec132, _dec133, _dec134], Object.getOwnPropertyDescriptor(_class2.prototype, "handleSepayWebhook"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "retryPayment", [_dec135, _dec136, _dec137, _dec138], Object.getOwnPropertyDescriptor(_class2.prototype, "retryPayment"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "refundPayment", [_dec139, _dec140, _dec141, _dec142, _dec143], Object.getOwnPropertyDescriptor(_class2.prototype, "refundPayment"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getDelivery", [_dec144, _dec145, _dec146, _dec147], Object.getOwnPropertyDescriptor(_class2.prototype, "getDelivery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getDeliveryByOrder", [_dec148, _dec149, _dec150, _dec151], Object.getOwnPropertyDescriptor(_class2.prototype, "getDeliveryByOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getAvailableDeliveries", [_dec152, _dec153, _dec154], Object.getOwnPropertyDescriptor(_class2.prototype, "getAvailableDeliveries"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getDriverHistoryByToken", [_dec155, _dec156, _dec157, _dec158], Object.getOwnPropertyDescriptor(_class2.prototype, "getDriverHistoryByToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "acceptDelivery", [_dec159, _dec160, _dec161, _dec162, _dec163], Object.getOwnPropertyDescriptor(_class2.prototype, "acceptDelivery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "arrivedDelivery", [_dec164, _dec165, _dec166, _dec167, _dec168], Object.getOwnPropertyDescriptor(_class2.prototype, "arrivedDelivery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "pickedDelivery", [_dec169, _dec170, _dec171, _dec172, _dec173], Object.getOwnPropertyDescriptor(_class2.prototype, "pickedDelivery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "completeDelivery", [_dec174, _dec175, _dec176, _dec177, _dec178], Object.getOwnPropertyDescriptor(_class2.prototype, "completeDelivery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "startDelivery", [_dec179, _dec180, _dec181, _dec182, _dec183], Object.getOwnPropertyDescriptor(_class2.prototype, "startDelivery"), _class2.prototype), _class2)) || _class) || _class) || _class) || _class);
+}(), _applyDecoratedDescriptor(_class2.prototype, "register", [_dec5, _dec6, _dec7, _dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "register"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "login", [_dec9, _dec0, _dec1, _dec10], Object.getOwnPropertyDescriptor(_class2.prototype, "login"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "verifyEmail", [_dec11, _dec12, _dec13, _dec14], Object.getOwnPropertyDescriptor(_class2.prototype, "verifyEmail"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "verifyToken", [_dec15, _dec16, _dec17, _dec18], Object.getOwnPropertyDescriptor(_class2.prototype, "verifyToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getProfileByToken", [_dec19, _dec20, _dec21, _dec22], Object.getOwnPropertyDescriptor(_class2.prototype, "getProfileByToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getProfile", [_dec23, _dec24, _dec25, _dec26], Object.getOwnPropertyDescriptor(_class2.prototype, "getProfile"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "updateProfile", [_dec27, _dec28, _dec29, _dec30, _dec31], Object.getOwnPropertyDescriptor(_class2.prototype, "updateProfile"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurants", [_dec32, _dec33, _dec34], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurants"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getAllMenuItems", [_dec35, _dec36, _dec37, _dec38], Object.getOwnPropertyDescriptor(_class2.prototype, "getAllMenuItems"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantById", [_dec39, _dec40, _dec41, _dec42], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantById"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "searchRestaurants", [_dec43, _dec44, _dec45, _dec46], Object.getOwnPropertyDescriptor(_class2.prototype, "searchRestaurants"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantMenu", [_dec47, _dec48, _dec49, _dec50], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantMenu"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "addMenuItem", [_dec51, _dec52, _dec53, _dec54, _dec55], Object.getOwnPropertyDescriptor(_class2.prototype, "addMenuItem"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "createRestaurant", [_dec56, _dec57, _dec58, _dec59], Object.getOwnPropertyDescriptor(_class2.prototype, "createRestaurant"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "deleteMenuItem", [_dec60, _dec61, _dec62, _dec63], Object.getOwnPropertyDescriptor(_class2.prototype, "deleteMenuItem"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "updateMenuItem", [_dec64, _dec65, _dec66, _dec67, _dec68], Object.getOwnPropertyDescriptor(_class2.prototype, "updateMenuItem"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantsAdmin", [_dec69, _dec70, _dec71], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantsAdmin"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getMenuForManage", [_dec72, _dec73, _dec74, _dec75], Object.getOwnPropertyDescriptor(_class2.prototype, "getMenuForManage"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "toggleRestaurantStatus", [_dec76, _dec77, _dec78, _dec79, _dec80], Object.getOwnPropertyDescriptor(_class2.prototype, "toggleRestaurantStatus"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "createOrder", [_dec81, _dec82, _dec83, _dec84], Object.getOwnPropertyDescriptor(_class2.prototype, "createOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getCustomerOrdersByToken", [_dec85, _dec86, _dec87, _dec88], Object.getOwnPropertyDescriptor(_class2.prototype, "getCustomerOrdersByToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getOrder", [_dec89, _dec90, _dec91, _dec92], Object.getOwnPropertyDescriptor(_class2.prototype, "getOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getCustomerOrders", [_dec93, _dec94, _dec95, _dec96], Object.getOwnPropertyDescriptor(_class2.prototype, "getCustomerOrders"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "confirmOrder", [_dec97, _dec98, _dec99, _dec100], Object.getOwnPropertyDescriptor(_class2.prototype, "confirmOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getCustomerOrdersByToken", [_dec101, _dec102, _dec103, _dec104], Object.getOwnPropertyDescriptor(_class2.prototype, "getCustomerOrdersByToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "cancelOrder", [_dec105, _dec106, _dec107, _dec108, _dec109], Object.getOwnPropertyDescriptor(_class2.prototype, "cancelOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "internalEvent", [_dec110, _dec111, _dec112, _dec113], Object.getOwnPropertyDescriptor(_class2.prototype, "internalEvent"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "initiatePayment", [_dec114, _dec115, _dec116, _dec117], Object.getOwnPropertyDescriptor(_class2.prototype, "initiatePayment"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "sepayWebhookHealthCheck", [_dec118, _dec119, _dec120], Object.getOwnPropertyDescriptor(_class2.prototype, "sepayWebhookHealthCheck"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getPayment", [_dec121, _dec122, _dec123, _dec124], Object.getOwnPropertyDescriptor(_class2.prototype, "getPayment"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getPaymentByOrder", [_dec125, _dec126, _dec127, _dec128], Object.getOwnPropertyDescriptor(_class2.prototype, "getPaymentByOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "handlePaymentCallback", [_dec129, _dec130, _dec131, _dec132, _dec133], Object.getOwnPropertyDescriptor(_class2.prototype, "handlePaymentCallback"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "handleSepayWebhook", [_dec134, _dec135, _dec136, _dec137, _dec138], Object.getOwnPropertyDescriptor(_class2.prototype, "handleSepayWebhook"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "retryPayment", [_dec139, _dec140, _dec141, _dec142], Object.getOwnPropertyDescriptor(_class2.prototype, "retryPayment"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "refundPayment", [_dec143, _dec144, _dec145, _dec146, _dec147], Object.getOwnPropertyDescriptor(_class2.prototype, "refundPayment"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getDelivery", [_dec148, _dec149, _dec150, _dec151], Object.getOwnPropertyDescriptor(_class2.prototype, "getDelivery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getDeliveryByOrder", [_dec152, _dec153, _dec154, _dec155], Object.getOwnPropertyDescriptor(_class2.prototype, "getDeliveryByOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getAvailableDeliveries", [_dec156, _dec157, _dec158], Object.getOwnPropertyDescriptor(_class2.prototype, "getAvailableDeliveries"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getDriverHistoryByToken", [_dec159, _dec160, _dec161, _dec162], Object.getOwnPropertyDescriptor(_class2.prototype, "getDriverHistoryByToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "acceptDelivery", [_dec163, _dec164, _dec165, _dec166, _dec167], Object.getOwnPropertyDescriptor(_class2.prototype, "acceptDelivery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "arrivedDelivery", [_dec168, _dec169, _dec170, _dec171, _dec172], Object.getOwnPropertyDescriptor(_class2.prototype, "arrivedDelivery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "pickedDelivery", [_dec173, _dec174, _dec175, _dec176, _dec177], Object.getOwnPropertyDescriptor(_class2.prototype, "pickedDelivery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "completeDelivery", [_dec178, _dec179, _dec180, _dec181, _dec182], Object.getOwnPropertyDescriptor(_class2.prototype, "completeDelivery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "startDelivery", [_dec183, _dec184, _dec185, _dec186, _dec187], Object.getOwnPropertyDescriptor(_class2.prototype, "startDelivery"), _class2.prototype), _class2)) || _class) || _class) || _class) || _class);
 module.exports = {
   GatewayController: GatewayController
 };

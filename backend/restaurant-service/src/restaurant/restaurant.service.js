@@ -40,6 +40,11 @@ class RestaurantService {
     return restaurant.save();
   }
 
+  // ✅ FIX: dùng đúng this.MenuModel (đã inject)
+  async getMenuForManage(restaurantId) {
+    return this.MenuModel.find({ restaurantId }).exec();
+  }
+
   async findAllRestaurants(showAll = false) {
     if (showAll) {
       return this.RestaurantModel.find({}).exec();
@@ -73,31 +78,31 @@ class RestaurantService {
   }
 
   async getAllMenuItems(keyword = '') {
-    const query = {
-      isActive: true,
-      isAvailable: true
-    };
+  // ✅ chỉ lọc isActive, không lọc isAvailable
+  const query = { isActive: true }
 
-    const q = String(keyword || '').trim();
-    if (q) {
-      query.$or = [
-        { name: { $regex: q, $options: 'i' } },
-        { description: { $regex: q, $options: 'i' } }
-      ];
-    }
-
-    const items = await this.MenuModel
-      .find(query)
-      .sort({ updatedAt: -1 })
-      .limit(200)
-      .populate('restaurantId', 'name isActive')
-      .exec();
-
-    return (items || []).filter((it) => {
-      const r = it && it.restaurantId;
-      return r && r.isActive !== false;
-    });
+  const q = String(keyword || '').trim()
+  if (q) {
+    query.$or = [
+      { name: { $regex: q, $options: 'i' } },
+      { description: { $regex: q, $options: 'i' } }
+    ]
   }
+
+  const items = await this.MenuModel
+    .find(query)
+    .sort({ updatedAt: -1 })
+    .limit(200)
+    .populate('restaurantId', 'name isActive')
+    .exec()
+
+  // ✅ ẩn nếu nhà hàng bị tắt
+  return (items || []).filter((it) => {
+    const r = it && it.restaurantId
+    return r && r.isActive !== false
+  })
+}
+
 
   async findRestaurantById(id) {
     return this.RestaurantModel.findById(id).exec();

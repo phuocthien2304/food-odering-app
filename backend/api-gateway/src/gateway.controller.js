@@ -181,6 +181,14 @@ async deleteMenuItem(@Param('menuItemId') menuItemId) {
       );
     }
   }
+@Get('restaurants/:restaurantId/menu/manage')
+async getMenuForManage(@Param('restaurantId') restaurantId) {
+  try {
+    return await this.gatewayService.getMenuForManage(restaurantId)
+  } catch (error) {
+    throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST)
+  }
+}
 
   @Patch('admin/restaurants/:id')
   async toggleRestaurantStatus(@Param('id') id, @Body() body) {

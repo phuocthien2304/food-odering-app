@@ -269,3 +269,27 @@
   color: #999;
   font-size: 1.1rem;
 }
+.menu-image-wrapper {
+  position: relative;
+}
+
+.sold-out-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.sold-out-overlay span {
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.btn-disabled {
+  background: #ccc !important;
+  cursor: not-allowed;
+}

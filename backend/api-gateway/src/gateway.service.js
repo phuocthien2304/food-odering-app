@@ -106,6 +106,13 @@ class GatewayService {
     );
   }
 
+async getMenuForManage(restaurantId) {
+  return this.proxyRequest(
+    'restaurant',
+    'GET',
+    `/api/restaurants/${restaurantId}/menu/manage`
+  )
+}
 
     // Tạo nhà hàng mới qua restaurant-service
   async createRestaurant(restaurantDto) {

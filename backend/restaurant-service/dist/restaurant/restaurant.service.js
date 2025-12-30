@@ -47,6 +47,13 @@ let RestaurantService = (_dec = Injectable(), _dec2 = function (target, key) {
     });
     return restaurant.save();
   }
+
+  // ✅ FIX: dùng đúng this.MenuModel (đã inject)
+  async getMenuForManage(restaurantId) {
+    return this.MenuModel.find({
+      restaurantId
+    }).exec();
+  }
   async findAllRestaurants(showAll = false) {
     if (showAll) {
       return this.RestaurantModel.find({}).exec();
@@ -86,9 +93,9 @@ let RestaurantService = (_dec = Injectable(), _dec2 = function (target, key) {
     }).exec();
   }
   async getAllMenuItems(keyword = '') {
+    // ✅ chỉ lọc isActive, không lọc isAvailable
     const query = {
-      isActive: true,
-      isAvailable: true
+      isActive: true
     };
     const q = String(keyword || '').trim();
     if (q) {
@@ -107,6 +114,8 @@ let RestaurantService = (_dec = Injectable(), _dec2 = function (target, key) {
     const items = await this.MenuModel.find(query).sort({
       updatedAt: -1
     }).limit(200).populate('restaurantId', 'name isActive').exec();
+
+    // ✅ ẩn nếu nhà hàng bị tắt
     return (items || []).filter(it => {
       const r = it && it.restaurantId;
       return r && r.isActive !== false;

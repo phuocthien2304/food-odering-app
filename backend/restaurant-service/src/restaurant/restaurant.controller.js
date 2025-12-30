@@ -109,6 +109,11 @@ class RestaurantController {
     }
     return this.restaurantService.toggleMenuItemAvailability(menuItemId, isAvailable);
   }
+  @Get(':restaurantId/menu/manage')
+async getMenuForManage(@Param('restaurantId') restaurantId) {
+  return this.restaurantService.getMenuForManage(restaurantId)
+}
+
 
   @Get(':id/stats')
   async getStats(@Param('id') id) {
