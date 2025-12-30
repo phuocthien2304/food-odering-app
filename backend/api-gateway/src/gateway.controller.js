@@ -1,4 +1,4 @@
-const { Controller, Get, Post, Patch, Body, Param, Headers, HttpException, HttpStatus, Inject, Query } = require('@nestjs/common');
+const { Controller, Get, Post, Delete, Patch, Body, Param, Headers, HttpException, HttpStatus, Inject, Query } = require('@nestjs/common');
 const { GatewayService } = require('./gateway.service');
 const wsBroadcast = require('./ws-broadcast');
 
@@ -146,6 +146,28 @@ class GatewayController {
       );
     }
   }
+  @Delete('restaurants/menu/:menuItemId')
+async deleteMenuItem(@Param('menuItemId') menuItemId) {
+  try {
+    return await this.gatewayService.deleteMenuItem(menuItemId)
+  } catch (error) {
+    throw new HttpException(
+      error.message,
+      error.status || HttpStatus.BAD_REQUEST
+    )
+  }
+}
+
+  
+    @Patch('restaurants/menu/:menuItemId')
+  async updateMenuItem(@Param('menuItemId') menuItemId, @Body() updateDto) {
+    try {
+      return await this.gatewayService.updateMenuItem(menuItemId, updateDto);
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
 
     // ==================== ADMIN - RESTAURANTS ====================
   @Get('admin/restaurants')

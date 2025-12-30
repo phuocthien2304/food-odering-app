@@ -314,19 +314,35 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
         return _deleteMenuItem.apply(this, arguments);
       }
       return deleteMenuItem;
+    }()
+  }, {
+    key: "updateMenuItem",
+    value: function () {
+      var _updateMenuItem = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee14(menuItemId, updateDto) {
+        return _regenerator().w(function (_context14) {
+          while (1) switch (_context14.n) {
+            case 0:
+              return _context14.a(2, this.proxyRequest('restaurant', 'PATCH', "/api/restaurants/menu/".concat(menuItemId), updateDto));
+          }
+        }, _callee14, this);
+      }));
+      function updateMenuItem(_x16, _x17) {
+        return _updateMenuItem.apply(this, arguments);
+      }
+      return updateMenuItem;
     }() // Tạo nhà hàng mới qua restaurant-service
   }, {
     key: "createRestaurant",
     value: function () {
-      var _createRestaurant = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee14(restaurantDto) {
-        return _regenerator().w(function (_context14) {
-          while (1) switch (_context14.n) {
+      var _createRestaurant = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee15(restaurantDto) {
+        return _regenerator().w(function (_context15) {
+          while (1) switch (_context15.n) {
             case 0:
-              return _context14.a(2, this.proxyRequest('restaurant', 'POST', '/api/restaurants', restaurantDto));
+              return _context15.a(2, this.proxyRequest('restaurant', 'POST', '/api/restaurants', restaurantDto));
           }
-        }, _callee14, this);
+        }, _callee15, this);
       }));
-      function createRestaurant(_x16) {
+      function createRestaurant(_x18) {
         return _createRestaurant.apply(this, arguments);
       }
       return createRestaurant;
@@ -334,13 +350,13 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "getRestaurantsAdmin",
     value: function () {
-      var _getRestaurantsAdmin = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee15() {
-        return _regenerator().w(function (_context15) {
-          while (1) switch (_context15.n) {
+      var _getRestaurantsAdmin = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee16() {
+        return _regenerator().w(function (_context16) {
+          while (1) switch (_context16.n) {
             case 0:
-              return _context15.a(2, this.proxyRequest('restaurant', 'GET', '/api/restaurants?admin=true'));
+              return _context16.a(2, this.proxyRequest('restaurant', 'GET', '/api/restaurants?admin=true'));
           }
-        }, _callee15, this);
+        }, _callee16, this);
       }));
       function getRestaurantsAdmin() {
         return _getRestaurantsAdmin.apply(this, arguments);
@@ -350,17 +366,17 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "toggleRestaurantStatus",
     value: function () {
-      var _toggleRestaurantStatus = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee16(restaurantId, isActive) {
-        return _regenerator().w(function (_context16) {
-          while (1) switch (_context16.n) {
+      var _toggleRestaurantStatus = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee17(restaurantId, isActive) {
+        return _regenerator().w(function (_context17) {
+          while (1) switch (_context17.n) {
             case 0:
-              return _context16.a(2, this.proxyRequest('restaurant', 'PATCH', "/api/restaurants/".concat(restaurantId, "/status"), {
+              return _context17.a(2, this.proxyRequest('restaurant', 'PATCH', "/api/restaurants/".concat(restaurantId, "/status"), {
                 isActive: isActive
               }));
           }
-        }, _callee16, this);
+        }, _callee17, this);
       }));
-      function toggleRestaurantStatus(_x17, _x18) {
+      function toggleRestaurantStatus(_x19, _x20) {
         return _toggleRestaurantStatus.apply(this, arguments);
       }
       return toggleRestaurantStatus;
@@ -368,15 +384,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "createOrder",
     value: function () {
-      var _createOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee17(orderDto) {
-        return _regenerator().w(function (_context17) {
-          while (1) switch (_context17.n) {
+      var _createOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee18(orderDto) {
+        return _regenerator().w(function (_context18) {
+          while (1) switch (_context18.n) {
             case 0:
-              return _context17.a(2, this.proxyRequest('order', 'POST', '/api/orders', orderDto));
+              return _context18.a(2, this.proxyRequest('order', 'POST', '/api/orders', orderDto));
           }
-        }, _callee17, this);
+        }, _callee18, this);
       }));
-      function createOrder(_x19) {
+      function createOrder(_x21) {
         return _createOrder.apply(this, arguments);
       }
       return createOrder;
@@ -384,15 +400,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "getOrder",
     value: function () {
-      var _getOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee18(orderId) {
-        return _regenerator().w(function (_context18) {
-          while (1) switch (_context18.n) {
+      var _getOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee19(orderId) {
+        return _regenerator().w(function (_context19) {
+          while (1) switch (_context19.n) {
             case 0:
-              return _context18.a(2, this.proxyRequest('order', 'GET', "/api/orders/".concat(orderId)));
+              return _context19.a(2, this.proxyRequest('order', 'GET', "/api/orders/".concat(orderId)));
           }
-        }, _callee18, this);
+        }, _callee19, this);
       }));
-      function getOrder(_x20) {
+      function getOrder(_x22) {
         return _getOrder.apply(this, arguments);
       }
       return getOrder;
@@ -400,15 +416,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "getCustomerOrders",
     value: function () {
-      var _getCustomerOrders = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee19(customerId) {
-        return _regenerator().w(function (_context19) {
-          while (1) switch (_context19.n) {
+      var _getCustomerOrders = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee20(customerId) {
+        return _regenerator().w(function (_context20) {
+          while (1) switch (_context20.n) {
             case 0:
-              return _context19.a(2, this.proxyRequest('order', 'GET', "/api/orders/customer/".concat(customerId)));
+              return _context20.a(2, this.proxyRequest('order', 'GET', "/api/orders/customer/".concat(customerId)));
           }
-        }, _callee19, this);
+        }, _callee20, this);
       }));
-      function getCustomerOrders(_x21) {
+      function getCustomerOrders(_x23) {
         return _getCustomerOrders.apply(this, arguments);
       }
       return getCustomerOrders;
@@ -416,15 +432,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "confirmOrder",
     value: function () {
-      var _confirmOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee20(orderId) {
-        return _regenerator().w(function (_context20) {
-          while (1) switch (_context20.n) {
+      var _confirmOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee21(orderId) {
+        return _regenerator().w(function (_context21) {
+          while (1) switch (_context21.n) {
             case 0:
-              return _context20.a(2, this.proxyRequest('order', 'PATCH', "/api/orders/".concat(orderId, "/confirm"), {}));
+              return _context21.a(2, this.proxyRequest('order', 'PATCH', "/api/orders/".concat(orderId, "/confirm"), {}));
           }
-        }, _callee20, this);
+        }, _callee21, this);
       }));
-      function confirmOrder(_x22) {
+      function confirmOrder(_x24) {
         return _confirmOrder.apply(this, arguments);
       }
       return confirmOrder;
@@ -432,28 +448,28 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "cancelOrder",
     value: function () {
-      var _cancelOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee21(orderId, reason) {
+      var _cancelOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee22(orderId, reason) {
         var delivery, cancelled, _t2, _t3;
-        return _regenerator().w(function (_context21) {
-          while (1) switch (_context21.p = _context21.n) {
+        return _regenerator().w(function (_context22) {
+          while (1) switch (_context22.p = _context22.n) {
             case 0:
               // Check if a delivery exists for this order and whether a driver is already assigned.
               delivery = null;
-              _context21.p = 1;
-              _context21.n = 2;
+              _context22.p = 1;
+              _context22.n = 2;
               return this.getDeliveryByOrder(orderId);
             case 2:
-              delivery = _context21.v;
-              _context21.n = 4;
+              delivery = _context22.v;
+              _context22.n = 4;
               break;
             case 3:
-              _context21.p = 3;
-              _t2 = _context21.v;
+              _context22.p = 3;
+              _t2 = _context22.v;
               // If delivery-service returns 404 or there is no delivery, proceed to cancel the order.
               delivery = null;
             case 4:
               if (!(delivery && delivery.driverId)) {
-                _context21.n = 5;
+                _context22.n = 5;
                 break;
               }
               throw {
@@ -461,33 +477,33 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
                 message: 'Cannot cancel order: a driver has already been assigned.'
               };
             case 5:
-              _context21.n = 6;
+              _context22.n = 6;
               return this.proxyRequest('order', 'PATCH', "/api/orders/".concat(orderId, "/cancel"), {
                 reason: reason
               });
             case 6:
-              cancelled = _context21.v;
+              cancelled = _context22.v;
               if (!delivery) {
-                _context21.n = 10;
+                _context22.n = 10;
                 break;
               }
-              _context21.p = 7;
-              _context21.n = 8;
+              _context22.p = 7;
+              _context22.n = 8;
               return this.proxyRequest('delivery', 'PATCH', "/api/deliveries/".concat(delivery._id, "/status"), {
                 status: 'CANCELLED'
               });
             case 8:
-              _context21.n = 10;
+              _context22.n = 10;
               break;
             case 9:
-              _context21.p = 9;
-              _t3 = _context21.v;
+              _context22.p = 9;
+              _t3 = _context22.v;
             case 10:
-              return _context21.a(2, cancelled);
+              return _context22.a(2, cancelled);
           }
-        }, _callee21, this, [[7, 9], [1, 3]]);
+        }, _callee22, this, [[7, 9], [1, 3]]);
       }));
-      function cancelOrder(_x23, _x24) {
+      function cancelOrder(_x25, _x26) {
         return _cancelOrder.apply(this, arguments);
       }
       return cancelOrder;
@@ -495,15 +511,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "initiatePayment",
     value: function () {
-      var _initiatePayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee22(paymentDto) {
-        return _regenerator().w(function (_context22) {
-          while (1) switch (_context22.n) {
+      var _initiatePayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee23(paymentDto) {
+        return _regenerator().w(function (_context23) {
+          while (1) switch (_context23.n) {
             case 0:
-              return _context22.a(2, this.proxyRequest('payment', 'POST', '/api/payments/initiate', paymentDto));
+              return _context23.a(2, this.proxyRequest('payment', 'POST', '/api/payments/initiate', paymentDto));
           }
-        }, _callee22, this);
+        }, _callee23, this);
       }));
-      function initiatePayment(_x25) {
+      function initiatePayment(_x27) {
         return _initiatePayment.apply(this, arguments);
       }
       return initiatePayment;
@@ -511,15 +527,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "getPayment",
     value: function () {
-      var _getPayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee23(paymentId) {
-        return _regenerator().w(function (_context23) {
-          while (1) switch (_context23.n) {
+      var _getPayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee24(paymentId) {
+        return _regenerator().w(function (_context24) {
+          while (1) switch (_context24.n) {
             case 0:
-              return _context23.a(2, this.proxyRequest('payment', 'GET', "/api/payments/".concat(paymentId)));
+              return _context24.a(2, this.proxyRequest('payment', 'GET', "/api/payments/".concat(paymentId)));
           }
-        }, _callee23, this);
+        }, _callee24, this);
       }));
-      function getPayment(_x26) {
+      function getPayment(_x28) {
         return _getPayment.apply(this, arguments);
       }
       return getPayment;
@@ -527,15 +543,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "getPaymentByOrderId",
     value: function () {
-      var _getPaymentByOrderId = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee24(orderId) {
-        return _regenerator().w(function (_context24) {
-          while (1) switch (_context24.n) {
+      var _getPaymentByOrderId = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee25(orderId) {
+        return _regenerator().w(function (_context25) {
+          while (1) switch (_context25.n) {
             case 0:
-              return _context24.a(2, this.proxyRequest('payment', 'GET', "/api/payments/order/".concat(orderId)));
+              return _context25.a(2, this.proxyRequest('payment', 'GET', "/api/payments/order/".concat(orderId)));
           }
-        }, _callee24, this);
+        }, _callee25, this);
       }));
-      function getPaymentByOrderId(_x27) {
+      function getPaymentByOrderId(_x29) {
         return _getPaymentByOrderId.apply(this, arguments);
       }
       return getPaymentByOrderId;
@@ -543,15 +559,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "handlePaymentCallback",
     value: function () {
-      var _handlePaymentCallback = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee25(paymentId, callbackData) {
-        return _regenerator().w(function (_context25) {
-          while (1) switch (_context25.n) {
+      var _handlePaymentCallback = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee26(paymentId, callbackData) {
+        return _regenerator().w(function (_context26) {
+          while (1) switch (_context26.n) {
             case 0:
-              return _context25.a(2, this.proxyRequest('payment', 'POST', "/api/payments/".concat(paymentId, "/callback"), callbackData));
+              return _context26.a(2, this.proxyRequest('payment', 'POST', "/api/payments/".concat(paymentId, "/callback"), callbackData));
           }
-        }, _callee25, this);
+        }, _callee26, this);
       }));
-      function handlePaymentCallback(_x28, _x29) {
+      function handlePaymentCallback(_x30, _x31) {
         return _handlePaymentCallback.apply(this, arguments);
       }
       return handlePaymentCallback;
@@ -559,17 +575,17 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "handleSepayWebhook",
     value: function () {
-      var _handleSepayWebhook = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee26(callbackData, authorization) {
-        return _regenerator().w(function (_context26) {
-          while (1) switch (_context26.n) {
+      var _handleSepayWebhook = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee27(callbackData, authorization) {
+        return _regenerator().w(function (_context27) {
+          while (1) switch (_context27.n) {
             case 0:
-              return _context26.a(2, this.proxyRequest('payment', 'POST', "/api/payments/callback", callbackData, _objectSpread({}, authorization ? {
+              return _context27.a(2, this.proxyRequest('payment', 'POST', "/api/payments/callback", callbackData, _objectSpread({}, authorization ? {
                 Authorization: authorization
               } : {})));
           }
-        }, _callee26, this);
+        }, _callee27, this);
       }));
-      function handleSepayWebhook(_x30, _x31) {
+      function handleSepayWebhook(_x32, _x33) {
         return _handleSepayWebhook.apply(this, arguments);
       }
       return handleSepayWebhook;
@@ -577,15 +593,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "retryPayment",
     value: function () {
-      var _retryPayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee27(paymentId) {
-        return _regenerator().w(function (_context27) {
-          while (1) switch (_context27.n) {
+      var _retryPayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee28(paymentId) {
+        return _regenerator().w(function (_context28) {
+          while (1) switch (_context28.n) {
             case 0:
-              return _context27.a(2, this.proxyRequest('payment', 'PATCH', "/api/payments/".concat(paymentId, "/retry"), {}));
+              return _context28.a(2, this.proxyRequest('payment', 'PATCH', "/api/payments/".concat(paymentId, "/retry"), {}));
           }
-        }, _callee27, this);
+        }, _callee28, this);
       }));
-      function retryPayment(_x32) {
+      function retryPayment(_x34) {
         return _retryPayment.apply(this, arguments);
       }
       return retryPayment;
@@ -593,17 +609,17 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "refundPayment",
     value: function () {
-      var _refundPayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee28(paymentId, reason) {
-        return _regenerator().w(function (_context28) {
-          while (1) switch (_context28.n) {
+      var _refundPayment = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee29(paymentId, reason) {
+        return _regenerator().w(function (_context29) {
+          while (1) switch (_context29.n) {
             case 0:
-              return _context28.a(2, this.proxyRequest('payment', 'POST', "/api/payments/".concat(paymentId, "/refund"), {
+              return _context29.a(2, this.proxyRequest('payment', 'POST', "/api/payments/".concat(paymentId, "/refund"), {
                 reason: reason
               }));
           }
-        }, _callee28, this);
+        }, _callee29, this);
       }));
-      function refundPayment(_x33, _x34) {
+      function refundPayment(_x35, _x36) {
         return _refundPayment.apply(this, arguments);
       }
       return refundPayment;
@@ -611,15 +627,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "getDelivery",
     value: function () {
-      var _getDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee29(deliveryId) {
-        return _regenerator().w(function (_context29) {
-          while (1) switch (_context29.n) {
+      var _getDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee30(deliveryId) {
+        return _regenerator().w(function (_context30) {
+          while (1) switch (_context30.n) {
             case 0:
-              return _context29.a(2, this.proxyRequest('delivery', 'GET', "/api/deliveries/".concat(deliveryId)));
+              return _context30.a(2, this.proxyRequest('delivery', 'GET', "/api/deliveries/".concat(deliveryId)));
           }
-        }, _callee29, this);
+        }, _callee30, this);
       }));
-      function getDelivery(_x35) {
+      function getDelivery(_x37) {
         return _getDelivery.apply(this, arguments);
       }
       return getDelivery;
@@ -627,15 +643,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "getDeliveryByOrder",
     value: function () {
-      var _getDeliveryByOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee30(orderId) {
-        return _regenerator().w(function (_context30) {
-          while (1) switch (_context30.n) {
+      var _getDeliveryByOrder = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee31(orderId) {
+        return _regenerator().w(function (_context31) {
+          while (1) switch (_context31.n) {
             case 0:
-              return _context30.a(2, this.proxyRequest('delivery', 'GET', "/api/deliveries/order/".concat(orderId)));
+              return _context31.a(2, this.proxyRequest('delivery', 'GET', "/api/deliveries/order/".concat(orderId)));
           }
-        }, _callee30, this);
+        }, _callee31, this);
       }));
-      function getDeliveryByOrder(_x36) {
+      function getDeliveryByOrder(_x38) {
         return _getDeliveryByOrder.apply(this, arguments);
       }
       return getDeliveryByOrder;
@@ -643,15 +659,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "createDelivery",
     value: function () {
-      var _createDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee31(orderData) {
-        return _regenerator().w(function (_context31) {
-          while (1) switch (_context31.n) {
+      var _createDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee32(orderData) {
+        return _regenerator().w(function (_context32) {
+          while (1) switch (_context32.n) {
             case 0:
-              return _context31.a(2, this.proxyRequest('delivery', 'POST', '/api/deliveries', orderData));
+              return _context32.a(2, this.proxyRequest('delivery', 'POST', '/api/deliveries', orderData));
           }
-        }, _callee31, this);
+        }, _callee32, this);
       }));
-      function createDelivery(_x37) {
+      function createDelivery(_x39) {
         return _createDelivery.apply(this, arguments);
       }
       return createDelivery;
@@ -659,15 +675,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "startDelivery",
     value: function () {
-      var _startDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee32(deliveryId, data) {
-        return _regenerator().w(function (_context32) {
-          while (1) switch (_context32.n) {
+      var _startDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee33(deliveryId, data) {
+        return _regenerator().w(function (_context33) {
+          while (1) switch (_context33.n) {
             case 0:
-              return _context32.a(2, this.proxyRequest('delivery', 'POST', "/api/deliveries/".concat(deliveryId, "/start"), data));
+              return _context33.a(2, this.proxyRequest('delivery', 'POST', "/api/deliveries/".concat(deliveryId, "/start"), data));
           }
-        }, _callee32, this);
+        }, _callee33, this);
       }));
-      function startDelivery(_x38, _x39) {
+      function startDelivery(_x40, _x41) {
         return _startDelivery.apply(this, arguments);
       }
       return startDelivery;
@@ -675,13 +691,13 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "getAvailableDeliveries",
     value: function () {
-      var _getAvailableDeliveries = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee33() {
-        return _regenerator().w(function (_context33) {
-          while (1) switch (_context33.n) {
+      var _getAvailableDeliveries = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee34() {
+        return _regenerator().w(function (_context34) {
+          while (1) switch (_context34.n) {
             case 0:
-              return _context33.a(2, this.proxyRequest('delivery', 'GET', '/api/deliveries/available'));
+              return _context34.a(2, this.proxyRequest('delivery', 'GET', '/api/deliveries/available'));
           }
-        }, _callee33, this);
+        }, _callee34, this);
       }));
       function getAvailableDeliveries() {
         return _getAvailableDeliveries.apply(this, arguments);
@@ -691,15 +707,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "getDriverHistory",
     value: function () {
-      var _getDriverHistory = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee34(driverId) {
-        return _regenerator().w(function (_context34) {
-          while (1) switch (_context34.n) {
+      var _getDriverHistory = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee35(driverId) {
+        return _regenerator().w(function (_context35) {
+          while (1) switch (_context35.n) {
             case 0:
-              return _context34.a(2, this.proxyRequest('delivery', 'GET', "/api/deliveries/driver/".concat(driverId, "/history")));
+              return _context35.a(2, this.proxyRequest('delivery', 'GET', "/api/deliveries/driver/".concat(driverId, "/history")));
           }
-        }, _callee34, this);
+        }, _callee35, this);
       }));
-      function getDriverHistory(_x40) {
+      function getDriverHistory(_x42) {
         return _getDriverHistory.apply(this, arguments);
       }
       return getDriverHistory;
@@ -707,17 +723,17 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "assignDelivery",
     value: function () {
-      var _assignDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee35(deliveryId, driverId) {
-        return _regenerator().w(function (_context35) {
-          while (1) switch (_context35.n) {
+      var _assignDelivery = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee36(deliveryId, driverId) {
+        return _regenerator().w(function (_context36) {
+          while (1) switch (_context36.n) {
             case 0:
-              return _context35.a(2, this.proxyRequest('delivery', 'PATCH', "/api/deliveries/".concat(deliveryId, "/assign"), {
+              return _context36.a(2, this.proxyRequest('delivery', 'PATCH', "/api/deliveries/".concat(deliveryId, "/assign"), {
                 driverId: driverId
               }));
           }
-        }, _callee35, this);
+        }, _callee36, this);
       }));
-      function assignDelivery(_x41, _x42) {
+      function assignDelivery(_x43, _x44) {
         return _assignDelivery.apply(this, arguments);
       }
       return assignDelivery;
@@ -725,15 +741,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "markArrived",
     value: function () {
-      var _markArrived = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee36(deliveryId) {
-        return _regenerator().w(function (_context36) {
-          while (1) switch (_context36.n) {
+      var _markArrived = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee37(deliveryId) {
+        return _regenerator().w(function (_context37) {
+          while (1) switch (_context37.n) {
             case 0:
-              return _context36.a(2, this.proxyRequest('delivery', 'PATCH', "/api/deliveries/".concat(deliveryId, "/arrived"), {}));
+              return _context37.a(2, this.proxyRequest('delivery', 'PATCH', "/api/deliveries/".concat(deliveryId, "/arrived"), {}));
           }
-        }, _callee36, this);
+        }, _callee37, this);
       }));
-      function markArrived(_x43) {
+      function markArrived(_x45) {
         return _markArrived.apply(this, arguments);
       }
       return markArrived;
@@ -741,15 +757,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "markPicked",
     value: function () {
-      var _markPicked = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee37(deliveryId) {
-        return _regenerator().w(function (_context37) {
-          while (1) switch (_context37.n) {
+      var _markPicked = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee38(deliveryId) {
+        return _regenerator().w(function (_context38) {
+          while (1) switch (_context38.n) {
             case 0:
-              return _context37.a(2, this.proxyRequest('delivery', 'PATCH', "/api/deliveries/".concat(deliveryId, "/picked"), {}));
+              return _context38.a(2, this.proxyRequest('delivery', 'PATCH', "/api/deliveries/".concat(deliveryId, "/picked"), {}));
           }
-        }, _callee37, this);
+        }, _callee38, this);
       }));
-      function markPicked(_x44) {
+      function markPicked(_x46) {
         return _markPicked.apply(this, arguments);
       }
       return markPicked;
@@ -757,15 +773,15 @@ var GatewayService = (_dec = Injectable(), _dec2 = Reflect.metadata("design:type
   }, {
     key: "completeDeliveryRequest",
     value: function () {
-      var _completeDeliveryRequest = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee38(deliveryId) {
-        return _regenerator().w(function (_context38) {
-          while (1) switch (_context38.n) {
+      var _completeDeliveryRequest = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee39(deliveryId) {
+        return _regenerator().w(function (_context39) {
+          while (1) switch (_context39.n) {
             case 0:
-              return _context38.a(2, this.proxyRequest('delivery', 'PATCH', "/api/deliveries/".concat(deliveryId, "/complete"), {}));
+              return _context39.a(2, this.proxyRequest('delivery', 'PATCH', "/api/deliveries/".concat(deliveryId, "/complete"), {}));
           }
-        }, _callee38, this);
+        }, _callee39, this);
       }));
-      function completeDeliveryRequest(_x45) {
+      function completeDeliveryRequest(_x47) {
         return _completeDeliveryRequest.apply(this, arguments);
       }
       return completeDeliveryRequest;

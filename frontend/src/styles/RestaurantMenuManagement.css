@@ -144,3 +144,155 @@
   color: #999;
   font-size: 1.1rem;
 }
+/* ===== Fix hiển thị ảnh menu item ===== */
+.menu-item-card {
+  overflow: hidden; /* chặn ảnh tràn card */
+}
+
+/* khung ảnh cố định chiều cao */
+.item-image {
+  width: 100%;
+  height: 160px;            /* chỉnh: 140-200 tùy bạn */
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f5f5f5;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ảnh fit vào khung */
+.item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;        /* ảnh đồng đều, không méo */
+  display: block;
+}
+.item-actions{
+  display:flex;
+  gap:10px;
+  margin-top:auto;
+}
+
+.btn-edit{
+  padding: 10px 16px;
+  background: #e7f1ff;
+  color: #0b3d91;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.btn-edit:hover{
+  background:#d6e8ff;
+}
+/* ===== Modal (Form nổi lên) ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 9999;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 720px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-close {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+.modal-close:hover {
+  background: #f3f4f6;
+}
+
+/* form trong modal */
+.modal-form {
+  padding: 16px 18px 20px;
+}
+
+/* nếu form bạn đang có margin-top lớn thì chặn lại */
+.add-item-form.modal-form {
+  margin: 0;
+}
+.item-flags{
+  display:flex;
+  gap:16px;
+  align-items:center;
+  margin-top:10px;
+  flex-wrap:wrap;
+}
+
+.switch{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.switch input{ display:none; }
+
+.slider{
+  width:56px;
+  height:30px;
+  background:#999;
+  border-radius:999px;
+  position:relative;
+  transition:0.2s;
+  display:inline-block;
+}
+
+.slider::before{
+  content:"";
+  width:24px;
+  height:24px;
+  background:#fff;
+  border-radius:50%;
+  position:absolute;
+  top:3px;
+  left:3px;
+  transition:0.2s;
+}
+
+.switch input:checked + .slider{
+  background:#2ecc71;
+}
+
+.switch input:checked + .slider::before{
+  transform: translateX(26px);
+}
+
+.switch-text{
+  font-weight:700;
+}
+
+.checkbox-soldout{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:700;
+}

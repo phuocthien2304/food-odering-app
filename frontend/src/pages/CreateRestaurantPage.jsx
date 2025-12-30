@@ -145,15 +145,19 @@ const CreateRestaurantPage = ({ user, updateUser, API_URL }) => {
           <legend>Địa chỉ</legend>
           <div className="form-group">
             <label>Địa chỉ nhà hàng</label>
-            <div className="address-picker-row">
+            <div className="address-picker-row" >
               <textarea
                 readOnly
+                rows={1}
+                style={{
+                  width: "100%"
+                }}
                 value={
                   addressSummary ||
                   [formData.address.street, formData.address.ward, formData.address.city]
                     .filter(Boolean)
                     .join(', ')
-                }
+                }                
                 placeholder="Chưa chọn. Nhấn nút để chọn trên bản đồ giống trang đặt hàng."
               />
               <button type="button" className="btn-secondary" onClick={() => setShowAddressForm(true)}>

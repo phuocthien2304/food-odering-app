@@ -30,6 +30,7 @@ export default function FoodsPage({ addToCart, API_URL }) {
 
   const visibleItems = useMemo(() => {
     const q = searchTerm.trim().toLowerCase()
+      const base = (items || []).filter((it) => it?.isActive !== false)
     if (!q) return items
     return (items || []).filter((it) => {
       const name = String(it?.name || "").toLowerCase()

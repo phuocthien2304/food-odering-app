@@ -97,6 +97,15 @@ class GatewayService {
   async deleteMenuItem(menuItemId) {
     return this.proxyRequest('restaurant', 'DELETE', `/api/restaurants/menu/${menuItemId}`);
   }
+  async updateMenuItem(menuItemId, updateDto) {
+    return this.proxyRequest(
+      'restaurant',
+      'PATCH',
+      `/api/restaurants/menu/${menuItemId}`,
+      updateDto
+    );
+  }
+
 
     // Tạo nhà hàng mới qua restaurant-service
   async createRestaurant(restaurantDto) {
