@@ -27,24 +27,33 @@ export default function DriverDashboard({ API_URL }) {
   const [expanded, setExpanded] = useState(null);
   const [ordersMap, setOrdersMap] = useState({});
   const [customersMap, setCustomersMap] = useState({});
+  const [hasActiveOrder, setHasActiveOrder] = useState(false);
 
   useEffect(() => {
     fetchAll();
-    const interval = setInterval(fetchAll, 10000);
+    const interval = setInterval(() => fetchAll(false), 10000);
     return () => clearInterval(interval);
   }, []);
 
   const headers = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
 
-  const fetchAll = async () => {
-    setLoading(true);
+  const fetchAll = async (showLoading = true) => {
+    if (showLoading) setLoading(true);
     try {
       const [a, h] = await Promise.all([
         axios.get(`${API_URL}/deliveries/available`, headers()),
         axios.get(`${API_URL}/deliveries/driver/history`, headers())
       ]);
+      
+      // Check if driver has any active orders
+      const activeOrder = (h.data || []).find(d => 
+        ['ASSIGNED', 'AT_RESTAURANT', 'PICKED_UP', 'DELIVERING'].includes(d.status)
+      );
+      setHasActiveOrder(!!activeOrder);
+      
       setAvailable(a.data || []);
       setHistory(h.data || []);
+      
       const ids = [...(a.data || []), ...(h.data || [])].map(d => d.orderId).filter(Boolean);
       await Promise.all(ids.map(id => fetchOrderIfNeeded(id)));
 
@@ -54,7 +63,7 @@ export default function DriverDashboard({ API_URL }) {
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 
@@ -151,13 +160,20 @@ export default function DriverDashboard({ API_URL }) {
           <OrderSummary order={order} />
 
           <div className="action-buttons pro-actions">
-            {isAvailable && (
+            {isAvailable && !hasActiveOrder && (
               <button
                 className="btn-action pro-btn confirmed"
                 onClick={(e) => { e.stopPropagation(); accept(d._id, d.orderId); }}
+                disabled={hasActiveOrder}
+                title={hasActiveOrder ? 'Bạn đã có đơn hàng đang thực hiện' : 'Nhận đơn'}
               >
                 Nhận đơn
               </button>
+            )}
+            {isAvailable && hasActiveOrder && (
+              <div className="text-sm text-gray-500 mt-2">
+                Bạn đang có đơn hàng đang thực hiện
+              </div>
             )}
 
             {!isAvailable && d.status === 'ASSIGNED' && (

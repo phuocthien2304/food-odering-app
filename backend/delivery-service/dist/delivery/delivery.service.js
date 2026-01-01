@@ -82,6 +82,17 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
     }).exec();
   }
   async assignDriver(id, driverId) {
+    // Check if driver already has an active delivery
+    const activeDelivery = await this.DeliveryModel.findOne({
+      driverId,
+      status: {
+        $in: ['ASSIGNED', 'AT_RESTAURANT', 'PICKED_UP', 'DELIVERING']
+      }
+    }).exec();
+    if (activeDelivery) {
+      throw new Error('Bạn đã có đơn hàng đang thực hiện. Vui lòng hoàn thành đơn hàng hiện tại trước khi nhận đơn mới.');
+    }
+
     // Atomic assign: only assign if no driverId yet (prevent race)
     const updated = await this.DeliveryModel.findOneAndUpdate({
       _id: id,
@@ -99,7 +110,7 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
       new: true
     }).exec();
     if (!updated) {
-      throw new Error('Delivery already assigned or not found');
+      throw new Error('Đơn hàng đã được nhận bởi tài xế khác hoặc không tìm thấy');
     }
 
     // Emit assignment event
@@ -111,6 +122,7 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
         status: updated.status
       });
     } catch (_) {}
+
     // Best-effort: update order service via HTTP so customer sees status immediately
     try {
       await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/confirm`);
