@@ -1,4 +1,4 @@
-const { Controller, Post, Get, Param, Body, Patch, HttpException, HttpStatus, Inject } = require('@nestjs/common');
+const { Controller, Post, Get, Param, Body, Patch, Query, HttpException, HttpStatus, Inject, Headers } = require('@nestjs/common');
 const { MessagePattern, Payload } = require('@nestjs/microservices');
 const { OrderService } = require('./order.service');
 
@@ -28,6 +28,55 @@ class OrderController {
     }
   }
 
+  @Get('customer/:customerId')
+  async getCustomerOrders(@Param('customerId') customerId) {
+    return this.orderService.getOrdersByCustomer(customerId);
+  }
+
+  @Get('restaurant/stats')
+  async getRestaurantStatsFromToken(@Headers('authorization') auth) {
+    try {
+      const token = auth?.replace('Bearer ', '');
+      if (!token) throw new HttpException('No token provided', HttpStatus.UNAUTHORIZED);
+      
+      const decoded = await this.orderService.verifyToken(token);
+      if (!decoded.restaurantId) throw new HttpException('No restaurant associated', HttpStatus.BAD_REQUEST);
+      
+      return this.orderService.getRestaurantStats(decoded.restaurantId);
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('restaurant/:restaurantId')
+  async getRestaurantOrders(@Param('restaurantId') restaurantId) {
+    return this.orderService.getOrdersByRestaurant(restaurantId);
+  }
+
+  @Get('restaurant')
+  async getRestaurantOrdersFromToken(@Headers('authorization') auth) {
+    try {
+      const token = auth?.replace('Bearer ', '');
+      if (!token) throw new HttpException('No token provided', HttpStatus.UNAUTHORIZED);
+      
+      const decoded = await this.orderService.verifyToken(token);
+      if (!decoded.restaurantId) throw new HttpException('No restaurant associated', HttpStatus.BAD_REQUEST);
+      
+      return this.orderService.getOrdersByRestaurant(decoded.restaurantId);
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('stats/restaurant/:restaurantId')
+  async getRestaurantStats(
+    @Param('restaurantId') restaurantId, 
+    @Query('startDate') startDate,
+    @Query('endDate') endDate
+  ) {
+    return this.orderService.getOrderStats(restaurantId, new Date(startDate), new Date(endDate));
+  }
+
   @Get(':id')
   async getOrder(@Param('id') id) {
     const order = await this.orderService.getOrderById(id);
@@ -35,16 +84,6 @@ class OrderController {
       throw new HttpException('Order not found', HttpStatus.NOT_FOUND);
     }
     return order;
-  }
-
-  @Get('customer/:customerId')
-  async getCustomerOrders(@Param('customerId') customerId) {
-    return this.orderService.getOrdersByCustomer(customerId);
-  }
-
-  @Get('restaurant/:restaurantId')
-  async getRestaurantOrders(@Param('restaurantId') restaurantId) {
-    return this.orderService.getOrdersByRestaurant(restaurantId);
   }
 
   @Patch(':id/confirm')
@@ -86,6 +125,25 @@ class OrderController {
     }
   }
 
+  @Patch(':id/restaurant-confirm')
+  async restaurantConfirmOrder(@Param('id') id) {
+    try {
+      return await this.orderService.restaurantConfirmOrder(id);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Patch(':id/restaurant-reject')
+  async restaurantRejectOrder(@Param('id') id, @Body() body) {
+    const { reason } = body;
+    try {
+      return await this.orderService.restaurantRejectOrder(id, reason || 'No reason provided');
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   @MessagePattern('payment_confirmed')
   async handlePaymentConfirmed(@Payload() data) {
     return this.orderService.markOrderAsPaid(data.orderId, data.paymentId);
@@ -96,11 +154,6 @@ class OrderController {
     return this.orderService.handleDeliveryStatusChange(data);
   }
 
-  @Get('stats/restaurant/:restaurantId')
-  async getRestaurantStats(@Param('restaurantId') restaurantId, @Body() body) {
-    const { startDate, endDate } = body;
-    return this.orderService.getOrderStats(restaurantId, new Date(startDate), new Date(endDate));
-  }
 }
 
 module.exports = { OrderController };

@@ -12,6 +12,7 @@ export default function RestaurantsPage({ cart, addToCart, API_URL }) {
 
   useEffect(() => {
     fetchRestaurants()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchRestaurants = async () => {
@@ -19,8 +20,10 @@ export default function RestaurantsPage({ cart, addToCart, API_URL }) {
       const response = await axios.get(`${API_URL}/restaurants`)
       setRestaurants(response.data)
     } catch (error) {
-      console.error("Lỗi tải nhà hàng", error)
-      alert("Lỗi tải nhà hàng")
+      if (error.response?.status !== 404) {
+        console.error("Lỗi tải nhà hàng:", error.response?.data?.message || error.message)
+      }
+      alert("Không thể tải danh sách nhà hàng")
     } finally {
       setLoading(false)
     }
@@ -36,7 +39,7 @@ export default function RestaurantsPage({ cart, addToCart, API_URL }) {
   }
 
   const filteredRestaurants = restaurants.filter((r) =>
-    r.name.toLowerCase().includes(searchTerm.toLowerCase())
+    r?.name?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   if (loading) return <div className="loading">Đang tải nhà hàng...</div>
@@ -67,7 +70,7 @@ export default function RestaurantsPage({ cart, addToCart, API_URL }) {
                   src={`/placeholder.svg?height=200&width=300&query=restaurant+${restaurant.name}`}
                   alt={restaurant.name}
                 />
-                <span className="rating">⭐ 4.5</span>
+                {restaurant.rating && <span className="rating">⭐ {restaurant.rating}</span>}
               </div>
               <div className="restaurant-info">
                 <h3>{restaurant.name}</h3>
@@ -117,6 +120,7 @@ function RestaurantMenu({ restaurant, onClose, addToCart, API_URL, formatAddress
 
   useEffect(() => {
     fetchMenu()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restaurant._id])
 
   const fetchMenu = async () => {
@@ -190,7 +194,13 @@ function RestaurantMenu({ restaurant, onClose, addToCart, API_URL, formatAddress
   disabled={soldOut}
   onClick={() => {
     if (soldOut) return
-    addToCart({ ...item, restaurantId: restaurant._id })
+    addToCart({
+      _id: item._id,
+      restaurantId: restaurant._id,
+      restaurantName: restaurant.name,
+      name: item.name,
+      price: item.price,
+    })
   }}
 >
   {soldOut ? "Hết món" : "Thêm vào giỏ hàng"}

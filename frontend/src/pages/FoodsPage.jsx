@@ -21,8 +21,10 @@ export default function FoodsPage({ addToCart, API_URL }) {
       const response = await axios.get(`${API_URL}/restaurants/menu${suffix}`)
       setItems(response.data || [])
     } catch (error) {
-      console.error("Lỗi tải món ăn", error)
-      alert("Lỗi tải món ăn")
+      if (error.response?.status !== 404) {
+        console.error("Lỗi tải món ăn:", error.response?.data?.message || error.message)
+      }
+      alert("Không thể tải danh sách món ăn")
     } finally {
       setLoading(false)
     }

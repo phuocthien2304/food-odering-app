@@ -25,7 +25,9 @@ export default function AdminDashboard({ API_URL }) {
       })
       setStats(response.data)
     } catch (error) {
-      console.error("Tải số liệu thống kê thất bại", error)
+      if (error.response?.status !== 404) {
+        console.error("Lỗi tải thống kê:", error.response?.data?.message || error.message)
+      }
     } finally {
       setLoading(false)
     }

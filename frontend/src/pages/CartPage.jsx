@@ -238,6 +238,7 @@ export default function CartPage({ cart, removeFromCart, clearCart, API_URL, nav
         if (paymentMethod === 'SEPAY' || paymentMethod === 'ONLINE') {
           try {
             const orderId = res.data._id || res.data.id
+            const orderTotalFromServer = Number(res.data.total ?? res.data.totalAmount ?? total ?? 0)
             if (orderId) {
               let payRes = null
               try {
@@ -246,7 +247,7 @@ export default function CartPage({ cart, removeFromCart, clearCart, API_URL, nav
                   {
                     orderId,
                     customerId,
-                    amount: total,
+                    amount: orderTotalFromServer,
                     paymentMethod: 'SEPAY'
                   },
                   { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }

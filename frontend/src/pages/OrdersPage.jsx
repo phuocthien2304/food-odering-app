@@ -35,7 +35,9 @@ export default function OrdersPage({ API_URL }) {
       })
       setOrders(response.data)
     } catch (error) {
-      console.error("Tải đơn hàng thất bại", error)
+      if (error.response?.status !== 404) {
+        console.error("Lỗi tải đơn hàng:", error.response?.data?.message || error.message)
+      }
     } finally {
       setLoading(false)
     }
@@ -69,11 +71,13 @@ export default function OrdersPage({ API_URL }) {
     return (
       {
         PENDING_PAYMENT: "badge-pending",
+        PENDING_RESTAURANT_CONFIRMATION: "badge-pending",
         CREATED: "badge-pending",
         CONFIRMED: "badge-confirmed",
         PREPARING: "badge-preparing",
         READY: "badge-ready",
         CANCELLED: "badge-cancelled",
+        REJECTED: "badge-cancelled",
         COMPLETED: "badge-completed",
       }[status] || "badge-pending"
     )
@@ -82,11 +86,13 @@ export default function OrdersPage({ API_URL }) {
   const statusTranslations = {
     all: "Tất cả đơn hàng",
     PENDING_PAYMENT: "Chờ thanh toán",
+    PENDING_RESTAURANT_CONFIRMATION: "Chờ nhà hàng xác nhận",
     CREATED: "Đã tạo",
     CONFIRMED: "Đã xác nhận",
     PREPARING: "Đang chuẩn bị",
     READY: "Sẵn sàng",
     CANCELLED: "Đã hủy",
+    REJECTED: "Đã từ chối",
     COMPLETED: "Hoàn thành",
   }
 
@@ -100,11 +106,13 @@ export default function OrdersPage({ API_URL }) {
     const method = order?.paymentMethod === 'ONLINE' ? 'SEPAY' : (order?.paymentMethod || 'COD');
     if (method === 'COD') {
       if (order?.status === 'CANCELLED') return 'Đã hủy';
+      if (order?.status === 'REJECTED') return 'Đã từ chối';
       if (order?.status === 'COMPLETED') return 'Đã thanh toán';
       return 'Thanh toán khi nhận';
     }
     if (order?.status === 'PENDING_PAYMENT') return 'Chờ thanh toán';
     if (order?.status === 'CANCELLED') return 'Đã hủy';
+    if (order?.status === 'REJECTED') return 'Đã hoàn tiền';
     return 'Đã thanh toán';
   }
 
@@ -115,7 +123,7 @@ export default function OrdersPage({ API_URL }) {
       <h2>Đơn hàng của tôi</h2>
 
       <div className="filter-tabs">
-        {["all", "PENDING_PAYMENT", "CREATED", "CONFIRMED", "PREPARING", "READY", "COMPLETED"].map((status) => (
+        {["all", "PENDING_PAYMENT", "PENDING_RESTAURANT_CONFIRMATION", "CONFIRMED", "PREPARING", "READY", "COMPLETED", "REJECTED"].map((status) => (
           <button
             key={status}
             className={`filter-tab ${filter === status ? "active" : ""}`}
@@ -185,7 +193,17 @@ export default function OrdersPage({ API_URL }) {
                     </div>
                   )}
 
-                  {['CREATED', 'CONFIRMED', 'PENDING_PAYMENT'].includes(order.status) && (
+                  {order.status === "REJECTED" && (
+                    <div className="status-info" style={{ backgroundColor: '#fff3cd', padding: '12px', borderRadius: '4px', marginTop: '12px' }}>
+                      <p style={{ color: '#856404', fontWeight: 'bold', margin: 0 }}>❌ Đơn hàng đã bị nhà hàng từ chối</p>
+                      <p style={{ color: '#856404', margin: '8px 0 0 0' }}>Lý do: {order.rejectionReason || 'Không có lý do'}</p>
+                      {(order.paymentMethod === 'SEPAY' || order.paymentMethod === 'ONLINE') && (
+                        <p style={{ color: '#28a745', fontWeight: 'bold', margin: '8px 0 0 0' }}>💰 Tiền đã được hoàn lại tự động</p>
+                      )}
+                    </div>
+                  )}
+
+                  {['CREATED', 'CONFIRMED', 'PENDING_PAYMENT', 'PENDING_RESTAURANT_CONFIRMATION'].includes(order.status) && (
                     <div style={{ marginTop: 12 }}>
                       <button
                         className="btn-action cancel"

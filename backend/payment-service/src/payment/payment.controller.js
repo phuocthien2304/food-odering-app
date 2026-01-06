@@ -86,10 +86,23 @@ class PaymentController {
 
   @MessagePattern('order_requires_payment')
   async handleOrderRequiresPayment(@Payload() orderData) {
+    console.log('[PAYMENT CONTROLLER] Received orderData:', JSON.stringify({
+      _id: orderData._id,
+      total: orderData.total,
+      subtotal: orderData.subtotal,
+      deliveryFee: orderData.deliveryFee,
+      allKeys: Object.keys(orderData)
+    }));
+    
+    // Đảm bảo lấy đúng total: ưu tiên total, nếu không có thì tính từ subtotal + deliveryFee
+    const amount = orderData.total || (orderData.subtotal + orderData.deliveryFee) || 0;
+    
+    console.log(`[PAYMENT CONTROLLER] Using amount: ${amount} (from total: ${orderData.total}, subtotal: ${orderData.subtotal}, deliveryFee: ${orderData.deliveryFee})`);
+    
     return this.paymentService.initiatePayment(
       orderData._id,
       orderData.customerId,
-      orderData.total,
+      amount,
       'SEPAY'
     );
   }

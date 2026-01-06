@@ -27,6 +27,16 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
         }
       }
     });
+    this.orderClient = ClientProxyFactory.create({
+      transport: Transport.RMQ,
+      options: {
+        urls: [process.env.RABBITMQ_URI || 'amqp://localhost:5672'],
+        queue: process.env.ORDER_QUEUE || 'order_queue',
+        queueOptions: {
+          durable: false
+        }
+      }
+    });
     this.orderServiceUrl = process.env.ORDER_SERVICE_URL || 'http://order-service:3001';
   }
   calculateDistance(lat1, lng1, lat2, lng2) {
@@ -56,10 +66,6 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
       status
     });
     const saved = await delivery.save();
-    // Emit event so gateway/other services can react
-    try {
-      this.client.emit('delivery_created', saved);
-    } catch (_) {}
     return saved;
   }
   async getAvailableDeliveries() {
@@ -115,7 +121,7 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
 
     // Emit assignment event
     try {
-      this.client.emit('delivery_status_changed', {
+      this.orderClient.emit('delivery_status_changed', {
         deliveryId: updated._id,
         orderId: updated.orderId,
         driverId,
@@ -139,7 +145,7 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
     }, {
       new: true
     }).exec();
-    this.client.emit('delivery_status_changed', {
+    this.orderClient.emit('delivery_status_changed', {
       deliveryId: updated._id,
       orderId: updated.orderId,
       status: updated.status
@@ -159,7 +165,7 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
     }, {
       new: true
     }).exec();
-    this.client.emit('delivery_status_changed', {
+    this.orderClient.emit('delivery_status_changed', {
       deliveryId: updated._id,
       orderId: updated.orderId,
       status: 'PICKED_UP'
@@ -178,7 +184,7 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
     }, {
       new: true
     }).exec();
-    this.client.emit('delivery_status_changed', {
+    this.orderClient.emit('delivery_status_changed', {
       deliveryId: updated._id,
       orderId: updated.orderId,
       status: 'COMPLETED'
@@ -230,7 +236,7 @@ let DeliveryService = (_dec = Injectable(), _dec2 = function (target, key) {
     }).exec();
 
     // Emit status change event
-    this.client.emit('delivery_status_changed', {
+    this.orderClient.emit('delivery_status_changed', {
       deliveryId: updated._id,
       orderId: updated.orderId,
       status: updated.status

@@ -156,6 +156,18 @@ async getMenuForManage(restaurantId) {
     return this.proxyRequest('order', 'PATCH', `/api/orders/${orderId}/confirm`, {});
   }
 
+  async startPreparingOrder(orderId) {
+    return this.proxyRequest('order', 'PATCH', `/api/orders/${orderId}/preparing`, {});
+  }
+
+  async markOrderReady(orderId) {
+    return this.proxyRequest('order', 'PATCH', `/api/orders/${orderId}/ready`, {});
+  }
+
+  async completeOrder(orderId) {
+    return this.proxyRequest('order', 'PATCH', `/api/orders/${orderId}/complete`, {});
+  }
+
   async cancelOrder(orderId, reason) {
     // Check if a delivery exists for this order and whether a driver is already assigned.
     let delivery = null;
@@ -187,7 +199,22 @@ async getMenuForManage(restaurantId) {
   }
 
   async initiatePayment(paymentDto) {
-    return this.proxyRequest('payment', 'POST', '/api/payments/initiate', paymentDto);
+    const dto = { ...(paymentDto || {}) };
+
+    // Always trust order-service for the final payable amount.
+    // This prevents mismatch between UI-calculated total and backend-calculated total.
+    if (dto.orderId) {
+      try {
+        const order = await this.getOrder(dto.orderId);
+        if (order && typeof order.total !== 'undefined') {
+          dto.amount = Number(order.total);
+        }
+      } catch (e) {
+        // If order-service is unavailable, fall back to provided dto.amount.
+      }
+    }
+
+    return this.proxyRequest('payment', 'POST', '/api/payments/initiate', dto);
   }
 
   async getPayment(paymentId) {
@@ -255,6 +282,22 @@ async getMenuForManage(restaurantId) {
 
   async completeDeliveryRequest(deliveryId) {
     return this.proxyRequest('delivery', 'PATCH', `/api/deliveries/${deliveryId}/complete`, {});
+  }
+
+  async getRestaurantOrdersByToken(token) {
+    return this.proxyRequest('order', 'GET', '/api/orders/restaurant', null, { Authorization: `Bearer ${token}` });
+  }
+
+  async getRestaurantStatsByToken(token) {
+    return this.proxyRequest('order', 'GET', '/api/orders/restaurant/stats', null, { Authorization: `Bearer ${token}` });
+  }
+
+  async restaurantConfirmOrder(orderId) {
+    return this.proxyRequest('order', 'PATCH', `/api/orders/${orderId}/restaurant-confirm`, {});
+  }
+
+  async restaurantRejectOrder(orderId, reason) {
+    return this.proxyRequest('order', 'PATCH', `/api/orders/${orderId}/restaurant-reject`, { reason });
   }
 }
 

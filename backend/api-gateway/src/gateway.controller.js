@@ -215,16 +215,8 @@ async getMenuForManage(@Param('restaurantId') restaurantId) {
   async createOrder(@Body() orderDto) {
     try {
       const created = await this.gatewayService.createOrder(orderDto);
-      // If order starts in CREATED (e.g., COD), try to create a delivery via delivery-service HTTP
-      try {
-        if (created && created.status === 'CREATED') {
-          // best-effort: notify delivery service so drivers can see it immediately
-          await this.gatewayService.createDelivery(created);
-        }
-      } catch (e) {
-        // don't fail order creation if delivery creation fails
-        console.warn('Failed to create delivery for order (fallback):', e.message || e);
-      }
+      // KHÔNG tạo delivery ngay - chỉ tạo sau khi nhà hàng confirm
+      // Delivery sẽ được tạo khi nhận event 'restaurant_confirmed_order'
       return created;
     } catch (error) {
       throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
@@ -249,6 +241,32 @@ async getMenuForManage(@Param('restaurantId') restaurantId) {
     }
   }
 
+  @Get('orders/restaurant')
+  async getRestaurantOrdersByToken(@Headers('authorization') authHeader) {
+    const token = authHeader && authHeader.replace('Bearer ', '');
+    if (!token) {
+      throw new HttpException('No token provided', HttpStatus.UNAUTHORIZED);
+    }
+    try {
+      return await this.gatewayService.getRestaurantOrdersByToken(token);
+    } catch (error) {
+      throw new HttpException(error.message || 'Failed to fetch restaurant orders', error.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get('orders/restaurant/stats')
+  async getRestaurantStatsByToken(@Headers('authorization') authHeader) {
+    const token = authHeader && authHeader.replace('Bearer ', '');
+    if (!token) {
+      throw new HttpException('No token provided', HttpStatus.UNAUTHORIZED);
+    }
+    try {
+      return await this.gatewayService.getRestaurantStatsByToken(token);
+    } catch (error) {
+      throw new HttpException(error.message || 'Failed to fetch restaurant stats', error.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
   @Get('orders/:id')
   async getOrder(@Param('id') id) {
     try {
@@ -267,6 +285,29 @@ async getMenuForManage(@Param('restaurantId') restaurantId) {
     }
   }
 
+  @Patch('orders/:id')
+  async updateOrderStatus(@Param('id') id, @Body() body) {
+    try {
+      const status = String(body?.status || '').toUpperCase();
+      if (status === 'CONFIRMED') {
+        const confirmed = await this.gatewayService.restaurantConfirmOrder(id);
+        // Tạo delivery sau khi nhà hàng confirm
+        try {
+          await this.gatewayService.createDelivery(confirmed);
+        } catch (e) {
+          console.warn('Failed to create delivery after restaurant confirmation:', e.message || e);
+        }
+        return confirmed;
+      }
+      if (status === 'PREPARING') return await this.gatewayService.startPreparingOrder(id);
+      if (status === 'READY') return await this.gatewayService.markOrderReady(id);
+      if (status === 'COMPLETED') return await this.gatewayService.completeOrder(id);
+      throw new HttpException('Unsupported status update', HttpStatus.BAD_REQUEST);
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
   @Patch('orders/:id/confirm')
   async confirmOrder(@Param('id') id) {
     try {
@@ -276,27 +317,36 @@ async getMenuForManage(@Param('restaurantId') restaurantId) {
     }
   }
 
-  // New: get orders for the authenticated customer (uses token)
-  @Get('orders/customer')
-  async getCustomerOrdersByToken(@Headers('authorization') authHeader) {
-    const token = authHeader && authHeader.replace('Bearer ', '');
-    if (!token) {
-      throw new HttpException('No token provided', HttpStatus.UNAUTHORIZED);
-    }
-    try {
-      const profile = await this.gatewayService.getProfileByToken(token);
-      const customerId = profile && (profile._id || profile.id);
-      if (!customerId) throw new HttpException('Invalid token/profile', HttpStatus.UNAUTHORIZED);
-      return await this.gatewayService.getCustomerOrders(customerId);
-    } catch (error) {
-      throw new HttpException(error.message || 'Failed to fetch customer orders', error.status || HttpStatus.BAD_REQUEST);
-    }
-  }
 
   @Patch('orders/:id/cancel')
   async cancelOrder(@Param('id') id, @Body() body) {
     try {
       return await this.gatewayService.cancelOrder(id, body.reason);
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Patch('orders/:id/restaurant-confirm')
+  async restaurantConfirmOrder(@Param('id') id) {
+    try {
+      const confirmed = await this.gatewayService.restaurantConfirmOrder(id);
+      // Tạo delivery sau khi nhà hàng confirm
+      try {
+        await this.gatewayService.createDelivery(confirmed);
+      } catch (e) {
+        console.warn('Failed to create delivery after restaurant confirmation:', e.message || e);
+      }
+      return confirmed;
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Patch('orders/:id/restaurant-reject')
+  async restaurantRejectOrder(@Param('id') id, @Body() body) {
+    try {
+      return await this.gatewayService.restaurantRejectOrder(id, body.reason);
     } catch (error) {
       throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
     }
@@ -361,7 +411,22 @@ async getMenuForManage(@Param('restaurantId') restaurantId) {
   @Post('payments/callback')
   async handleSepayWebhook(@Body() callbackData, @Headers('authorization') authorization) {
     try {
-      return await this.gatewayService.handleSepayWebhook(callbackData, authorization);
+      const payment = await this.gatewayService.handleSepayWebhook(callbackData, authorization);
+      
+      // Nếu thanh toán SePay thành công, tự động tạo delivery cho order
+      if (payment && payment.status === 'SUCCESS' && payment.orderId) {
+        try {
+          const order = await this.gatewayService.getOrderById(payment.orderId);
+          if (order && order.status === 'CONFIRMED') {
+            await this.gatewayService.createDelivery(order);
+            console.log('Auto-created delivery for SePay order:', order._id);
+          }
+        } catch (deliveryError) {
+          console.error('Failed to auto-create delivery:', deliveryError.message);
+        }
+      }
+      
+      return payment;
     } catch (error) {
       throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
     }

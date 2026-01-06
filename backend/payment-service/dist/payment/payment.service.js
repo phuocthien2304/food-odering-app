@@ -40,11 +40,20 @@ let PaymentService = (_dec = Injectable(), _dec2 = function (target, key) {
   }
   async initiatePayment(orderId, customerId, amount, paymentMethod = 'SEPAY') {
     try {
+      console.log(`[PAYMENT] Initiating payment - Order: ${orderId}, Amount: ${amount}, Method: ${paymentMethod}`);
       const existing = await this.PaymentModel.findOne({
         orderId,
         paymentMethod: 'SEPAY'
       }).exec();
       if (existing) {
+        if (String(existing.status || '').toUpperCase() === 'PENDING' && Number(existing.amount) !== Number(amount)) {
+          existing.amount = amount;
+          existing.updatedAt = new Date();
+          const updated = await existing.save();
+          console.log(`[PAYMENT] Updated existing PENDING payment amount: ${updated._id}, Amount: ${updated.amount}`);
+          return updated;
+        }
+        console.log(`[PAYMENT] Existing payment found: ${existing._id}, Amount: ${existing.amount}`);
         return existing;
       }
       const payment = new this.PaymentModel({
@@ -57,6 +66,7 @@ let PaymentService = (_dec = Injectable(), _dec2 = function (target, key) {
         retryCount: 0
       });
       let saved = await payment.save();
+      console.log(`[PAYMENT] Payment created: ${saved._id}, Amount: ${saved.amount}`);
       const transferContent = `PAY ${saved._id.toString()}`;
       saved.transactionCode = transferContent;
       saved.bankName = process.env.SEPAY_BANK_NAME || saved.bankName;
@@ -158,6 +168,7 @@ let PaymentService = (_dec = Injectable(), _dec2 = function (target, key) {
       payment.bankName = callbackData.gateway || payment.bankName;
       payment.paidAt = callbackData.transactionDate ? new Date(callbackData.transactionDate) : new Date();
       await payment.save();
+      console.log(`[PAYMENT] SePay payment SUCCESS - Payment: ${payment._id}, Order: ${payment.orderId}, Amount: ${payment.amount}`);
       this.orderClient.emit('payment_confirmed', {
         paymentId: payment._id,
         orderId: payment.orderId,
@@ -166,6 +177,7 @@ let PaymentService = (_dec = Injectable(), _dec2 = function (target, key) {
         transactionId: payment.transactionId,
         paymentMethod: 'SEPAY'
       });
+      console.log(`[PAYMENT] Emitted payment_confirmed event for order ${payment.orderId}`);
       return {
         success: true
       };

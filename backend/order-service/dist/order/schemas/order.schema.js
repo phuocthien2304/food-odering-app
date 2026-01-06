@@ -64,10 +64,12 @@ const OrderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['CREATED', 'CONFIRMED', 'PREPARING', 'READY', 'DELIVERING', 'COMPLETED', 'CANCELLED', 'PENDING_PAYMENT', 'PAYMENT_FAILED'],
+    enum: ['PENDING_RESTAURANT_CONFIRMATION', 'CREATED', 'CONFIRMED', 'PREPARING', 'READY', 'DELIVERING', 'COMPLETED', 'CANCELLED', 'PENDING_PAYMENT', 'PAYMENT_FAILED', 'REJECTED'],
     default: 'CREATED',
     index: true
   },
+  rejectionReason: String,
+  rejectedAt: Date,
   notes: String,
   distanceKm: Number,
   etaMinutes: Number,

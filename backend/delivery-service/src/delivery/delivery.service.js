@@ -15,6 +15,16 @@ class DeliveryService {
         queueOptions: { durable: false },
       },
     });
+
+    this.orderClient = ClientProxyFactory.create({
+      transport: Transport.RMQ,
+      options: {
+        urls: [process.env.RABBITMQ_URI || 'amqp://localhost:5672'],
+        queue: process.env.ORDER_QUEUE || 'order_queue',
+        queueOptions: { durable: false },
+      },
+    });
+
     this.orderServiceUrl = process.env.ORDER_SERVICE_URL || 'http://order-service:3001';
   }
 
@@ -52,8 +62,6 @@ class DeliveryService {
     });
 
     const saved = await delivery.save();
-    // Emit event so gateway/other services can react
-    try { this.client.emit('delivery_created', saved); } catch (_) {}
     return saved;
   }
 
@@ -89,7 +97,7 @@ class DeliveryService {
 
     // Emit assignment event
     try { 
-      this.client.emit('delivery_status_changed', { 
+      this.orderClient.emit('delivery_status_changed', { 
         deliveryId: updated._id, 
         orderId: updated.orderId, 
         driverId, 
@@ -112,7 +120,7 @@ class DeliveryService {
       { status: 'AT_RESTAURANT', arrivedAt: new Date(), updatedAt: new Date() },
       { new: true }
     ).exec();
-    this.client.emit('delivery_status_changed', { deliveryId: updated._id, orderId: updated.orderId, status: updated.status });
+    this.orderClient.emit('delivery_status_changed', { deliveryId: updated._id, orderId: updated.orderId, status: updated.status });
     // Best-effort HTTP update to Order service
     try {
       await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/preparing`);
@@ -126,7 +134,7 @@ class DeliveryService {
       { status: 'PICKED_UP', pickedAt: new Date(), startedAt: new Date(), updatedAt: new Date() },
       { new: true }
     ).exec();
-    this.client.emit('delivery_status_changed', { deliveryId: updated._id, orderId: updated.orderId, status: 'PICKED_UP' });
+    this.orderClient.emit('delivery_status_changed', { deliveryId: updated._id, orderId: updated.orderId, status: 'PICKED_UP' });
     // Best-effort HTTP update to Order service: mark as READY for customer view
     try {
       await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/ready`);
@@ -140,7 +148,7 @@ class DeliveryService {
       { status: 'COMPLETED', completedAt: new Date(), updatedAt: new Date() },
       { new: true }
     ).exec();
-    this.client.emit('delivery_status_changed', { deliveryId: updated._id, orderId: updated.orderId, status: 'COMPLETED' });
+    this.orderClient.emit('delivery_status_changed', { deliveryId: updated._id, orderId: updated.orderId, status: 'COMPLETED' });
     try {
       await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/complete`);
     } catch (e) {}
@@ -190,7 +198,7 @@ class DeliveryService {
     const updated = await this.DeliveryModel.findByIdAndUpdate(id, data, { new: true }).exec();
     
     // Emit status change event
-    this.client.emit('delivery_status_changed', {
+    this.orderClient.emit('delivery_status_changed', {
       deliveryId: updated._id,
       orderId: updated.orderId,
       status: updated.status

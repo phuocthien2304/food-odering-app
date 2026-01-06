@@ -121,7 +121,18 @@ let PaymentController = (_dec = Controller('api/payments'), _dec2 = function (ta
     return this.paymentService.getPaymentStats(new Date(startDate), new Date(endDate));
   }
   async handleOrderRequiresPayment(orderData) {
-    return this.paymentService.initiatePayment(orderData._id, orderData.customerId, orderData.total, 'SEPAY');
+    console.log('[PAYMENT CONTROLLER] Received orderData:', JSON.stringify({
+      _id: orderData._id,
+      total: orderData.total,
+      subtotal: orderData.subtotal,
+      deliveryFee: orderData.deliveryFee,
+      allKeys: Object.keys(orderData)
+    }));
+
+    // Đảm bảo lấy đúng total: ưu tiên total, nếu không có thì tính từ subtotal + deliveryFee
+    const amount = orderData.total || orderData.subtotal + orderData.deliveryFee || 0;
+    console.log(`[PAYMENT CONTROLLER] Using amount: ${amount} (from total: ${orderData.total}, subtotal: ${orderData.subtotal}, deliveryFee: ${orderData.deliveryFee})`);
+    return this.paymentService.initiatePayment(orderData._id, orderData.customerId, amount, 'SEPAY');
   }
 }, _applyDecoratedDescriptor(_class2.prototype, "initiatePayment", [_dec5, _dec6, _dec7, _dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "initiatePayment"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "handleSepayCallback", [_dec9, _dec0, _dec1, _dec10, _dec11], Object.getOwnPropertyDescriptor(_class2.prototype, "handleSepayCallback"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "sepayWebhookHealthCheck", [_dec12, _dec13, _dec14], Object.getOwnPropertyDescriptor(_class2.prototype, "sepayWebhookHealthCheck"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getPayment", [_dec15, _dec16, _dec17, _dec18], Object.getOwnPropertyDescriptor(_class2.prototype, "getPayment"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getPaymentByOrder", [_dec19, _dec20, _dec21, _dec22], Object.getOwnPropertyDescriptor(_class2.prototype, "getPaymentByOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "handleCallback", [_dec23, _dec24, _dec25, _dec26, _dec27], Object.getOwnPropertyDescriptor(_class2.prototype, "handleCallback"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "retryPayment", [_dec28, _dec29, _dec30, _dec31], Object.getOwnPropertyDescriptor(_class2.prototype, "retryPayment"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "refundPayment", [_dec32, _dec33, _dec34, _dec35, _dec36], Object.getOwnPropertyDescriptor(_class2.prototype, "refundPayment"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getStats", [_dec37, _dec38, _dec39, _dec40, _dec41], Object.getOwnPropertyDescriptor(_class2.prototype, "getStats"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "handleOrderRequiresPayment", [_dec42, _dec43, _dec44, _dec45], Object.getOwnPropertyDescriptor(_class2.prototype, "handleOrderRequiresPayment"), _class2.prototype), _class2)) || _class) || _class) || _class) || _class);
 module.exports = {

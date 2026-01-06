@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import "../styles/RestaurantDashboard.css"
 
-export default function RestaurantDashboard({ API_URL, user, setUser }) {
+export default function RestaurantDashboard({ API_URL, user, updateUser }) {
   const [orders, setOrders] = useState([])
   const [stats, setStats] = useState({ totalOrders: 0, totalRevenue: 0, pendingOrders: 0 })
   const [loading, setLoading] = useState(true)
@@ -38,7 +38,9 @@ export default function RestaurantDashboard({ API_URL, user, setUser }) {
       })
       setOrders(response.data)
     } catch (error) {
-      console.error("Tải đơn hàng thất bại", error)
+      if (error.response?.status !== 404) {
+        console.error("Lỗi tải đơn hàng:", error.response?.data?.message || error.message)
+      }
     }
   }
 
@@ -49,7 +51,9 @@ export default function RestaurantDashboard({ API_URL, user, setUser }) {
       })
       setStats(response.data)
     } catch (error) {
-      console.error("Tải số liệu thống kê thất bại", error)
+      if (error.response?.status !== 404) {
+        console.error("Lỗi tải thống kê:", error.response?.data?.message || error.message)
+      }
     } finally {
       setLoading(false)
     }
@@ -68,6 +72,43 @@ export default function RestaurantDashboard({ API_URL, user, setUser }) {
       fetchStats()
     } catch (error) {
       alert("Cập nhật đơn hàng thất bại: " + error.response?.data?.message)
+    }
+  }
+
+  const confirmOrder = async (orderId) => {
+    try {
+      await axios.patch(
+        `${API_URL}/orders/${orderId}/restaurant-confirm`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        },
+      )
+      alert("Đã xác nhận đơn hàng!")
+      fetchOrders()
+      fetchStats()
+    } catch (error) {
+      alert("Xác nhận đơn hàng thất bại: " + (error.response?.data?.message || error.message))
+    }
+  }
+
+  const rejectOrder = async (orderId) => {
+    const reason = prompt("Lý do từ chối đơn hàng:");
+    if (!reason) return;
+    
+    try {
+      await axios.patch(
+        `${API_URL}/orders/${orderId}/restaurant-reject`,
+        { reason },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        },
+      )
+      alert("Đã từ chối đơn hàng!")
+      fetchOrders()
+      fetchStats()
+    } catch (error) {
+      alert("Từ chối đơn hàng thất bại: " + (error.response?.data?.message || error.message))
     }
   }
 
@@ -207,10 +248,10 @@ export default function RestaurantDashboard({ API_URL, user, setUser }) {
     <div className="dashboard-container">
       <h2>Bảng điều khiển nhà hàng</h2>
 
-      {/* Stats Cards */}
+      {/* Stats Cards - Phân tích */}
       <div className="stats-grid">
         <div className="stat-card">
-          <h3>{stats.totalOrders}</h3>
+          <h3>{stats.totalOrders || 0}</h3>
           <p>Tổng số đơn hàng</p>
         </div>
         <div className="stat-card">
@@ -218,8 +259,12 @@ export default function RestaurantDashboard({ API_URL, user, setUser }) {
           <p>Tổng doanh thu</p>
         </div>
         <div className="stat-card pending">
-          <h3>{stats.pendingOrders}</h3>
+          <h3>{stats.pendingOrders || 0}</h3>
           <p>Đơn hàng chờ xử lý</p>
+        </div>
+        <div className="stat-card">
+          <h3>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format((stats.totalRevenue || 0) / (stats.totalOrders || 1))}</h3>
+          <p>Giá trị đơn hàng trung bình</p>
         </div>
       </div>
 
@@ -274,6 +319,23 @@ export default function RestaurantDashboard({ API_URL, user, setUser }) {
                     </div>
 
                     <div className="action-buttons">
+                      {order.status === "PENDING_RESTAURANT_CONFIRMATION" && (
+                        <>
+                          <button
+                            className="btn-action confirmed"
+                            onClick={(e) => { e.stopPropagation(); confirmOrder(order._id); }}
+                          >
+                            ✅ Xác nhận đơn hàng
+                          </button>
+                          <button
+                            className="btn-action rejected"
+                            onClick={(e) => { e.stopPropagation(); rejectOrder(order._id); }}
+                            style={{ backgroundColor: '#dc3545', marginLeft: '10px' }}
+                          >
+                            ❌ Từ chối
+                          </button>
+                        </>
+                      )}
                       {order.status === "CREATED" && (
                         <button
                           className="btn-action confirmed"
@@ -298,10 +360,15 @@ export default function RestaurantDashboard({ API_URL, user, setUser }) {
                       {order.status === "READY" && (
                         <button
                           className="btn-action completed"
-                          onClick={() => updateOrderStatus(order._d, "COMPLETED")}
+                          onClick={() => updateOrderStatus(order._id, "COMPLETED")}
                         >
                           Hoàn thành đơn hàng
                         </button>
+                      )}
+                      {order.status === "REJECTED" && (
+                        <div style={{ color: '#dc3545', fontWeight: 'bold' }}>
+                          Đã từ chối: {order.rejectionReason}
+                        </div>
                       )}
                     </div>
                   </div>

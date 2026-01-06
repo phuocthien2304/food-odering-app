@@ -14,10 +14,10 @@ import OrdersPage from "./pages/OrdersPage"
 import RestaurantDashboard from "./pages/RestaurantDashboard"
 import AdminDashboard from "./pages/AdminDashboard"
 import RestaurantMenuManagement from "./pages/RestaurantMenuManagement"
-import RestaurantAnalytics from "./pages/RestaurantAnalytics"
 import CreateRestaurantPage from "./pages/CreateRestaurantPage"
 import AddInitialMenuItemsPage from "./pages/AddInitialMenuItemsPage"
 import DriverDashboard from "./pages/DriverDashboard"
+import ProfilePage from "./pages/ProfilePage"
 
 // --- Component Bảo vệ Route ---
 // Giúp chặn người không có quyền truy cập vào link cụ thể
@@ -34,6 +34,12 @@ export default function App() {
   
   const navigate = useNavigate();
   const location = useLocation();
+
+  const isActive = (path, mode = 'exact') => {
+    if (!path) return false;
+    if (mode === 'prefix') return location.pathname.startsWith(path);
+    return location.pathname === path;
+  }
 
   // Dùng biến môi trường nếu có, không thì localhost
   const API_URL = import.meta.env.VITE_API_GATEWAY_URL || "http://localhost:3000/api"
@@ -64,7 +70,10 @@ export default function App() {
         redirectBasedOnRole(verifiedUser);
       }
     } catch (error) {
-      console.error("Phiên đã hết hạn")
+      // Không log error nếu chỉ là token hết hạn
+      if (error.response?.status !== 401) {
+        console.error("Lỗi xác thực:", error.response?.data?.message || error.message)
+      }
       localStorage.removeItem("token")
       setUser(null)
     } finally {
@@ -154,26 +163,31 @@ export default function App() {
             {user ? (
               <>
                 {user.userType === "ADMIN" && (
-                  <button className="nav-btn" onClick={() => navigate("/admin/dashboard")}>Bảng điều khiển</button>
+                  <>
+                    <button className={`nav-btn${isActive('/admin/dashboard') ? ' active' : ''}`} onClick={() => navigate("/admin/dashboard")}>Bảng điều khiển</button>
+                    <button className={`nav-btn${isActive('/profile') ? ' active' : ''}`} onClick={() => navigate("/profile")}>Hồ sơ</button>
+                  </>
                 )}
                 {user.userType === "RESTAURANT_STAFF" && (
                   <>
-                    <button className="nav-btn" onClick={() => navigate("/restaurant/dashboard")}>Đơn hàng</button>
-                    <button className="nav-btn" onClick={() => navigate("/restaurant/menu")}>Thực đơn</button>
-                    <button className="nav-btn" onClick={() => navigate("/restaurant/analytics")}>Phân tích</button>
+                    <button className={`nav-btn${isActive('/restaurant/dashboard') ? ' active' : ''}`} onClick={() => navigate("/restaurant/dashboard")}>Đơn hàng</button>
+                    <button className={`nav-btn${isActive('/restaurant/menu', 'prefix') ? ' active' : ''}`} onClick={() => navigate("/restaurant/menu")}>Thực đơn</button>
+                    <button className={`nav-btn${isActive('/profile') ? ' active' : ''}`} onClick={() => navigate("/profile")}>Hồ sơ</button>
                   </>
                 )}
                 {user.userType === "DRIVER" && (
                   <>
-                    <button className="nav-btn" onClick={() => navigate('/driver/dashboard')}>Tài xế - Đơn hàng</button>
+                    <button className={`nav-btn${isActive('/driver/dashboard') ? ' active' : ''}`} onClick={() => navigate('/driver/dashboard')}>Tài xế - Đơn hàng</button>
+                    <button className={`nav-btn${isActive('/profile') ? ' active' : ''}`} onClick={() => navigate("/profile")}>Hồ sơ</button>
                   </>
                 )}
                 {user.userType === "CUSTOMER" && (
                   <>
-                    <button className="nav-btn" onClick={() => navigate("/foods")}>Món ăn</button>
-                    <button className="nav-btn" onClick={() => navigate("/restaurants")}>Nhà hàng</button>
-                    <button className="nav-btn" onClick={() => navigate("/orders")}>Đơn hàng của tôi</button>
-                    <button className="nav-btn cart-btn" onClick={() => navigate("/cart")}>Giỏ hàng ({cart.length})</button>
+                    <button className={`nav-btn${isActive('/foods') ? ' active' : ''}`} onClick={() => navigate("/foods")}>Món ăn</button>
+                    <button className={`nav-btn${isActive('/restaurants') ? ' active' : ''}`} onClick={() => navigate("/restaurants")}>Nhà hàng</button>
+                    <button className={`nav-btn${isActive('/orders') ? ' active' : ''}`} onClick={() => navigate("/orders")}>Đơn hàng của tôi</button>
+                    <button className={`nav-btn cart-btn${isActive('/cart') ? ' active' : ''}`} onClick={() => navigate("/cart")}>Giỏ hàng ({cart.length})</button>
+                    <button className={`nav-btn${isActive('/profile') ? ' active' : ''}`} onClick={() => navigate("/profile")}>Hồ sơ</button>
                   </>
                 )}
                 <span className="user-info">Chào, {user.name}</span>
@@ -198,6 +212,11 @@ export default function App() {
             />
           } />
 
+          {/* Route Profile chung cho tất cả role đã đăng nhập */}
+          <Route element={<ProtectedRoute user={user} allowedRoles={['CUSTOMER', 'RESTAURANT_STAFF', 'DRIVER', 'ADMIN']} />}>
+            <Route path="/profile" element={<ProfilePage API_URL={API_URL} user={user} updateUser={updateUser} />} />
+          </Route>
+
           {/* Routes cho KHÁCH HÀNG */}
           <Route element={<ProtectedRoute user={user} allowedRoles={['CUSTOMER']} />}>
             <Route path="/foods" element={<FoodsPage cart={cart} addToCart={addToCart} API_URL={API_URL} />} />
@@ -209,9 +228,8 @@ export default function App() {
 
           {/* Routes cho CHỦ NHÀ HÀNG */}
           <Route element={<ProtectedRoute user={user} allowedRoles={['RESTAURANT_STAFF']} />}>
-            <Route path="/restaurant/dashboard" element={<RestaurantDashboard API_URL={API_URL} />} />
+            <Route path="/restaurant/dashboard" element={<RestaurantDashboard API_URL={API_URL} user={user} updateUser={updateUser} />} />
             <Route path="/restaurant/menu" element={<RestaurantMenuManagement API_URL={API_URL} user={user} />} />
-            <Route path="/restaurant/analytics" element={<RestaurantAnalytics API_URL={API_URL} />} />
             <Route
               path="/restaurant/create"
               element={<CreateRestaurantPage user={user} updateUser={updateUser} API_URL={API_URL} />}

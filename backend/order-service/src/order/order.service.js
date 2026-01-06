@@ -1,6 +1,7 @@
 const { Injectable } = require('@nestjs/common');
 const { ClientProxyFactory, Transport } = require('@nestjs/microservices');
 const { InjectModel } = require('@nestjs/mongoose');
+const axios = require('axios');
 
 @Injectable()
 class OrderService {
@@ -15,6 +16,15 @@ class OrderService {
       options: {
         urls: [process.env.RABBITMQ_URI || 'amqp://localhost:5672'],
         queue: process.env.ORDER_QUEUE || 'order_queue',
+        queueOptions: { durable: false },
+      },
+    });
+
+    this.deliveryClient = ClientProxyFactory.create({
+      transport: Transport.RMQ,
+      options: {
+        urls: [process.env.RABBITMQ_URI || 'amqp://localhost:5672'],
+        queue: process.env.DELIVERY_QUEUE || 'delivery_queue',
         queueOptions: { durable: false },
       },
     });
@@ -84,19 +94,26 @@ class OrderService {
       recipientPhone: createDto.recipientPhone || '',
       customerLocation: createDto.customerLocation,
       notes: createDto.notes || '',
-      status: normalizedPaymentMethod === 'SEPAY' ? 'PENDING_PAYMENT' : 'CREATED'
+      status: normalizedPaymentMethod === 'SEPAY' ? 'PENDING_PAYMENT' : 'PENDING_RESTAURANT_CONFIRMATION'
     });
 
     const saved = await order.save();
 
     // Emit events based on payment method
     if (normalizedPaymentMethod === 'SEPAY') {
-      this.paymentClient.emit('order_requires_payment', {
-        ...saved.toObject(),
+      const orderData = {
+        _id: saved._id,
+        customerId: saved.customerId,
+        restaurantId: saved.restaurantId,
+        total: saved.total,
+        subtotal: saved.subtotal,
+        deliveryFee: saved.deliveryFee,
         paymentMethod: normalizedPaymentMethod
-      });
+      };
+      console.log(`[ORDER] Emitting order_requires_payment - Order: ${saved._id}, Total: ${saved.total}, Subtotal: ${saved.subtotal}`);
+      this.paymentClient.emit('order_requires_payment', orderData);
     } else {
-      this.client.emit('order_created', saved);
+      this.deliveryClient.emit('order_created', saved);
     }
 
     // Previously this service scheduled automatic progression for CREATED orders.
@@ -282,9 +299,7 @@ class OrderService {
       { new: true }
     ).exec();
 
-    // Emit event to notify restaurant
-    this.client.emit('order_paid_confirmed', order);
-    // Do not auto-schedule progression; wait for delivery events to update statuses.
+    // Delivery creation is handled by API Gateway after SePay webhook confirmation.
     return order;
   }
 
@@ -335,6 +350,91 @@ class OrderService {
       codRevenue: orders.filter(o => o.paymentMethod === 'COD' && o.status === 'COMPLETED').reduce((sum, o) => sum + o.total, 0),
       onlineRevenue: orders.filter(o => o.paymentMethod === 'ONLINE' && o.status === 'COMPLETED').reduce((sum, o) => sum + o.total, 0)
     };
+  }
+
+  async verifyToken(token) {
+    try {
+      const userServiceUrl = process.env.USER_SERVICE_URL || 'http://user-service:3003';
+      const response = await axios.get(`${userServiceUrl}/api/auth/profile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Invalid token or user not found');
+    }
+  }
+
+  async getRestaurantStats(restaurantId) {
+    const orders = await this.OrderModel.find({ restaurantId }).exec();
+    const pendingOrders = orders.filter(o => o.status === 'PENDING' || o.status === 'CONFIRMED' || o.status === 'PENDING_RESTAURANT_CONFIRMATION').length;
+    const totalRevenue = orders.reduce((sum, o) => sum + (o.status === 'COMPLETED' ? o.total : 0), 0);
+
+    return {
+      totalOrders: orders.length,
+      totalRevenue,
+      pendingOrders
+    };
+  }
+
+  async restaurantConfirmOrder(orderId) {
+    const order = await this.OrderModel.findById(orderId).exec();
+    if (!order) {
+      throw new Error('Order not found');
+    }
+    if (order.status !== 'PENDING_RESTAURANT_CONFIRMATION') {
+      throw new Error('Order is not pending restaurant confirmation');
+    }
+
+    const updated = await this.OrderModel.findByIdAndUpdate(
+      orderId,
+      {
+        status: 'CONFIRMED',
+        confirmedAt: new Date(),
+        updatedAt: new Date()
+      },
+      { new: true }
+    ).exec();
+
+    return updated;
+  }
+
+  async restaurantRejectOrder(orderId, reason) {
+    const order = await this.OrderModel.findById(orderId).exec();
+    if (!order) {
+      throw new Error('Order not found');
+    }
+    if (order.status !== 'PENDING_RESTAURANT_CONFIRMATION') {
+      throw new Error('Order is not pending restaurant confirmation');
+    }
+
+    const updated = await this.OrderModel.findByIdAndUpdate(
+      orderId,
+      {
+        status: 'REJECTED',
+        rejectionReason: reason || 'No reason provided',
+        rejectedAt: new Date(),
+        updatedAt: new Date()
+      },
+      { new: true }
+    ).exec();
+
+    // Nếu đơn hàng đã thanh toán SEPAY, tự động hoàn tiền
+    if (updated.paymentMethod === 'SEPAY' && updated.paymentId) {
+      try {
+        // Gọi payment service để refund
+        const paymentServiceUrl = process.env.PAYMENT_SERVICE_URL || 'http://payment-service:3005';
+        await axios.post(`${paymentServiceUrl}/api/payments/${updated.paymentId}/refund`, {
+          reason: `Restaurant rejected order: ${reason}`
+        });
+        console.log(`Auto-refund initiated for payment ${updated.paymentId}`);
+      } catch (error) {
+        console.error('Failed to initiate refund:', error.message);
+        // Không throw error để không block việc từ chối đơn hàng
+        // Admin có thể refund thủ công sau
+      }
+    }
+
+    return updated;
   }
 }
 
