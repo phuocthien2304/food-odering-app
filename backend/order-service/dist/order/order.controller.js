@@ -1,6 +1,6 @@
 "use strict";
 
-var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec0, _dec1, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _dec34, _dec35, _dec36, _dec37, _dec38, _dec39, _dec40, _dec41, _dec42, _dec43, _dec44, _dec45, _dec46, _dec47, _dec48, _dec49, _dec50, _dec51, _dec52, _dec53, _dec54, _dec55, _dec56, _dec57, _dec58, _dec59, _dec60, _dec61, _dec62, _dec63, _dec64, _dec65, _dec66, _dec67, _dec68, _dec69, _dec70, _dec71, _dec72, _dec73, _dec74, _dec75, _class, _class2;
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec0, _dec1, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _dec34, _dec35, _dec36, _dec37, _dec38, _dec39, _dec40, _dec41, _dec42, _dec43, _dec44, _dec45, _dec46, _dec47, _dec48, _dec49, _dec50, _dec51, _dec52, _dec53, _dec54, _dec55, _dec56, _dec57, _dec58, _dec59, _dec60, _dec61, _dec62, _dec63, _dec64, _dec65, _dec66, _dec67, _dec68, _dec69, _dec70, _dec71, _class, _class2;
 function _applyDecoratedDescriptor(i, e, r, n, l) { var a = {}; return Object.keys(n).forEach(function (i) { a[i] = n[i]; }), a.enumerable = !!a.enumerable, a.configurable = !!a.configurable, ("value" in a || a.initializer) && (a.writable = !0), a = r.slice().reverse().reduce(function (r, n) { return n(i, e, r) || r; }, a), l && void 0 !== a.initializer && (a.value = a.initializer ? a.initializer.call(l) : void 0, a.initializer = void 0), void 0 === a.initializer ? (Object.defineProperty(i, e, a), null) : a; }
 const {
   Controller,
@@ -42,33 +42,31 @@ let OrderController = (_dec = Controller('api/orders'), _dec2 = function (target
   return Query('endDate')(target, key, 2);
 }, _dec27 = Reflect.metadata("design:type", Function), _dec28 = Reflect.metadata("design:paramtypes", [void 0, void 0, void 0]), _dec29 = Get(':id'), _dec30 = function (target, key) {
   return Param('id')(target, key, 0);
-}, _dec31 = Reflect.metadata("design:type", Function), _dec32 = Reflect.metadata("design:paramtypes", [void 0]), _dec33 = Patch(':id/confirm'), _dec34 = function (target, key) {
+}, _dec31 = Reflect.metadata("design:type", Function), _dec32 = Reflect.metadata("design:paramtypes", [void 0]), _dec33 = Patch(':id/preparing'), _dec34 = function (target, key) {
   return Param('id')(target, key, 0);
-}, _dec35 = Reflect.metadata("design:type", Function), _dec36 = Reflect.metadata("design:paramtypes", [void 0]), _dec37 = Patch(':id/preparing'), _dec38 = function (target, key) {
+}, _dec35 = Reflect.metadata("design:type", Function), _dec36 = Reflect.metadata("design:paramtypes", [void 0]), _dec37 = Patch(':id/ready'), _dec38 = function (target, key) {
   return Param('id')(target, key, 0);
-}, _dec39 = Reflect.metadata("design:type", Function), _dec40 = Reflect.metadata("design:paramtypes", [void 0]), _dec41 = Patch(':id/ready'), _dec42 = function (target, key) {
+}, _dec39 = Reflect.metadata("design:type", Function), _dec40 = Reflect.metadata("design:paramtypes", [void 0]), _dec41 = Patch(':id/delivering'), _dec42 = function (target, key) {
   return Param('id')(target, key, 0);
-}, _dec43 = Reflect.metadata("design:type", Function), _dec44 = Reflect.metadata("design:paramtypes", [void 0]), _dec45 = Patch(':id/delivering'), _dec46 = function (target, key) {
-  return Param('id')(target, key, 0);
-}, _dec47 = function (target, key) {
+}, _dec43 = function (target, key) {
   return Body()(target, key, 1);
-}, _dec48 = Reflect.metadata("design:type", Function), _dec49 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec50 = Patch(':id/complete'), _dec51 = function (target, key) {
+}, _dec44 = Reflect.metadata("design:type", Function), _dec45 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec46 = Patch(':id/complete'), _dec47 = function (target, key) {
   return Param('id')(target, key, 0);
-}, _dec52 = Reflect.metadata("design:type", Function), _dec53 = Reflect.metadata("design:paramtypes", [void 0]), _dec54 = Patch(':id/cancel'), _dec55 = function (target, key) {
+}, _dec48 = Reflect.metadata("design:type", Function), _dec49 = Reflect.metadata("design:paramtypes", [void 0]), _dec50 = Patch(':id/cancel'), _dec51 = function (target, key) {
   return Param('id')(target, key, 0);
-}, _dec56 = function (target, key) {
+}, _dec52 = function (target, key) {
   return Body()(target, key, 1);
-}, _dec57 = Reflect.metadata("design:type", Function), _dec58 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec59 = Patch(':id/restaurant-confirm'), _dec60 = function (target, key) {
+}, _dec53 = Reflect.metadata("design:type", Function), _dec54 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec55 = Patch(':id/restaurant-confirm'), _dec56 = function (target, key) {
   return Param('id')(target, key, 0);
-}, _dec61 = Reflect.metadata("design:type", Function), _dec62 = Reflect.metadata("design:paramtypes", [void 0]), _dec63 = Patch(':id/restaurant-reject'), _dec64 = function (target, key) {
+}, _dec57 = Reflect.metadata("design:type", Function), _dec58 = Reflect.metadata("design:paramtypes", [void 0]), _dec59 = Patch(':id/restaurant-reject'), _dec60 = function (target, key) {
   return Param('id')(target, key, 0);
-}, _dec65 = function (target, key) {
+}, _dec61 = function (target, key) {
   return Body()(target, key, 1);
-}, _dec66 = Reflect.metadata("design:type", Function), _dec67 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec68 = MessagePattern('payment_confirmed'), _dec69 = function (target, key) {
+}, _dec62 = Reflect.metadata("design:type", Function), _dec63 = Reflect.metadata("design:paramtypes", [void 0, void 0]), _dec64 = MessagePattern('payment_confirmed'), _dec65 = function (target, key) {
   return Payload()(target, key, 0);
-}, _dec70 = Reflect.metadata("design:type", Function), _dec71 = Reflect.metadata("design:paramtypes", [void 0]), _dec72 = MessagePattern('delivery_status_changed'), _dec73 = function (target, key) {
+}, _dec66 = Reflect.metadata("design:type", Function), _dec67 = Reflect.metadata("design:paramtypes", [void 0]), _dec68 = MessagePattern('delivery_status_changed'), _dec69 = function (target, key) {
   return Payload()(target, key, 0);
-}, _dec74 = Reflect.metadata("design:type", Function), _dec75 = Reflect.metadata("design:paramtypes", [void 0]), _dec(_class = _dec2(_class = _dec3(_class = _dec4(_class = (_class2 = class OrderController {
+}, _dec70 = Reflect.metadata("design:type", Function), _dec71 = Reflect.metadata("design:paramtypes", [void 0]), _dec(_class = _dec2(_class = _dec3(_class = _dec4(_class = (_class2 = class OrderController {
   constructor(orderService) {
     this.orderService = orderService;
   }
@@ -127,9 +125,6 @@ let OrderController = (_dec = Controller('api/orders'), _dec2 = function (target
     }
     return order;
   }
-  async confirmOrder(id) {
-    return this.orderService.confirmOrder(id);
-  }
   async startPreparing(id) {
     return this.orderService.startPreparing(id);
   }
@@ -182,7 +177,7 @@ let OrderController = (_dec = Controller('api/orders'), _dec2 = function (target
   async handleDeliveryStatusChange(data) {
     return this.orderService.handleDeliveryStatusChange(data);
   }
-}, _applyDecoratedDescriptor(_class2.prototype, "createOrder", [_dec5, _dec6, _dec7, _dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "createOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getCustomerOrders", [_dec9, _dec0, _dec1, _dec10], Object.getOwnPropertyDescriptor(_class2.prototype, "getCustomerOrders"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantStatsFromToken", [_dec11, _dec12, _dec13, _dec14], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantStatsFromToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantOrders", [_dec15, _dec16, _dec17, _dec18], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantOrders"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantOrdersFromToken", [_dec19, _dec20, _dec21, _dec22], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantOrdersFromToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantStats", [_dec23, _dec24, _dec25, _dec26, _dec27, _dec28], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantStats"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getOrder", [_dec29, _dec30, _dec31, _dec32], Object.getOwnPropertyDescriptor(_class2.prototype, "getOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "confirmOrder", [_dec33, _dec34, _dec35, _dec36], Object.getOwnPropertyDescriptor(_class2.prototype, "confirmOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "startPreparing", [_dec37, _dec38, _dec39, _dec40], Object.getOwnPropertyDescriptor(_class2.prototype, "startPreparing"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "markReady", [_dec41, _dec42, _dec43, _dec44], Object.getOwnPropertyDescriptor(_class2.prototype, "markReady"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "startDelivery", [_dec45, _dec46, _dec47, _dec48, _dec49], Object.getOwnPropertyDescriptor(_class2.prototype, "startDelivery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "completeOrder", [_dec50, _dec51, _dec52, _dec53], Object.getOwnPropertyDescriptor(_class2.prototype, "completeOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "cancelOrder", [_dec54, _dec55, _dec56, _dec57, _dec58], Object.getOwnPropertyDescriptor(_class2.prototype, "cancelOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "restaurantConfirmOrder", [_dec59, _dec60, _dec61, _dec62], Object.getOwnPropertyDescriptor(_class2.prototype, "restaurantConfirmOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "restaurantRejectOrder", [_dec63, _dec64, _dec65, _dec66, _dec67], Object.getOwnPropertyDescriptor(_class2.prototype, "restaurantRejectOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "handlePaymentConfirmed", [_dec68, _dec69, _dec70, _dec71], Object.getOwnPropertyDescriptor(_class2.prototype, "handlePaymentConfirmed"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "handleDeliveryStatusChange", [_dec72, _dec73, _dec74, _dec75], Object.getOwnPropertyDescriptor(_class2.prototype, "handleDeliveryStatusChange"), _class2.prototype), _class2)) || _class) || _class) || _class) || _class);
+}, _applyDecoratedDescriptor(_class2.prototype, "createOrder", [_dec5, _dec6, _dec7, _dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "createOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getCustomerOrders", [_dec9, _dec0, _dec1, _dec10], Object.getOwnPropertyDescriptor(_class2.prototype, "getCustomerOrders"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantStatsFromToken", [_dec11, _dec12, _dec13, _dec14], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantStatsFromToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantOrders", [_dec15, _dec16, _dec17, _dec18], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantOrders"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantOrdersFromToken", [_dec19, _dec20, _dec21, _dec22], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantOrdersFromToken"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getRestaurantStats", [_dec23, _dec24, _dec25, _dec26, _dec27, _dec28], Object.getOwnPropertyDescriptor(_class2.prototype, "getRestaurantStats"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getOrder", [_dec29, _dec30, _dec31, _dec32], Object.getOwnPropertyDescriptor(_class2.prototype, "getOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "startPreparing", [_dec33, _dec34, _dec35, _dec36], Object.getOwnPropertyDescriptor(_class2.prototype, "startPreparing"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "markReady", [_dec37, _dec38, _dec39, _dec40], Object.getOwnPropertyDescriptor(_class2.prototype, "markReady"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "startDelivery", [_dec41, _dec42, _dec43, _dec44, _dec45], Object.getOwnPropertyDescriptor(_class2.prototype, "startDelivery"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "completeOrder", [_dec46, _dec47, _dec48, _dec49], Object.getOwnPropertyDescriptor(_class2.prototype, "completeOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "cancelOrder", [_dec50, _dec51, _dec52, _dec53, _dec54], Object.getOwnPropertyDescriptor(_class2.prototype, "cancelOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "restaurantConfirmOrder", [_dec55, _dec56, _dec57, _dec58], Object.getOwnPropertyDescriptor(_class2.prototype, "restaurantConfirmOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "restaurantRejectOrder", [_dec59, _dec60, _dec61, _dec62, _dec63], Object.getOwnPropertyDescriptor(_class2.prototype, "restaurantRejectOrder"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "handlePaymentConfirmed", [_dec64, _dec65, _dec66, _dec67], Object.getOwnPropertyDescriptor(_class2.prototype, "handlePaymentConfirmed"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "handleDeliveryStatusChange", [_dec68, _dec69, _dec70, _dec71], Object.getOwnPropertyDescriptor(_class2.prototype, "handleDeliveryStatusChange"), _class2.prototype), _class2)) || _class) || _class) || _class) || _class);
 module.exports = {
   OrderController
 };

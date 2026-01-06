@@ -308,16 +308,6 @@ async getMenuForManage(@Param('restaurantId') restaurantId) {
     }
   }
 
-  @Patch('orders/:id/confirm')
-  async confirmOrder(@Param('id') id) {
-    try {
-      return await this.gatewayService.confirmOrder(id);
-    } catch (error) {
-      throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
-    }
-  }
-
-
   @Patch('orders/:id/cancel')
   async cancelOrder(@Param('id') id, @Body() body) {
     try {

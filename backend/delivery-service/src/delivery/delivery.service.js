@@ -28,6 +28,11 @@ class DeliveryService {
     this.orderServiceUrl = process.env.ORDER_SERVICE_URL || 'http://order-service:3001';
   }
 
+  async getOrderById(orderId) {
+    const res = await axios.get(`${this.orderServiceUrl}/api/orders/${orderId}`);
+    return res && res.data;
+  }
+
   calculateDistance(lat1, lng1, lat2, lng2) {
     const R = 6371; // Earth radius in km
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -47,10 +52,17 @@ class DeliveryService {
   async createDelivery(orderData) {
     // Avoid creating duplicate delivery for same order
     const existing = await this.getDeliveryByOrderId(orderData._id);
-    if (existing) return existing;
-
-    // Respect provided order status when available (e.g., CREATED for COD flows)
-    const status = orderData.status && ['CREATED', 'CONFIRMED'].includes(orderData.status) ? orderData.status : 'CONFIRMED';
+    const desiredStatus = orderData && orderData.status === 'CONFIRMED' ? 'CONFIRMED' : 'CREATED';
+    if (existing) {
+      if (desiredStatus === 'CONFIRMED' && existing.status !== 'CONFIRMED') {
+        return this.DeliveryModel.findByIdAndUpdate(
+          existing._id,
+          { status: 'CONFIRMED', updatedAt: new Date() },
+          { new: true }
+        ).exec();
+      }
+      return existing;
+    }
 
     const delivery = new this.DeliveryModel({
       orderId: orderData._id,
@@ -58,7 +70,7 @@ class DeliveryService {
       customerId: orderData.customerId,
       restaurantLocation: orderData.restaurantLocation,
       customerLocation: orderData.customerLocation,
-      status
+      status: desiredStatus
     });
 
     const saved = await delivery.save();
@@ -66,7 +78,31 @@ class DeliveryService {
   }
 
   async getAvailableDeliveries() {
-    return this.DeliveryModel.find({ status: { $in: ['CONFIRMED', 'CREATED'] }, driverId: { $exists: false } }).sort({ createdAt: -1 }).exec();
+    const deliveries = await this.DeliveryModel.find({ status: 'CONFIRMED', driverId: { $exists: false } }).sort({ createdAt: -1 }).exec();
+    if (!deliveries || deliveries.length === 0) return deliveries;
+
+    const checks = await Promise.all(
+      deliveries.map(async (d) => {
+        try {
+          const order = await this.getOrderById(d.orderId);
+          if (order && order.status === 'CONFIRMED') return d;
+        } catch (_) {
+          // ignore
+        }
+        try {
+          await this.DeliveryModel.findByIdAndUpdate(
+            d._id,
+            { status: 'CREATED', updatedAt: new Date() },
+            { new: false }
+          ).exec();
+        } catch (_) {
+          // ignore
+        }
+        return null;
+      })
+    );
+
+    return checks.filter(Boolean);
   }
 
   async getDeliveriesByDriver(driverId) {
@@ -84,15 +120,51 @@ class DeliveryService {
       throw new Error('Bạn đã có đơn hàng đang thực hiện. Vui lòng hoàn thành đơn hàng hiện tại trước khi nhận đơn mới.');
     }
 
+    const delivery = await this.DeliveryModel.findById(id).exec();
+    if (!delivery) {
+      throw new Error('Đơn hàng không tồn tại');
+    }
+
+    try {
+      const order = await this.getOrderById(delivery.orderId);
+      if (!order || order.status !== 'CONFIRMED') {
+        try {
+          if (delivery.status === 'CONFIRMED') {
+            await this.DeliveryModel.findByIdAndUpdate(
+              delivery._id,
+              { status: 'CREATED', updatedAt: new Date() },
+              { new: false }
+            ).exec();
+          }
+        } catch (_) {
+          // ignore
+        }
+        throw new Error('Đơn hàng chưa được nhà hàng xác nhận');
+      }
+    } catch (e) {
+      if (e && e.message) throw e;
+      throw new Error('Đơn hàng chưa được nhà hàng xác nhận');
+    }
+
     // Atomic assign: only assign if no driverId yet (prevent race)
     const updated = await this.DeliveryModel.findOneAndUpdate(
-      { _id: id, driverId: { $exists: false } },
+      { _id: id, driverId: { $exists: false }, status: 'CONFIRMED' },
       { $set: { driverId, status: 'ASSIGNED', assignedAt: new Date(), updatedAt: new Date() } },
       { new: true }
     ).exec();
 
     if (!updated) {
-      throw new Error('Đơn hàng đã được nhận bởi tài xế khác hoặc không tìm thấy');
+      const current = await this.DeliveryModel.findById(id).exec();
+      if (!current) {
+        throw new Error('Đơn hàng không tồn tại');
+      }
+      if (current.driverId) {
+        throw new Error('Đơn hàng đã được nhận bởi tài xế khác hoặc không tìm thấy');
+      }
+      if (current.status !== 'CONFIRMED') {
+        throw new Error('Đơn hàng chưa được nhà hàng xác nhận');
+      }
+      throw new Error('Không thể nhận đơn hàng');
     }
 
     // Emit assignment event
@@ -105,12 +177,6 @@ class DeliveryService {
       }); 
     } catch (_) {}
     
-    // Best-effort: update order service via HTTP so customer sees status immediately
-    try {
-      await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/confirm`);
-    } catch (e) {
-      // ignore network errors — RMQ may handle it
-    }
     return updated;
   }
 
@@ -207,9 +273,7 @@ class DeliveryService {
     // Also best-effort HTTP update to keep order status in sync
     try {
       const s = updated.status;
-      if (s === 'ASSIGNED') {
-        await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/confirm`);
-      } else if (s === 'AT_RESTAURANT') {
+      if (s === 'AT_RESTAURANT') {
         await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/preparing`);
       } else if (s === 'PICKED_UP') {
         await axios.patch(`${this.orderServiceUrl}/api/orders/${updated.orderId}/ready`);

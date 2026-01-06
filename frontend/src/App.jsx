@@ -89,6 +89,8 @@ export default function App() {
       navigate("/admin/dashboard");
     } else if (user.userType === "RESTAURANT_STAFF") {
       navigate("/restaurant/dashboard");
+    } else if (user.userType === "DRIVER") {
+      navigate("/driver/dashboard");
     } else {
       navigate("/foods"); // Khách hàng
     }

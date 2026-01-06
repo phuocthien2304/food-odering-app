@@ -2,13 +2,13 @@
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 var _dec, _dec2, _dec3, _dec4, _dec5, _class;
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
 function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
 function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
@@ -34,6 +34,36 @@ var UserService = (_dec = Injectable(), _dec2 = function _dec2(target, key) {
     this.jwtService = jwtService;
   }
   return _createClass(UserService, [{
+    key: "splitFullName",
+    value: function splitFullName(name) {
+      var raw = String(name || '').trim();
+      if (!raw) return {
+        firstName: '',
+        lastName: ''
+      };
+      var parts = raw.split(/\s+/).filter(Boolean);
+      if (parts.length === 1) return {
+        firstName: parts[0],
+        lastName: ''
+      };
+      return {
+        firstName: parts[0],
+        lastName: parts.slice(1).join(' ')
+      };
+    }
+  }, {
+    key: "normalizeUser",
+    value: function normalizeUser(userDoc) {
+      if (!userDoc) return userDoc;
+      var obj = typeof userDoc.toObject === 'function' ? userDoc.toObject() : userDoc;
+      var firstName = obj.firstName || '';
+      var lastName = obj.lastName || '';
+      var name = String("".concat(firstName, " ").concat(lastName)).trim();
+      return _objectSpread(_objectSpread({}, obj), {}, {
+        name: name
+      });
+    }
+  }, {
     key: "hashPassword",
     value: function () {
       var _hashPassword = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(password) {
@@ -74,11 +104,13 @@ var UserService = (_dec = Injectable(), _dec2 = function _dec2(target, key) {
     key: "register",
     value: function () {
       var _register = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(registerDto) {
-        var email, password, firstName, lastName, userType, existingUser, hashedPassword, verificationToken, user;
+        var email, password, firstName, lastName, userType, fullName, fromFullName, existingUser, hashedPassword, verificationToken, user;
         return _regenerator().w(function (_context3) {
           while (1) switch (_context3.n) {
             case 0:
-              email = registerDto.email, password = registerDto.password, firstName = registerDto.firstName, lastName = registerDto.lastName, userType = registerDto.userType; // Check if user exists
+              email = registerDto.email, password = registerDto.password, firstName = registerDto.firstName, lastName = registerDto.lastName, userType = registerDto.userType;
+              fullName = registerDto && typeof registerDto.name !== 'undefined' ? registerDto.name : undefined;
+              fromFullName = typeof fullName !== 'undefined' && !firstName && !lastName ? this.splitFullName(fullName) : null; // Check if user exists
               _context3.n = 1;
               return this.UserModel.findOne({
                 email: email
@@ -99,8 +131,8 @@ var UserService = (_dec = Injectable(), _dec2 = function _dec2(target, key) {
               user = new this.UserModel({
                 email: email,
                 password: hashedPassword,
-                firstName: firstName,
-                lastName: lastName,
+                firstName: fromFullName ? fromFullName.firstName : firstName,
+                lastName: fromFullName ? fromFullName.lastName : lastName,
                 userType: userType || 'CUSTOMER',
                 verificationToken: verificationToken,
                 isActive: true
@@ -168,6 +200,7 @@ var UserService = (_dec = Injectable(), _dec2 = function _dec2(target, key) {
                   email: user.email,
                   firstName: user.firstName,
                   lastName: user.lastName,
+                  name: String("".concat(user.firstName || '', " ").concat(user.lastName || '')).trim(),
                   userType: user.userType,
                   restaurantId: user.restaurantId
                 }
@@ -216,10 +249,15 @@ var UserService = (_dec = Injectable(), _dec2 = function _dec2(target, key) {
     key: "getUserById",
     value: function () {
       var _getUserById = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(id) {
+        var user;
         return _regenerator().w(function (_context6) {
           while (1) switch (_context6.n) {
             case 0:
-              return _context6.a(2, this.UserModel.findById(id).select('-password').exec());
+              _context6.n = 1;
+              return this.UserModel.findById(id).select('-password').exec();
+            case 1:
+              user = _context6.v;
+              return _context6.a(2, this.normalizeUser(user));
           }
         }, _callee6, this);
       }));
@@ -232,14 +270,26 @@ var UserService = (_dec = Injectable(), _dec2 = function _dec2(target, key) {
     key: "updateProfile",
     value: function () {
       var _updateProfile = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7(id, updateDto) {
+        var dto, splitted, user;
         return _regenerator().w(function (_context7) {
           while (1) switch (_context7.n) {
             case 0:
-              return _context7.a(2, this.UserModel.findByIdAndUpdate(id, _objectSpread(_objectSpread({}, updateDto), {}, {
+              dto = _objectSpread({}, updateDto || {});
+              if (typeof dto.name !== 'undefined') {
+                splitted = this.splitFullName(dto.name);
+                dto.firstName = splitted.firstName;
+                dto.lastName = splitted.lastName;
+                delete dto.name;
+              }
+              _context7.n = 1;
+              return this.UserModel.findByIdAndUpdate(id, _objectSpread(_objectSpread({}, dto), {}, {
                 updatedAt: new Date()
               }), {
                 "new": true
-              }).select('-password').exec());
+              }).select('-password').exec();
+            case 1:
+              user = _context7.v;
+              return _context7.a(2, this.normalizeUser(user));
           }
         }, _callee7, this);
       }));

@@ -152,10 +152,6 @@ async getMenuForManage(restaurantId) {
     return this.proxyRequest('order', 'GET', `/api/orders/customer/${customerId}`);
   }
 
-  async confirmOrder(orderId) {
-    return this.proxyRequest('order', 'PATCH', `/api/orders/${orderId}/confirm`, {});
-  }
-
   async startPreparingOrder(orderId) {
     return this.proxyRequest('order', 'PATCH', `/api/orders/${orderId}/preparing`, {});
   }

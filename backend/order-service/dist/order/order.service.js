@@ -281,9 +281,9 @@ let OrderService = (_dec = Injectable(), _dec2 = function (target, key) {
   }
   async markOrderAsPaid(orderId, paymentId) {
     const order = await this.OrderModel.findByIdAndUpdate(orderId, {
-      status: 'CONFIRMED',
+      status: 'PENDING_RESTAURANT_CONFIRMATION',
       paymentId,
-      confirmedAt: new Date(),
+      paidAt: new Date(),
       updatedAt: new Date()
     }, {
       new: true

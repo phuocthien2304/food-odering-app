@@ -291,9 +291,9 @@ class OrderService {
     const order = await this.OrderModel.findByIdAndUpdate(
       orderId,
       {
-        status: 'CONFIRMED',
+        status: 'PENDING_RESTAURANT_CONFIRMATION',
         paymentId,
-        confirmedAt: new Date(),
+        paidAt: new Date(),
         updatedAt: new Date()
       },
       { new: true }

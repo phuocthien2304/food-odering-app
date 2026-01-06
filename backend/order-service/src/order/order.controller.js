@@ -86,11 +86,6 @@ class OrderController {
     return order;
   }
 
-  @Patch(':id/confirm')
-  async confirmOrder(@Param('id') id) {
-    return this.orderService.confirmOrder(id);
-  }
-
   @Patch(':id/preparing')
   async startPreparing(@Param('id') id) {
     return this.orderService.startPreparing(id);

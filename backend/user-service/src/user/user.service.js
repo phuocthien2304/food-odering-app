@@ -11,6 +11,23 @@ class UserService {
     this.jwtService = jwtService;
   }
 
+  splitFullName(name) {
+    const raw = String(name || '').trim();
+    if (!raw) return { firstName: '', lastName: '' };
+    const parts = raw.split(/\s+/).filter(Boolean);
+    if (parts.length === 1) return { firstName: parts[0], lastName: '' };
+    return { firstName: parts[0], lastName: parts.slice(1).join(' ') };
+  }
+
+  normalizeUser(userDoc) {
+    if (!userDoc) return userDoc;
+    const obj = typeof userDoc.toObject === 'function' ? userDoc.toObject() : userDoc;
+    const firstName = obj.firstName || '';
+    const lastName = obj.lastName || '';
+    const name = String(`${firstName} ${lastName}`).trim();
+    return { ...obj, name };
+  }
+
   async hashPassword(password) {
     const salt = await bcrypt.genSalt(10);
     return bcrypt.hash(password, salt);
@@ -22,6 +39,8 @@ class UserService {
 
   async register(registerDto) {
     const { email, password, firstName, lastName, userType } = registerDto;
+    const fullName = registerDto && typeof registerDto.name !== 'undefined' ? registerDto.name : undefined;
+    const fromFullName = typeof fullName !== 'undefined' && (!firstName && !lastName) ? this.splitFullName(fullName) : null;
 
     // Check if user exists
     const existingUser = await this.UserModel.findOne({ email }).exec();
@@ -35,8 +54,8 @@ class UserService {
     const user = new this.UserModel({
       email,
       password: hashedPassword,
-      firstName,
-      lastName,
+      firstName: fromFullName ? fromFullName.firstName : firstName,
+      lastName: fromFullName ? fromFullName.lastName : lastName,
       userType: userType || 'CUSTOMER',
       verificationToken,
       isActive: true
@@ -78,6 +97,7 @@ class UserService {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        name: String(`${user.firstName || ''} ${user.lastName || ''}`).trim(),
         userType: user.userType,
         restaurantId: user.restaurantId
       }
@@ -97,15 +117,26 @@ class UserService {
   }
 
   async getUserById(id) {
-    return this.UserModel.findById(id).select('-password').exec();
+    const user = await this.UserModel.findById(id).select('-password').exec();
+    return this.normalizeUser(user);
   }
 
   async updateProfile(id, updateDto) {
-    return this.UserModel.findByIdAndUpdate(
+    const dto = { ...(updateDto || {}) };
+    if (typeof dto.name !== 'undefined') {
+      const splitted = this.splitFullName(dto.name);
+      dto.firstName = splitted.firstName;
+      dto.lastName = splitted.lastName;
+      delete dto.name;
+    }
+
+    const user = await this.UserModel.findByIdAndUpdate(
       id,
-      { ...updateDto, updatedAt: new Date() },
+      { ...dto, updatedAt: new Date() },
       { new: true }
     ).select('-password').exec();
+
+    return this.normalizeUser(user);
   }
 
   async changePassword(id, oldPassword, newPassword) {
