@@ -146,7 +146,7 @@ export default function RestaurantMenuManagement({ API_URL, user }) {
     try {
       if (!isEditing) {
         // ✅ ADD
-        await axios.post(`${API_URL}/restaurants/${user.restaurantId}/menu/manage`, payload, {
+        await axios.post(`${API_URL}/restaurants/${user.restaurantId}/menu`, payload, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
         alert("Thêm món thành công!")
