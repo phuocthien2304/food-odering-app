@@ -38,7 +38,7 @@ jobs:
         working-directory: ./frontend
         run: npm run lint --if-present
 
-      # BƯỚC BỔ SUNG: Gửi log Frontend về Loki
+      # Gửi log Frontend về Loki
       - name: Gửi log Test Frontend về Loki
         if: always()
         run: |
@@ -79,7 +79,7 @@ jobs:
           npm ci
           npm run test --if-present
 
-      # BƯỚC BỔ SUNG: Gửi log Backend về Loki
+      # Gửi log Backend về Loki
       - name: Gửi log Test Backend về Loki
         if: always()
         run: |
